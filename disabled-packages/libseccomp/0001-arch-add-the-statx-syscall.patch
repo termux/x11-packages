@@ -1,0 +1,280 @@
+From 4793ea990ea80ee26ed63e2a20723fdb417abf5b Mon Sep 17 00:00:00 2001
+From: Tobias Klauser <tklauser@distanz.ch>
+Date: Fri, 20 Oct 2017 09:39:40 +0200
+Subject: [PATCH] arch: add the statx syscall
+
+Fixes #88
+
+Removed snipped for parisc architecture, which was not available
+in version 2.3.2.
+
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+[PM: fixed the incorrect x32 definition]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+---
+ src/arch-aarch64-syscalls.c   | 3 ++-
+ src/arch-arm-syscalls.c       | 3 ++-
+ src/arch-mips-syscalls.c      | 3 ++-
+ src/arch-mips64-syscalls.c    | 3 ++-
+ src/arch-mips64n32-syscalls.c | 3 ++-
+ src/arch-ppc-syscalls.c       | 3 ++-
+ src/arch-ppc64-syscalls.c     | 3 ++-
+ src/arch-s390-syscalls.c      | 3 ++-
+ src/arch-s390x-syscalls.c     | 3 ++-
+ src/arch-x32-syscalls.c       | 3 ++-
+ src/arch-x86-syscalls.c       | 3 ++-
+ src/arch-x86_64-syscalls.c    | 3 ++-
+ 13 files changed, 26 insertions(+), 13 deletions(-)
+
+diff --git a/src/arch-aarch64-syscalls.c b/src/arch-aarch64-syscalls.c
+index d907182..157aedc 100644
+--- a/src/arch-aarch64-syscalls.c
++++ b/src/arch-aarch64-syscalls.c
+@@ -26,7 +26,7 @@
+ #include "arch.h"
+ #include "arch-aarch64.h"
+ 
+-/* NOTE: based on Linux 4.10-rc6+ */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def aarch64_syscall_table[] = { \
+ 	{ "_llseek", __PNR__llseek },
+ 	{ "_newselect", __PNR__newselect },
+@@ -392,6 +392,7 @@ const struct arch_syscall_def aarch64_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", 43 },
+ 	{ "statfs64", __PNR_statfs64 },
++	{ "statx", 291 },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-arm-syscalls.c b/src/arch-arm-syscalls.c
+index 6f40caa..43e2cc5 100644
+--- a/src/arch-arm-syscalls.c
++++ b/src/arch-arm-syscalls.c
+@@ -37,7 +37,7 @@
+ #define __SCMP_NR_BASE			__SCMP_NR_OABI_SYSCALL_BASE
+ #endif
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def arm_syscall_table[] = { \
+ 	/* NOTE: arm_sync_file_range() and sync_file_range2() share values */
+ 	{ "_llseek", (__SCMP_NR_BASE + 140) },
+@@ -404,6 +404,7 @@ const struct arch_syscall_def arm_syscall_table[] = { \
+ 	{ "stat64", (__SCMP_NR_BASE + 195) },
+ 	{ "statfs", (__SCMP_NR_BASE + 99) },
+ 	{ "statfs64", (__SCMP_NR_BASE + 266) },
++	{ "statx", (__SCMP_NR_BASE + 397) },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-mips-syscalls.c b/src/arch-mips-syscalls.c
+index e53f565..a5264c8 100644
+--- a/src/arch-mips-syscalls.c
++++ b/src/arch-mips-syscalls.c
+@@ -30,7 +30,7 @@
+ /* O32 ABI */
+ #define __SCMP_NR_BASE		4000
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def mips_syscall_table[] = { \
+ 	{ "_llseek", (__SCMP_NR_BASE + 140) },
+ 	{ "_newselect", (__SCMP_NR_BASE + 142) },
+@@ -396,6 +396,7 @@ const struct arch_syscall_def mips_syscall_table[] = { \
+ 	{ "stat64", (__SCMP_NR_BASE + 213) },
+ 	{ "statfs", (__SCMP_NR_BASE + 99) },
+ 	{ "statfs64", (__SCMP_NR_BASE + 255) },
++	{ "statx", (__SCMP_NR_BASE + 366) },
+ 	{ "stime", (__SCMP_NR_BASE + 25) },
+ 	{ "stty", (__SCMP_NR_BASE + 31) },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-mips64-syscalls.c b/src/arch-mips64-syscalls.c
+index 248acaf..bc16b1d 100644
+--- a/src/arch-mips64-syscalls.c
++++ b/src/arch-mips64-syscalls.c
+@@ -30,7 +30,7 @@
+ /* 64 ABI */
+ #define __SCMP_NR_BASE	5000
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def mips64_syscall_table[] = { \
+ 	{ "_llseek", __PNR__llseek },
+ 	{ "_newselect", (__SCMP_NR_BASE + 22) },
+@@ -396,6 +396,7 @@ const struct arch_syscall_def mips64_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", (__SCMP_NR_BASE + 134) },
+ 	{ "statfs64", __PNR_statfs64 },
++	{ "statx", (__SCMP_NR_BASE + 326) },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-mips64n32-syscalls.c b/src/arch-mips64n32-syscalls.c
+index 1525f8b..fa89bc2 100644
+--- a/src/arch-mips64n32-syscalls.c
++++ b/src/arch-mips64n32-syscalls.c
+@@ -30,7 +30,7 @@
+ /* N32 ABI */
+ #define __SCMP_NR_BASE	6000
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def mips64n32_syscall_table[] = { \
+ 	{ "_llseek", __PNR__llseek },
+ 	{ "_newselect", (__SCMP_NR_BASE + 22) },
+@@ -396,6 +396,7 @@ const struct arch_syscall_def mips64n32_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", (__SCMP_NR_BASE + 134) },
+ 	{ "statfs64", (__SCMP_NR_BASE + 217) },
++	{ "statx", (__SCMP_NR_BASE + 330) },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-ppc-syscalls.c b/src/arch-ppc-syscalls.c
+index c117da9..fe0cdfb 100644
+--- a/src/arch-ppc-syscalls.c
++++ b/src/arch-ppc-syscalls.c
+@@ -27,7 +27,7 @@
+ #include "arch.h"
+ #include "arch-ppc.h"
+ 
+-/* NOTE: based on Linux 4.10-rc6+ */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def ppc_syscall_table[] = { \
+ 	{ "_llseek", 140 },
+ 	{ "_newselect", 142 },
+@@ -393,6 +393,7 @@ const struct arch_syscall_def ppc_syscall_table[] = { \
+ 	{ "stat64", 195 },
+ 	{ "statfs", 99 },
+ 	{ "statfs64", 252 },
++	{ "statx", 383},
+ 	{ "stime", 25 },
+ 	{ "stty", 31 },
+ 	{ "subpage_prot", 310 },
+diff --git a/src/arch-ppc64-syscalls.c b/src/arch-ppc64-syscalls.c
+index bbd5876..dc09610 100644
+--- a/src/arch-ppc64-syscalls.c
++++ b/src/arch-ppc64-syscalls.c
+@@ -27,7 +27,7 @@
+ #include "arch.h"
+ #include "arch-ppc64.h"
+ 
+-/* NOTE: based on Linux 4.10-rc6+ */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def ppc64_syscall_table[] = { \
+ 	{ "_llseek", 140 },
+ 	{ "_newselect", 142 },
+@@ -393,6 +393,7 @@ const struct arch_syscall_def ppc64_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", 99 },
+ 	{ "statfs64", 252 },
++	{ "statx", 383},
+ 	{ "stime", 25 },
+ 	{ "stty", 31 },
+ 	{ "subpage_prot", 310 },
+diff --git a/src/arch-s390-syscalls.c b/src/arch-s390-syscalls.c
+index 959b42f..8a6cecc 100644
+--- a/src/arch-s390-syscalls.c
++++ b/src/arch-s390-syscalls.c
+@@ -10,7 +10,7 @@
+ #include "arch.h"
+ #include "arch-s390.h"
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def s390_syscall_table[] = { \
+ 	{ "_llseek", 140 },
+ 	{ "_newselect", 142 },
+@@ -376,6 +376,7 @@ const struct arch_syscall_def s390_syscall_table[] = { \
+ 	{ "stat64", 195 },
+ 	{ "statfs", 99 },
+ 	{ "statfs64", 265 },
++	{ "statx", 379 },
+ 	{ "stime", 25 },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-s390x-syscalls.c b/src/arch-s390x-syscalls.c
+index f6a2759..728dfc4 100644
+--- a/src/arch-s390x-syscalls.c
++++ b/src/arch-s390x-syscalls.c
+@@ -10,7 +10,7 @@
+ #include "arch.h"
+ #include "arch-s390x.h"
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def s390x_syscall_table[] = { \
+ 	{ "_llseek", __PNR__llseek },
+ 	{ "_newselect", __PNR__newselect },
+@@ -376,6 +376,7 @@ const struct arch_syscall_def s390x_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", 99 },
+ 	{ "statfs64", 265 },
++	{ "statx", 379 },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-x32-syscalls.c b/src/arch-x32-syscalls.c
+index 64e180a..bb3e077 100644
+--- a/src/arch-x32-syscalls.c
++++ b/src/arch-x32-syscalls.c
+@@ -26,7 +26,7 @@
+ #include "arch.h"
+ #include "arch-x32.h"
+ 
+-/* NOTE: based on Linux 4.5-rc4 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def x32_syscall_table[] = { \
+ 	{ "_llseek", __PNR__llseek },
+ 	{ "_newselect", __PNR__newselect },
+@@ -392,6 +392,7 @@ const struct arch_syscall_def x32_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", (X32_SYSCALL_BIT + 137) },
+ 	{ "statfs64", __PNR_statfs64 },
++	{ "statx", (X32_SYSCALL_BIT + 332) },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-x86-syscalls.c b/src/arch-x86-syscalls.c
+index 5443095..81a52a3 100644
+--- a/src/arch-x86-syscalls.c
++++ b/src/arch-x86-syscalls.c
+@@ -26,7 +26,7 @@
+ #include "arch.h"
+ #include "arch-x86.h"
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def x86_syscall_table[] = { \
+ 	{ "_llseek", 140 },
+ 	{ "_newselect", 142 },
+@@ -392,6 +392,7 @@ const struct arch_syscall_def x86_syscall_table[] = { \
+ 	{ "stat64", 195 },
+ 	{ "statfs", 99 },
+ 	{ "statfs64", 268 },
++	{ "statx", 383 },
+ 	{ "stime", 25 },
+ 	{ "stty", 31 },
+ 	{ "subpage_prot", __PNR_subpage_prot },
+diff --git a/src/arch-x86_64-syscalls.c b/src/arch-x86_64-syscalls.c
+index 6c389b8..1da2530 100644
+--- a/src/arch-x86_64-syscalls.c
++++ b/src/arch-x86_64-syscalls.c
+@@ -26,7 +26,7 @@
+ #include "arch.h"
+ #include "arch-x86_64.h"
+ 
+-/* NOTE: based on Linux 4.9 */
++/* NOTE: based on Linux 4.14 */
+ const struct arch_syscall_def x86_64_syscall_table[] = { \
+ 	{ "_llseek", __PNR__llseek },
+ 	{ "_newselect", __PNR__newselect },
+@@ -392,6 +392,7 @@ const struct arch_syscall_def x86_64_syscall_table[] = { \
+ 	{ "stat64", __PNR_stat64 },
+ 	{ "statfs", 137 },
+ 	{ "statfs64", __PNR_statfs64 },
++	{ "statx", 332 },
+ 	{ "stime", __PNR_stime },
+ 	{ "stty", __PNR_stty },
+ 	{ "subpage_prot", __PNR_subpage_prot },
