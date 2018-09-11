@@ -1,4 +1,5 @@
 # Termux X11 Packages
+[![Build Status](https://travis-ci.org/termux/x11-packages.svg?branch=master)](https://travis-ci.org/termux/x11-packages)
 
 Here are located build scripts and patches for X11 packages for Termux.
 
