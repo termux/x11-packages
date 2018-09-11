@@ -35,7 +35,7 @@ if [ ! -e "./termux-packages/.initialized" ]; then
     fi
 
     echo -n "[*] Copying extra packages to build environment... "
-    if cp -a ./packages/* ./packages-x11/* ./termux-packages/packages/ > /dev/null 2>&1; then
+    if cp -a ./packages/* ./termux-packages/packages/ > /dev/null 2>&1; then
         echo "ok"
     else
         echo "fail"
