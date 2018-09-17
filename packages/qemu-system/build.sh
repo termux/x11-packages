@@ -6,7 +6,7 @@ TERMUX_PKG_VERSION=2.12.0
 TERMUX_PKG_REVISION=3
 TERMUX_PKG_SRCURL=https://download.qemu.org/qemu-${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=e69301f361ff65bf5dabd8a19196aeaa5613c1b5ae1678f0823bdf50e7d5c6fc
-TERMUX_PKG_DEPENDS="glib, libandroid-shmem, libandroid-support, libbz2, libc++, libcurl, libgnutls, libjpeg-turbo, liblzo, libnettle, libpixman, libpng, libsasl, libsdl, libseccomp, libssh2, libutil, ncurses"
+TERMUX_PKG_DEPENDS="glib, libandroid-shmem, libandroid-support, libbz2, libc++, libcurl, libgnutls, libjpeg-turbo, liblzo, libnettle, libpixman, libpng, libsasl, libsdl, libssh2, libutil, ncurses"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_RM_AFTER_INSTALL="
 bin/qemu-nbd
@@ -43,7 +43,7 @@ termux_step_configure()
                 --disable-spice \
                 --enable-lzo \
                 --enable-bzip2 \
-                --enable-seccomp \
+                --disable-seccomp \
                 --enable-coroutine-pool \
                 --enable-tpm \
                 --enable-libssh2 \
