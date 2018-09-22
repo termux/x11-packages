@@ -9,7 +9,7 @@ TARGET_ARCHITECTURE="aarch64"
 BUILD_LOG_FILE="termux-build.log"
 SETUP_LOG_FILE="setup-build-environment.log"
 BUILD_FINISHED_CONTROL_FILE="/tmp/.build-finished"
-PACKAGES_ARCHIVE_FILE="termux-extra-packages_${TARGET_ARCHITECTURE}.tar"
+PACKAGES_ARCHIVE_FILE="termux-x11-packages_${TARGET_ARCHITECTURE}.tar"
 
 ## Print message every 5 minutes.
 timed_message() {
@@ -34,7 +34,7 @@ if [ ! -e "./termux-packages/.initialized" ]; then
         exit 1
     fi
 
-    echo -n "[*] Copying extra packages to build environment... "
+    echo -n "[*] Copying x11 packages to build environment... "
     if cp -a ./packages/* ./termux-packages/packages/ > /dev/null 2>&1; then
         echo "ok"
     else
