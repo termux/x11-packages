@@ -3,54 +3,90 @@
 ##  Script for querying latest version of package.
 ##
 
+
 if [ -z "${1}" ]; then
-    echo "Usage: check-pkg-version.sh [package name]"
+    echo "Usage: check-pkg-version.sh [package 1] [package 2] ..."
     echo
     echo "This script retrieves current package version"
     echo "from https://www.archlinux.org."
     exit 1
 fi
 
-check_if_update_needed() {
-    local SCRIPT_DIR SCRIPT_PATH
-    SCRIPT_PATH=$(realpath "${0}")
-    SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
-
-    if [ -f "${SCRIPT_DIR}/${1}/build.sh" ]; then
-        CURRENT_VERSION=$(grep 'TERMUX_PKG_VERSION=' "${SCRIPT_DIR}/${1}/build.sh" | cut -d= -f2)
-        if [ "${CURRENT_VERSION}" != "${2}" ]; then
-            echo "Current version: ${CURRENT_VERSION}"
-            echo
-            echo "[!] Package should be updated."
-            echo
-        fi
-    elif [ -f "${SCRIPT_DIR}/lib${1}/build.sh" ]; then
-        ## Same packages in ArchLinux and Termux may have different names.
-        ## Example: GTK-2 in Termux has name 'libgtk2' but in ArchLinux it
-        ## named as 'gtk2'.
-        CURRENT_VERSION=$(grep 'TERMUX_PKG_VERSION=' "${SCRIPT_DIR}/lib${1}/build.sh" | cut -d= -f2)
-        if [ "${CURRENT_VERSION}" != "${2}" ]; then
-            echo "Current version: ${CURRENT_VERSION}"
-            echo
-            echo "[!] Package should be updated."
-            echo
-        fi
-    else
-        ## If no 'build.sh' script found, then do nothing.
-        :
+is_update_needed() {
+    if [ "${1}" = "${2}" ]; then
+        return 1
     fi
-}
 
-for repo in extra community core; do
-    for arch in x86_64 any; do
-        VERSION=$(curl -s "https://www.archlinux.org/packages/${repo}/${arch}/${1}/" | grep 'itemprop="version"' | cut -d'"' -f4 | cut -d- -f1)
-        if [ -n "${VERSION}" ]; then
-            echo "Package: ${1}"
-            echo "Latest version: ${VERSION}"
-            check_if_update_needed "${1}" "${VERSION}"
-            exit 0
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++)); do
+        ver1[i]=0
+    done
+
+    for ((i=0; i<${#ver1[@]}; i++)); do
+        if [ -z "${ver2[i]}" ]; then
+            ver2[i]=0
+        fi
+
+        if ((10#${ver1[i]} > 10#${ver2[i]})); then
+            return 1
+        fi
+
+        if ((10#${ver1[i]} < 10#${ver2[i]})); then
+            return 0
         fi
     done
+
+    return 1
+}
+
+check_package() {
+    local CURRENT_VERSION LATEST_VERSION PACKAGES_DIR
+    PACKAGES_DIR=$(realpath "$(dirname "${0}")/../packages")
+
+    for repo in extra community core; do
+        for arch in x86_64 any; do
+            LATEST_VERSION=$(curl -s "https://www.archlinux.org/packages/${repo}/${arch}/${1}/" | grep 'itemprop="version"' | cut -d'"' -f4 | cut -d- -f1 | cut -d+ -f1)
+            if [ -n "${LATEST_VERSION}" ]; then
+                if [ -f "${PACKAGES_DIR}/${1}/build.sh" ]; then
+                    CURRENT_VERSION=$(grep 'TERMUX_PKG_VERSION=' "${PACKAGES_DIR}/${1}/build.sh" | cut -d= -f2)
+                fi
+
+                echo "Package: ${1}"
+
+                if [ -n "${CURRENT_VERSION}" ]; then
+                    if is_update_needed "${CURRENT_VERSION}" "${LATEST_VERSION}"; then
+                        echo "Version: ${CURRENT_VERSION} (can be updated to ${LATEST_VERSION})"
+                    else
+                        echo "Version: ${CURRENT_VERSION} (latest)"
+                    fi
+                else
+                    echo "Latest version: ${LATEST_VERSION}"
+                fi
+
+                return 0
+            fi
+        done
+    done
+
+    echo "[!] Cannot fetch latest version for '${1}'. Possible that"
+    echo "    package is not exist in database."
+    return 1
+}
+
+while true; do
+    if [ ${#} -lt 1 ]; then
+        break
+    fi
+
+    check_package $(basename "${1}")
+
+    if [ ${#} -gt 1 ]; then
+        echo
+    fi
+
+    shift 1
 done
 
-exit 1
+exit 0
