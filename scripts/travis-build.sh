@@ -49,7 +49,7 @@ echo "[*] Preparing build environment..."
 cd ./termux-packages || exit 1
 
 if [ ! -e "./setup-build-environment.sh" ]; then
-    if ! cp ../setup-build-environment.sh ./ > /dev/null 2>&1; then
+    if ! cp ../scripts/setup-build-environment.sh ./ > /dev/null 2>&1; then
         echo "[!] Failed to copy setup script to build environment."
         exit 1
     fi
