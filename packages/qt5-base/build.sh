@@ -115,7 +115,6 @@ termux_step_configure () {
         -skip qtwebsockets \
         -skip qtwebview \
         -skip qtwinextras \
-        -skip qtx11extras \
         -skip qtxmlpatterns \
         -no-dbus \
         -no-accessibility \
