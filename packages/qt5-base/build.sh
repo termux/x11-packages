@@ -16,6 +16,7 @@ TERMUX_PKG_SRCURL="http://download.qt.io/official_releases/qt/${TERMUX_PKG_VERSI
 TERMUX_PKG_SHA256=c6104b840b6caee596fa9a35bc5f57f67ed5a99d6a36497b6fe66f990a53ca81
 TERMUX_PKG_DEPENDS="harfbuzz, libandroid-support, libandroid-shmem, libc++, libice, libicu, libjpeg-turbo, libpng, libsm, libuuid, libx11, libxcb, libxi, libxkbcommon, openssl, pcre2, ttf-dejavu, xcb-util-image, xcb-util-keysyms, xcb-util-renderutil, xcb-util-wm"
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_KEEP_STATIC_LIBRARIES=true
 
 TERMUX_PKG_INCLUDE_IN_DEVPACKAGE="
 bin/moc
@@ -27,6 +28,7 @@ bin/qmake
 lib/qt/mkspecs
 lib/libQt5*.prl
 lib/libqt*.prl
+lib/*.a
 "
 
 TERMUX_PKG_RM_AFTER_INSTALL="
@@ -85,7 +87,6 @@ termux_step_configure () {
         -skip qtcharts \
         -skip qtconnectivity \
         -skip qtdatavis3d \
-        -skip qtdeclarative \
         -skip qtdoc \
         -skip qtgamepad \
         -skip qtgraphicaleffects \
@@ -167,6 +168,7 @@ termux_step_make_install() {
         cd -
     }
 
+    ## Compiling libQt5Bootstrap.a for target arch.
     cd "${TERMUX_PKG_SRCDIR}/qtbase/src/tools/bootstrap" && {
         make clean
 
@@ -174,8 +176,48 @@ termux_step_make_install() {
             -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
 
         make -j "${TERMUX_MAKE_PROCESSES}"
+        install -Dm644 ../../../lib/libQt5Bootstrap.a "${TERMUX_PREFIX}/lib/libQt5Bootstrap.a"
+        install -Dm644 ../../../lib/libQt5Bootstrap.prl "${TERMUX_PREFIX}/lib/libQt5Bootstrap.prl"
     }
 
+    ## Compiling libQt5QmlDevTools.a for target arch.
+    cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/src/qmldevtools" && {
+        make clean
+
+        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+            -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+
+        make -j "${TERMUX_MAKE_PROCESSES}"
+        install -Dm644 ../../lib/libQt5QmlDevTools.a "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.a"
+        install -Dm644 ../../lib/libQt5QmlDevTools.prl "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.prl"
+    }
+
+    ## Compiling libQt5PacketProtocol.a for target arch.
+    cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/src/plugins/qmltooling/packetprotocol" && {
+        make clean
+
+        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+            -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+
+        make -j "${TERMUX_MAKE_PROCESSES}"
+        install -Dm644 ../../../../lib/libQt5PacketProtocol.a "${TERMUX_PREFIX}/lib/libQt5PacketProtocol.a"
+        install -Dm644 ../../../../lib/libQt5PacketProtocol.prl "${TERMUX_PREFIX}/lib/libQt5PacketProtocol.prl"
+    }
+
+    ## Compiling qt5-declarative utilities for target arch.
+    for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
+        cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/tools/${i}" && {
+            make clean
+
+            "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+                -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+
+            make -j "${TERMUX_MAKE_PROCESSES}"
+            install -Dm700 "../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
+        }
+    done
+
+    ## Compiling qt5-base utilities for target arch.
     for i in moc qlalr qvkgen rcc uic; do
         cd "${TERMUX_PKG_SRCDIR}/qtbase/src/tools/${i}" && {
             make clean
@@ -194,10 +236,7 @@ termux_step_make_install() {
                 Makefile
 
             make -j "${TERMUX_MAKE_PROCESSES}"
-
-            install \
-                -Dm700 "${TERMUX_PKG_BUILDDIR}/qtbase/bin/${i}" \
-                "${TERMUX_PREFIX}/bin/${i}"
+            install -Dm700 "../../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
         }
     done
     unset i
@@ -210,9 +249,12 @@ termux_step_make_install() {
             "${TERMUX_PREFIX}/bin/qmake"
     }
 
-    # Drop QMAKE_PRL_BUILD_DIR because reference the build dir.
+    ## Drop QMAKE_PRL_BUILD_DIR because reference the build dir.
     find "${TERMUX_PREFIX}/lib" -type f -name '*.prl' \
         -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' "{}" \;
+
+    ## Remove *.la files.
+    find "${TERMUX_PREFIX}/lib" -iname \*.la -delete
 }
 
 termux_step_create_debscripts() {
