@@ -1,0 +1,12 @@
+diff -uNr libast-0.7/configure libast-0.7.mod/configure
+--- libast-0.7/configure	2006-01-23 20:20:35.000000000 +0200
++++ libast-0.7.mod/configure	2018-11-14 18:35:16.456533630 +0200
+@@ -23988,6 +23988,8 @@
+ 
+ fi
+ 
++dps_cv_symlink_open_bug=3
++
+     case "$dps_cv_symlink_open_bug" in
+         0) echo "$as_me:$LINENO: result: secure" >&5
+ echo "${ECHO_T}secure" >&6 ;;
