@@ -1,0 +1,27 @@
+diff -uNr Eterm-0.9.6/src/command.c Eterm-0.9.6.mod/src/command.c
+--- Eterm-0.9.6/src/command.c	2011-03-16 08:05:03.000000000 +0200
++++ Eterm-0.9.6.mod/src/command.c	2018-11-14 19:00:51.868674191 +0200
+@@ -1388,9 +1388,9 @@
+ #endif
+ 
+ #if defined(HAVE_POSIX_OPENPT) || defined(HAVE_DEV_PTMX)
+-inline int posix_get_pty(void);
++int posix_get_pty(void);
+ 
+-inline int
++int
+ posix_get_pty(void)
+ {
+ 
+@@ -1425,9 +1425,9 @@
+ #define PTYCHAR1 "pqrstuvwxyz"
+ #define PTYCHAR2 "0123456789abcdefghijklmnopqrstuvwxyz"
+ 
+-inline int gen_get_pty(void);
++int gen_get_pty(void);
+ 
+-inline int
++int
+ gen_get_pty(void)
+ {
+ 

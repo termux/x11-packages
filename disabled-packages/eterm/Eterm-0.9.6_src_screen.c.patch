@@ -1,0 +1,25 @@
+diff -uNr Eterm-0.9.6/src/screen.c Eterm-0.9.6.mod/src/screen.c
+--- Eterm-0.9.6/src/screen.c	2011-03-16 07:16:59.000000000 +0200
++++ Eterm-0.9.6.mod/src/screen.c	2018-11-14 19:13:44.108235869 +0200
+@@ -101,8 +101,8 @@
+ #endif
+ 
+ /* Fill part/all of a drawn line with blanks. */
+-inline void blank_line(text_t *, rend_t *, int, rend_t);
+-inline void
++void blank_line(text_t *, rend_t *, int, rend_t);
++void
+ blank_line(text_t *et, rend_t *er, int width, rend_t efs)
+ {
+ /*    int             i = width; */
+@@ -115,8 +115,8 @@
+ }
+ 
+ /* Create a new row in the screen buffer and initialize it. */
+-inline void blank_screen_mem(text_t **, rend_t **, int, rend_t);
+-inline void
++void blank_screen_mem(text_t **, rend_t **, int, rend_t);
++void
+ blank_screen_mem(text_t **tp, rend_t **rp, int row, rend_t efs)
+ {
+     register unsigned int i = TERM_WINDOW_GET_REPORTED_COLS();

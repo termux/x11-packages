@@ -1,0 +1,16 @@
+diff -uNr libast-0.7/include/libast.h libast-0.7.mod/include/libast.h
+--- libast-0.7/include/libast.h	2006-01-23 20:17:26.000000000 +0200
++++ libast-0.7.mod/include/libast.h	2018-11-14 18:50:50.637307982 +0200
+@@ -92,11 +92,7 @@
+ #endif
+ 
+ #if LIBAST_REGEXP_SUPPORT_PCRE
+-#  if HAVE_PCRE_H
+-#    include <pcre.h>
+-#  elif HAVE_PCRE_PCRE_H
+-#    include <pcre/pcre.h>
+-#  endif
++#  include <pcre.h>
+ #elif LIBAST_REGEXP_SUPPORT_POSIX || LIBAST_REGEXP_SUPPORT_BSD
+ #  if HAVE_REGEX_H
+ #    include <regex.h>

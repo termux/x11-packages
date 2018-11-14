@@ -1,0 +1,12 @@
+diff -uNr libast-0.7/src/snprintf.c libast-0.7.mod/src/snprintf.c
+--- libast-0.7/src/snprintf.c	2004-07-24 01:34:05.000000000 +0300
++++ libast-0.7.mod/src/snprintf.c	2018-11-14 18:41:33.692972895 +0200
+@@ -2,6 +2,8 @@
+ # include <config.h>
+ #endif
+ 
++#include <stdlib.h>
++
+ #include <errno.h>
+ #if defined(HAVE_STDARG_H) && (HAVE_STDARG_H != 0)
+ # include <stdarg.h>
