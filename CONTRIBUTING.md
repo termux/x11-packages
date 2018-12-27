@@ -56,7 +56,7 @@ Things that should *never* be requested here:
 
 \- all package requests that require a thing one of listed above will be closed immediately.
 
-Each package requiest should include:
+Each package request should include:
 
 - **Package description**
 
