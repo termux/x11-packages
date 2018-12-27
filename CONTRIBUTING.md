@@ -69,3 +69,87 @@ Each package requiest should include:
 **Important**: it's likely that package requests will not be processed immediately, especially if your package introduces a dependencies that are not available in repository.
 
 A template for the package request issue can be found here: https://github.com/termux/x11-packages/issues/new?template=package-request.md.
+
+## Pull requests
+
+Instead of waiting when your bug report or package request will be processed, you are free to implement all necessary changes by yourself.
+
+### Writing a build script
+
+Example of build script (build.sh) for the package "feh" with comments:
+```
+## Maintainer field.
+## Write your self here if you want to be a package maintainer otherwise
+## left me (xeffyr).
+## Since x11-packages is a separate repository, this field should not be empty !!!
+TERMUX_PKG_MAINTAINER="Leonid Plyushch <leonid.plyushch@gmail.com> @xeffyr"
+
+## I hope you understand what is the following lines do.
+TERMUX_PKG_HOMEPAGE=https://feh.finalrewind.org/
+TERMUX_PKG_DESCRIPTION="Fast and light imlib2-based image viewer"
+TERMUX_PKG_VERSION=3.0
+TERMUX_PKG_SRCURL=https://feh.finalrewind.org/feh-${TERMUX_PKG_VERSION}.tar.bz2
+
+## The sha-256 hash of the package source archive.
+## This field should not be empty !!!
+TERMUX_PKG_SHA256=b67b4e5c6e1fb45dd2a4567e395b413c7565246db6780a46fb1bcdf33d72dc01
+
+## List of run-time dependencies.
+TERMUX_PKG_DEPENDS="imlib2, libandroid-shmem, libcurl, libexif, libpng, libx11, libxinerama"
+
+## List of dependencies required only at build-time.
+TERMUX_PKG_BUILD_DEPENDS="libxt"
+
+## Some packages do not support building in a separate directory.
+TERMUX_PKG_BUILD_IN_SRC=true
+
+## Sometimes you have to pass additional arguments to the command "make".
+TERMUX_PKG_EXTRA_MAKE_ARGS="exif=1 help=1 verscmp=0"
+
+## If you need to configure some variables, do this in termux_step_pre_configure().
+termux_step_pre_configure() {
+    CFLAGS+=" -I${TERMUX_PREFIX}/include"
+}
+```
+
+This repository uses a bit different coding style requirements:
+
+- Maintainer field should be always exist and be always on top.
+- Use spaces for indentation.
+- Do not mix field entries. See example above to determine an order of them.
+
+Minor violations of these requirements *will not* affect probability of merging your pull request.
+
+There are some other packages recommended to check or use as base for PR: [gtk2](./packages/gtk2), [liblua52](./packages/liblua52), [libx11](./packages/libx11), [mpv-x](./packages/mpv-x).
+
+### Patching
+
+Many packages should be patched in order to work in the Termux. Before submitting a pull request, take a look on https://wiki.termux.com/wiki/Differences_from_Linux.
+
+You may often see hardcoded paths like:
+
+* /bin/sh
+* /etc
+* /tmp
+* /var
+
+You should fix them by prepending `@TERMUX_PREFIX@`.
+
+### Formatting patches
+
+If you changed multiple files, do not create the single-file patch. We prefer per-file patches. When amount of patches is large, you can split them between groups.
+
+### Quality control
+
+Always test things that you want to be merged at least on *two different CPU architectures*, device may be either real or AVD. Epsecially this is required for new packages. If you can't test the package, do not submit a pull request as likely it will be closed.
+
+Things that should not be submitted:
+
+- Trash.
+- Things that you do not want to host yourself.
+- Unknown packages, often self-developed.
+- Changes, that break existing stuff.
+- Changes, that introduce usage of command `sudo` (or similar) in build scripts.
+- Changes, that forces build script to do something outside of the build directory.
+
+In addition, read the [package request](#package-request) guide to know that packages are unwanted.
