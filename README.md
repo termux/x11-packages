@@ -10,6 +10,10 @@ To enable the [termux-x11.ml](https://termux-x11.ml) package repository run:
 pkg install x11-repo
 ```
 
+## Contributing
+
+If you wish to contribute for this project, take a look on our [contributing guide](./CONTRIBUTING.md).
+
 ## External links
 
 * Termux home page: https://termux.com/
