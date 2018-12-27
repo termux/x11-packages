@@ -7,10 +7,10 @@ about: Create a report to help us improve
 <!-- Important note: Refusing to provide needed information may result in issue closing. -->
 
 **Problem description**
-A clear and concise description of what the problem is. You may post screenshots in addition to description.
+A clear and concise description of what the problem is. It will be better if you add a screenshot.
 
 **Steps to reproduce**
-Steps to reproduce the behavior. If problem is related to command line programs, please post all necessary commands to reproduce the issue or even better - attach the script.
+Steps to reproduce the behavior. If problem is related to command line programs, please post all necessary commands to reproduce the issue or even better - attach a bash script.
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.

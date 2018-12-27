@@ -4,7 +4,7 @@ about: Suggest us a new package
 
 ---
 
-<!-- Important note: If you don't provide information 'why this package is needed' then it's importance will be determined by repository owner ;) -->
+<!-- Important note: motivating 'why this package is needed' will most likely give the package higher priority in the developer's TODO-list. -->
 
 **Package description**
 Describe what this package do and why it should be available.
