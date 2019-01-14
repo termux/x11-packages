@@ -1,4 +1,0 @@
-language: ruby
-sudo: required
-cache: bundler
-services: docker
