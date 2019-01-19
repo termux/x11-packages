@@ -1,0 +1,48 @@
+image: ubuntu:18.10
+
+variables:
+  GIT_SUBMODULE_STRATEGY: "recursive"
+  ANDROID_SDK_TOOLS_REVISION: "4333796"
+  ANDROID_SDK_BUILD_TOOLS_VERSION: "28.0.2"
+  ANDROID_NDK_VERSION: "18"
+
+before_script:
+  - apt update > /dev/null
+  - apt upgrade -yq > /dev/null
+  - env DEBIAN_FRONTEND=noninteractive apt install -yq --no-install-recommends build-essential
+    asciidoc asciidoctor autoconf automake bison curl ed flex g++-multilib gawk gettext git
+    gnome-common gtk-3-examples gtk-doc-tools gperf help2man intltool libexpat1-dev
+    libgdk-pixbuf2.0-dev libgmp-dev libgtk-3-bin libglib2.0-dev libisl-dev libjpeg-dev
+    libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libssl-dev libtool-bin lzip m4
+    openjdk-8-jdk-headless pax-utils pkg-config python-pip python3.7 python3-docutils
+    python3-pip python3-setuptools python3-sphinx ruby scons texinfo unzip xfonts-utils xmlto
+    zip zlib1g-dev > /dev/null
+  - mkdir -p ${HOME}/lib
+  - curl --silent --location --output sdk.zip
+    https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS_REVISION}.zip
+  - unzip -q -d android-sdk sdk.zip && rm -f sdk.zip
+  - mv android-sdk ${HOME}/lib/
+  - export ANDROID_HOME=${HOME}/lib/android-sdk
+  - mkdir -p ${HOME}/.android
+  - echo 'count=0' > ${HOME}/.android/repositories.cfg
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_SDK_BUILD_TOOLS_VERSION}" > /dev/null
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-21" > /dev/null
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-27" > /dev/null
+  - curl --silent --location --output ndk.zip
+    https://dl.google.com/android/repository/android-ndk-r${ANDROID_NDK_VERSION}-Linux-x86_64.zip
+  - unzip -q ndk.zip && rm -f ndk.zip
+  - mv android-ndk-r${ANDROID_NDK_VERSION} ${HOME}/lib/android-ndk
+  - mkdir -p /data/data/com.termux/files/usr
+
+stages:
+  - build
+
+process-last-commit:
+  stage: build
+  script:
+    - cp -a ./packages/* termux-packages/packages/
+    - cd termux-packages
+    - bash ../scripts/ci-process-last-commit.sh
+  artifacts:
+    paths:
+      - termux-packages/binary-packages/*
