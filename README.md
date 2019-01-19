@@ -1,7 +1,7 @@
 # Termux X11 Packages
 
 <!--[![builds.sr.ht status](https://builds.sr.ht/~xeffyr/x11-packages.svg)](https://builds.sr.ht/~xeffyr/x11-packages?)-->
-![gitlab pipeline](https://gitlab.com/xeffyr/x11-packages/badges/master/build.svg)
+[![pipeline status](https://gitlab.com/xeffyr/x11-packages/badges/master/pipeline.svg)](https://gitlab.com/xeffyr/x11-packages/commits/master)
 
 Here are located build scripts and patches for X11 packages for Termux.
 
