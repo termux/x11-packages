@@ -12,38 +12,42 @@ This article will describe all recommendations and things that you should know t
 
 ## Bug reports
 
-If you found that something crashes, reports that some file does not exist or just not working, consider to submit
-a bug report.
+Porting packages to such non-standard platform like Termux may lead in various bugs in the [x11-related packages](https://github.com/termux/x11-packages). Typical signs that you encountered a bug are messages like "segmentation fault", freezes, attempts to access non-existent files, etc.
 
-Good bug report should include:
+If you think that you found a bug, please submit a bug report which includes:
 
 - **Description**
 
-  Which package errored, what kind of error you get. You may attach a screenshots, especially when error
-  is related to graphical things.
+  Clear description of the problem you encountered. If error related to graphics, please attach a screenshot.
 
 - **Steps to reproduce**
 
-  Which command you have executed to get an error. Will be better if you create a bash script that will help to reproduce
-  the problem you got.
+  What you did to encounter the problem. Ideally, attach the script which will execute all necessary commands. If program fails only on certain configuration, attach the configuration files.
 
 - **System information**
 
   Your CPU architecture and version of Android. Usually, you can get necessary information by executing command `termux-info`.
 
-**Important**: before submitting a bug report, make sure that all your packages are up-to-date by running command `pkg upgrade`,
-then try to reproduce error yourself again - if it still occur, feel free to submit bug report, otherwise don't waste developers
-time because you have not upgraded the packages.
-
 Don't forget to use the right template when opening issue. To open issue with a bug report template, use this URL: https://github.com/termux/x11-packages/issues/new?template=bug_report.md.
+
+
+**Important**: do not submit bug reports about third-party, self-compiled and outdated packages. These issues will be considered as "spam". Same goes for corrupted configuration files and questions like "help me, I don't know how to use package".
 
 ## Package requests
 
-If you found that some package is missing, you may request it by opening appropriate issue.
+You are free to request specific package if you found it important but not available in repository.
 
-Note that unlike traditional Linux distributions, Termux has some limitations which make impossible to port specific packages. To learn about Termux's limitations, read following article on Termux Wiki: https://wiki.termux.com/wiki/Differences_from_Linux.
+Each package request should include:
 
-Things that should *never* be requested here:
+- **Package description**
+
+  A short and clear description of package, what it doing and why it should be packaged for Termux.
+
+- **Package's location**
+
+  An URL to the package's home page and sources. Use only *official* links - various unofficial modifications are generally *unwanted*, same goes for *unauthorized* mirrors.
+
+There are restrictions on accepted packages. Particulary, *never* request following stuff here:
 
 - Packages that cannot work without root.
 - Packages that require kernel features that are not available for Android devices.
@@ -52,23 +56,13 @@ Things that should *never* be requested here:
 - Packages that work only on specific architectures (e.g. x86 only).
 - Packages that can't work without OpenGL.
 - Packages that require Java.
-- Large/complex desktop environments like KDE or GNOME.
+- Complex desktop environments like KDE or GNOME.
 
 \- all package requests that require a thing one of listed above will be closed immediately.
 
-Each package request should include:
-
-- **Package description**
-
-  What this package doing. Why it should be available in Termux.
-
-- **Package's location**
-
-  An URL to the package's home page and sources. Please, use official links here.
-
-**Important**: it's likely that package requests will not be processed immediately, especially if your package introduces a dependencies that are not available in repository.
-
 A template for the package request issue can be found here: https://github.com/termux/x11-packages/issues/new?template=package-request.md.
+
+**Important**: package requests may not be processed instantly. Developer's time is quite limited. If you want to make package available quickly - implement it yourself and submit a [pull request](#pull-requests).
 
 ## Pull requests
 
@@ -76,51 +70,22 @@ Instead of waiting when your bug report or package request will be processed, yo
 
 ### Writing a build script
 
-Example of build script (build.sh) for the package "feh" with comments:
-```
-## Maintainer field.
-## Write your self here if you want to be a package maintainer otherwise
-## left me (xeffyr).
-## Since x11-packages is a separate repository, this field should not be empty !!!
-TERMUX_PKG_MAINTAINER="Leonid Plyushch <leonid.plyushch@gmail.com> @xeffyr"
+As example, it is recommended to check build scripts of some packages. For example: [gtk2](./packages/gtk2), [liblua52](./packages/liblua52), [libx11](./packages/libx11), [mpv-x](./packages/mpv-x).
 
-## I hope you understand what is the following lines do.
-TERMUX_PKG_HOMEPAGE=https://feh.finalrewind.org/
-TERMUX_PKG_DESCRIPTION="Fast and light imlib2-based image viewer"
-TERMUX_PKG_VERSION=3.0
-TERMUX_PKG_SRCURL=https://feh.finalrewind.org/feh-${TERMUX_PKG_VERSION}.tar.bz2
+There also some important things that worth to mention:
 
-## The sha-256 hash of the package source archive.
-## This field should not be empty !!!
-TERMUX_PKG_SHA256=b67b4e5c6e1fb45dd2a4567e395b413c7565246db6780a46fb1bcdf33d72dc01
+- **Maintainer field**
 
-## List of run-time dependencies.
-TERMUX_PKG_DEPENDS="imlib2, libandroid-shmem, libcurl, libexif, libpng, libx11, libxinerama"
+  Always set maintainer field. Either to yourself or me. Example:
+  ```
+  TERMUX_PKG_MAINTAINER="Leonid Plyushch <leonid.plyushch@gmail.com> @xeffyr"
+  ```
 
-## List of dependencies required only at build-time.
-TERMUX_PKG_BUILD_DEPENDS="libxt"
+- **License field**
 
-## Some packages do not support building in a separate directory.
-TERMUX_PKG_BUILD_IN_SRC=true
-
-## Sometimes you have to pass additional arguments to the command "make".
-TERMUX_PKG_EXTRA_MAKE_ARGS="exif=1 help=1 verscmp=0"
-
-## If you need to configure some variables, do this in termux_step_pre_configure().
-termux_step_pre_configure() {
-    CFLAGS+=" -I${TERMUX_PREFIX}/include"
-}
-```
-
-This repository uses a bit different coding style requirements:
-
-- Maintainer field should be always exist and be always on top.
-- Use spaces for indentation.
-- Do not mix field entries. See example above to determine an order of them.
-
-Minor violations of these requirements *will not* affect probability of merging your pull request.
-
-There are some other packages recommended to check or use as base for PR: [gtk2](./packages/gtk2), [liblua52](./packages/liblua52), [libx11](./packages/libx11), [mpv-x](./packages/mpv-x).
+  Another important field is a package license. Inspect package's source code and read files like "LICENSE" or "COPYING".
+  
+  Examples of accepted license names: AFL-2.1, AFL-3.0, AGPL-V3, Apache-1.0, Apache-1.1, Apache-2.0, APL-1.0, APSL-2.0, Artistic-License-2.0, Attribution, Bouncy-Castle, BSD, BSD 2-Clause, BSD 3-Clause, BSL-1.0, CA-TOSL-1.1, CC0-1.0, CDDL-1.0, Codehaus, CPAL-1.0, CPL-1.0, CPOL-1.02, CUAOFFICE-1.0, Day, Day-Addendum, ECL2, Eiffel-2.0, Entessa-1.0, EPL-1.0, EPL-2.0, EUDATAGRID, EUPL-1.1, EUPL-1.2, Fair, Facebook-Platform, Frameworx-1.0, Go, GPL-2.0, GPL-2.0+CE, GPL-3.0, Historical, HSQLDB, IBMPL-1.0, IJG, ImageMagick, IPAFont-1.0, ISC, IU-Extreme-1.1.1, JA-SIG, JSON, JTidy, LGPL-2.0, LGPL-2.1, LGPL-3.0, Libpng, LPPL-1.0, Lucent-1.02, MirOS, MIT, Motosoto-0.9.1, Mozilla-1.1, MPL-2.0, MS-PL, MS-RL, Multics, NASA-1.3, NAUMEN, NCSA, Nethack, Nokia-1.0a, NOSL-3.0, NTP, NUnit-2.6.3, NUnit-Test-Adapter-2.6.3, OCLC-2.0, Openfont-1.1, Opengroup, OpenSSL, OSL-3.0, PHP-3.0, PostgreSQL, Public Domain, Public Domain - SUN, PythonPL, PythonSoftFoundation, QTPL-1.0, Real-1.0, RicohPL, RPL-1.5, Scala, SimPL-2.0, Sleepycat, SUNPublic-1.0, Sybase-1.0, TMate, Unicode-DFS-2015, Unlicense, UoI-NCSA, UPL-1.0, VIM License, VovidaPL-1.0, W3C, WTFPL, wxWindows, Xnet, ZLIB, ZPL-2.0.
 
 ### Patching
 
@@ -135,21 +100,21 @@ You may often see hardcoded paths like:
 
 You should fix them by prepending `@TERMUX_PREFIX@`.
 
-### Formatting patches
-
-If you changed multiple files, do not create the single-file patch. We prefer per-file patches. When amount of patches is large, you can split them between groups.
+Another problem is that most programs are written for GNU libc but Termux uses a Bionic libc supplied by Android OS. There are no general recommendations on fixing compatibility so there you should deal on your own.
 
 ### Quality control
 
-Always test things that you want to be merged at least on *two different CPU architectures*, device may be either real or AVD. Epsecially this is required for new packages. If you can't test the package, do not submit a pull request as likely it will be closed.
+Build your packages in *latest* docker image provided by [termux-packages](https://github.com/termux/termux-packages) environment so builds will be reproducible.
 
-Things that should not be submitted:
+Always test things that you want to be merged at least on *two different CPU architectures*. The device can be either real or AVD (emulator) provided by Android SDK. Testing packages in other software like Anbox, Bluestacks or similar is strongly discouraged.
 
-- Trash.
-- Things that you do not want to host yourself.
-- Unknown packages, often self-developed.
-- Changes, that break existing stuff.
-- Changes, that introduce usage of command `sudo` (or similar) in build scripts.
-- Changes, that forces build script to do something outside of the build directory.
+What is not accepted in pull requests:
+
+- Breakage of existing stuff.
+- Usage of sudo-enabled commands.
+- Usage of commands that create or modify files outside the build directory.
+- Introducing *custom* global variables outside functions in the build script.
+- Implementation of unknown, dead, trash-like, poor-quality packages.
+- Implementation of commercial and closed-source packages.
 
 In addition, read the [package request](#package-request) guide to know that packages are unwanted.
