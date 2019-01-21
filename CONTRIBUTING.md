@@ -117,4 +117,4 @@ What is not accepted in pull requests:
 - Implementation of unknown, dead, trash-like, poor-quality packages.
 - Implementation of commercial and closed-source packages.
 
-In addition, read the [package request](#package-request) guide to know that packages are unwanted.
+In addition, read the [package request](#package-requests) guide to know that packages are unwanted.
