@@ -98,7 +98,20 @@ def read_env_var(var_name):
 
 def main():
     if len(sys.argv) == 1:
-        print("Usage: bintray-add-package.py [path to build.sh]")
+        print("")
+        print("Usage: bintray-add-package.py [-d] [path to build.sh]")
+        print("")
+        print("Package uploader script for Bintray.")
+        print("")
+        print("Options:")
+        print("")
+        print("  -d  Delete package instead of uploading.")
+        print("")
+        print("Credentials are specified via environment variables:")
+        print("")
+        print("  BINTRAY_USERNAME  - User or organisation name.")
+        print("  BINTRAY_API_KEY   - API key.")
+        print("")
         sys.exit(1)
 
     bintray_user = read_env_var("BINTRAY_USERNAME")
