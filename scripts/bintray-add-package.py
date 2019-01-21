@@ -66,7 +66,7 @@ class PackageMetadata(object):
             print(f"[!] No license for package '{package_name}'.")
             sys.exit(1)
 
-        if not self.licenses:
+        if not self.website_url:
             print(f"[!] No homepage for package '{package_name}'.")
             sys.exit(1)
 
@@ -117,6 +117,31 @@ def req_upload_package(session, metadata):
         print(f"[!] Package '{metadata.name}' already exists.")
     else:
         print(f"[!] Unknown error: {response.json()['message']}.")
+        sys.exit(1)
+
+    package_uploaded = False
+    for arch in ['all', 'aarch64', 'arm', 'i686', 'x86_64']:
+        package_file_name = f"{metadata.name}_{metadata.version}_{arch}.deb"
+        package_file_path = f"debs/{package_file_name}"
+
+        if os.path.exists(package_file_path):
+            print(f"[*] Uploading '{package_file_path}'...")
+            session.headers.update({
+                "X-Bintray-Debian-Distribution": "x11",
+                "X-Bintray-Debian-Component": "main",
+                "X-Bintray-Debian-Architecture": arch
+            })
+
+            with open(package_file_path, "rb") as package_file:
+                response = session.put(f"https://api.bintray.com/content/xeffyr/x11-packages/{metadata.name}/{metadata.version}/pool/main/l/{package_file_name}",
+                                       data=package_file)
+                print(response.text)
+                package_uploaded = True
+
+    if not package_uploaded:
+        print(f"[!] Cannot any *.deb file '{metadata.name}'.")
+        print( "    Deleting package from remote.")
+        req_delete_package(session, metadata)
         sys.exit(1)
 
 def main():
