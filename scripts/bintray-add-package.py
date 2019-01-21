@@ -27,12 +27,16 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 class PackageMetadata(object):
-    def __init__(self, package_name):
-        build_script_path = f"packages/{package_name}/build.sh"
-
+    def __init__(self, build_script_path):
         if not os.path.exists(build_script_path):
             print(f"[!] File {build_script_path} is not exist.")
             sys.exit(1)
+
+        if os.path.basename(build_script_path) != "build.sh":
+            print(f"[!] File '{build_script_path}' is not a build script.")
+            sys.exit(1)
+
+        package_name = os.path.basename(os.path.dirname(build_script_path))
 
         self.name = package_name
         self.desc = None
@@ -102,14 +106,14 @@ def main():
 
     metadata = PackageMetadata(sys.argv[1])
 
-    response = requests.post("https://api.bintray.com/packages/xeffyr/termux-x11",
+    response = requests.post("https://api.bintray.com/packages/xeffyr/x11-packages",
                              json=metadata.dump(),
                              auth=HTTPBasicAuth(bintray_user, bintray_api_key))
 
     if response.status_code == 201:
-        print(f"[*] New package '{sys.argv[1]}' successfully created.")
+        print(f"[*] New package '{metadata.name}' successfully created.")
     elif response.status_code == 409:
-        print(f"[!] Package '{sys.argv[1]}' already exists.")
+        print(f"[!] Package '{metadata.name}' already exists.")
     else:
         print(f"[!] Failed to submit a package '{sys.argv[1]}'.")
         print(f"Raw response: {response.text}")
