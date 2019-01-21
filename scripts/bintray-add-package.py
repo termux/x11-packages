@@ -135,11 +135,11 @@ def req_upload_package(session, metadata):
             with open(package_file_path, "rb") as package_file:
                 response = session.put(f"https://api.bintray.com/content/xeffyr/x11-packages/{metadata.name}/{metadata.version}/pool/main/l/{package_file_name}",
                                        data=package_file)
-                print(response.text)
+                print(f"[!] {response.json()['message']}.")
                 package_uploaded = True
 
     if not package_uploaded:
-        print(f"[!] Cannot any *.deb file '{metadata.name}'.")
+        print(f"[!] Cannot find any *.deb file for package '{metadata.name}'.")
         print( "    Deleting package from remote.")
         req_delete_package(session, metadata)
         sys.exit(1)
