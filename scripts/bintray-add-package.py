@@ -96,6 +96,29 @@ def read_env_var(var_name):
         print(f'[!] Environment variable {var_name} is not set.')
         sys.exit(1)
 
+def req_delete_package(session, metadata):
+    response = session.delete(f"https://api.bintray.com/packages/xeffyr/x11-packages/{metadata.name}")
+
+    if response.status_code == 200:
+        print(f"[*] Package '{metadata.name}' was successfully deleted.")
+    elif response.status_code == 404:
+        print(f"[!] Package '{metadata.name}' was not found.")
+    else:
+        print(f"[!] Unknown error: {response.json()['message']}.")
+        sys.exit(1)
+
+def req_upload_package(session, metadata):
+    response = session.post("https://api.bintray.com/packages/xeffyr/x11-packages",
+                            json=metadata.dump())
+
+    if response.status_code == 201:
+        print(f"[*] New package '{metadata.name}' successfully created.")
+    elif response.status_code == 409:
+        print(f"[!] Package '{metadata.name}' already exists.")
+    else:
+        print(f"[!] Unknown error: {response.json()['message']}.")
+        sys.exit(1)
+
 def main():
     if len(sys.argv) == 1:
         print("")
@@ -109,28 +132,35 @@ def main():
         print("")
         print("Credentials are specified via environment variables:")
         print("")
-        print("  BINTRAY_USERNAME  - User or organisation name.")
+        print("  BINTRAY_USERNAME  - User or organization name.")
         print("  BINTRAY_API_KEY   - API key.")
         print("")
         sys.exit(1)
 
+
+    delete_package = False
+
+    if len(sys.argv) >= 3:
+        if sys.argv[1] == "-d":
+            delete_package = True
+        else:
+            print(f"[!] Unknown option '{sys.argv[1]}'.")
+            sys.exit(1)
+
+        metadata = PackageMetadata(sys.argv[2])
+    else:
+        metadata = PackageMetadata(sys.argv[1])
+
     bintray_user = read_env_var("BINTRAY_USERNAME")
     bintray_api_key = read_env_var("BINTRAY_API_KEY")
 
-    metadata = PackageMetadata(sys.argv[1])
+    http_session = requests.Session()
+    http_session.auth = (bintray_user, bintray_api_key)
 
-    response = requests.post("https://api.bintray.com/packages/xeffyr/x11-packages",
-                             json=metadata.dump(),
-                             auth=HTTPBasicAuth(bintray_user, bintray_api_key))
-
-    if response.status_code == 201:
-        print(f"[*] New package '{metadata.name}' successfully created.")
-    elif response.status_code == 409:
-        print(f"[!] Package '{metadata.name}' already exists.")
+    if delete_package:
+        req_delete_package(http_session, metadata)
     else:
-        print(f"[!] Failed to submit a package '{sys.argv[1]}'.")
-        print(f"Raw response: {response.text}")
-        sys.exit(1)
+        req_upload_package(http_session, metadata)
 
 if __name__ == "__main__":
     main()
