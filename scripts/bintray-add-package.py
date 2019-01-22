@@ -19,6 +19,7 @@
 ##
 
 import fnmatch
+import getopt
 import json
 import os
 import sys
@@ -36,7 +37,7 @@ TERMUX_PACKAGES_BASEDIR = None
 TERMUX_PACKAGES_DEBDIR = None
 
 
-class PackageMetadata(object):
+class PackageMetadata():
     """Represents metadata structure used by Bintray."""
 
     def __init__(self, build_script_path):
@@ -108,13 +109,13 @@ class PackageMetadata(object):
 def req_delete_package(session, metadata):
     """Process request for deleting package."""
 
-    print(f"[*] Deleting published package '{metadata.name}' from remote... ", end="", flush=True)
+    print(f"[@] Deleting published package '{metadata.name}' from remote... ", end="", flush=True)
     response = session.delete(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}/{metadata.name}")
 
     if response.status_code == 200:
         print("done")
     elif response.status_code == 404:
-        print("unchanged")
+        print("no-need")
     else:
         print("failure")
         print(f"[!] {response.json()['message']}.")
@@ -152,7 +153,12 @@ def req_upload_package(session, metadata):
         # Finally append list to catalog.
         debfiles_catalog[arch] = debfiles
 
-    # Check that our catalog is not empty.
+    # Purge empty sets from catalog.
+    for arch in debfiles_catalog.copy():
+        if not debfiles_catalog[arch]:
+            debfiles_catalog.pop(arch)
+
+    # Verify that our catalog is not empty.
     if not debfiles_catalog:
         print("[!] No *.deb files to upload.")
         sys.exit(1)
@@ -161,7 +167,7 @@ def req_upload_package(session, metadata):
     req_delete_package(session, metadata)
 
     # Create new entry for package.
-    print(f"[*] Creating new entry for package '{metadata.name}'... ", end="", flush=True)
+    print(f"[@] Creating new entry for package '{metadata.name}'... ", end="", flush=True)
     response = session.post(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}",
                             json=metadata.dump())
     if response.status_code == 201:
@@ -176,8 +182,8 @@ def req_upload_package(session, metadata):
     # Go through catalog and upload things.
     for arch, debfile_list in debfiles_catalog.items():
         session.headers.update({
-            "X-Bintray-Debian-Distribution": "x11",
-            "X-Bintray-Debian-Component": "main",
+            "X-Bintray-Debian-Distribution": REPO_DISTRIBUTION,
+            "X-Bintray-Debian-Component": REPO_COMPONENT,
             "X-Bintray-Debian-Architecture": arch
         })
 
@@ -185,7 +191,7 @@ def req_upload_package(session, metadata):
             debfile_path = os.path.join(TERMUX_PACKAGES_DEBDIR, debfile)
 
             with open(debfile_path, "rb") as data_stream:
-                print(f"[*] Uploading '{debfile}'... ", end="", flush=True)
+                print(f"[*]   Uploading '{debfile}'... ", end="", flush=True)
 
                 response = session.put(f"https://api.bintray.com/content/{session.auth[0]}/{REPO_NAME}/{metadata.name}/{metadata.version}/{arch}/{debfile};publish=1",
                                        data=data_stream)
@@ -199,19 +205,26 @@ def req_upload_package(session, metadata):
                     print(f"[!] {response.json()['message']}.")
                     sys.exit(1)
 
-    print(f"[*] Finished publication of package '{metadata.name}'.")
+    print(f"[@] Finished publication of package '{metadata.name}'.")
 
 
 def show_usage():
     """Print information about usage."""
 
-    print("\nUsage: bintray-add-package.py [-d] [path to build.sh]\n"
+    script_name = os.path.basename(sys.argv[0])
+
+    print(f"\nUsage: {script_name} [OPTIONS] [package name] ...\n"
           "\n"
           "Package uploader script for Bintray.\n"
           "\n"
           "Options:\n"
           "\n"
-          "  -d  Delete package instead of uploading.\n"
+          "  -d, --delete    Delete package instead of uploading.\n"
+          "\n"
+          "  -h, --help      Print this help.\n"
+          "\n"
+          "  -p, --path      Override path to directory with\n"
+          "                  the *.deb files.\n"
           "\n"
           "Credentials are specified via environment variables:\n"
           "\n"
@@ -222,43 +235,68 @@ def show_usage():
 def main():
     """Handle command line arguments."""
 
+    delete_package = False
+
     if len(sys.argv) == 1:
         show_usage()
         sys.exit(1)
 
-    delete_package = False
+    try:
+        options, args = getopt.getopt(sys.argv[1:], "dhp:",
+                                      ['--delete', '--help', '--path='])
+    except getopt.GetoptError as err:
+        print(f"[!] Error: {err}.")
+        sys.exit(1)
 
-    if len(sys.argv) >= 3:
-        if sys.argv[1] == "-d":
+    for opt, value in options:
+        if opt in ('-d', '--delete'):
             delete_package = True
+        elif opt in ('-h', '--help'):
+            show_usage()
+            sys.exit(0)
+        elif opt in ('-p', '--path'):
+            TERMUX_PACKAGES_DEBDIR = value
         else:
-            print(f"[!] Unknown option '{sys.argv[1]}'.")
+            print("[!] Error while parsing options.")
             sys.exit(1)
 
-        metadata = PackageMetadata(sys.argv[2])
-    else:
-        metadata = PackageMetadata(sys.argv[1])
+    if not args:
+        print("[!] You have to specify package name(s).")
+        sys.exit(1)
 
+    # Obtain authentication credentials.
     try:
         bintray_user = os.environ['BINTRAY_USERNAME']
     except:
         print("[!] Environment variable 'BINTRAY_USERNAME' is not set.")
         sys.exit(1)
-
     try:
         bintray_api_key = os.environ['BINTRAY_API_KEY']
     except:
         print("[!] Environment variable 'BINTRAY_API_KEY' is not set.")
         sys.exit(1)
 
-    http_session = requests.Session()
-    http_session.auth = (bintray_user, bintray_api_key)
+    # Process all specified packages.
+    for package_name in args:
+        build_script_path = os.path.join(TERMUX_PACKAGES_BASEDIR, "packages",
+                                         package_name, "build.sh")
 
-    if delete_package:
-        req_delete_package(http_session, metadata)
-    else:
-        req_upload_package(http_session, metadata)
+        metadata = None
+        if os.path.exists(build_script_path):
+            metadata = PackageMetadata(build_script_path)
+        else:
+            print(f"[!] Package '{package_name}' is not exist.")
+            sys.exit(1)
 
+        http_session = requests.Session()
+        http_session.auth = (bintray_user, bintray_api_key)
+
+        if delete_package:
+            req_delete_package(http_session, metadata)
+        else:
+            req_upload_package(http_session, metadata)
+
+    sys.exit(0)
 
 if __name__ == "__main__":
     # Obtain absolute path to the Termux packages repository.
