@@ -62,6 +62,9 @@ class PackageMetadata(object):
                 if line.startswith("TERMUX_PKG_VERSION"):
                     self.version = self.get_value(line, "TERMUX_PKG_VERSION")
 
+                if line.startswith("TERMUX_PKG_REVISION"):
+                    self.version = "{}-{}".format(self.version, self.get_value(line, "TERMUX_PKG_REVISION"))
+
         if not self.licenses:
             print(f"[!] No license for package '{package_name}'.")
             sys.exit(1)
