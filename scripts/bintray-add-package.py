@@ -147,8 +147,6 @@ def req_upload_package(session, metadata):
 
     if not package_uploaded:
         print(f"[!] Cannot find any *.deb file for package '{metadata.name}'.")
-        print( "    Deleting package from remote.")
-        req_delete_package(session, metadata)
         sys.exit(1)
 
 def main():
