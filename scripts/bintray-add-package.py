@@ -105,8 +105,25 @@ class PackageMetadata(object):
         return self.__dict__
 
 
-def find_and_upload_debs(session, metadata):
-    """Discover and upload all existing *.deb files for specific package."""
+def req_delete_package(session, metadata):
+    """Process request for deleting package."""
+
+    print(f"[*] Deleting published package '{metadata.name}' from remote... ", end="", flush=True)
+    response = session.delete(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}/{metadata.name}")
+
+    if response.status_code == 200:
+        print("done")
+    elif response.status_code == 404:
+        print("unchanged")
+    else:
+        print("failure")
+        print(f"[!] {response.json()['message']}.")
+        sys.exit(1)
+
+
+def req_upload_package(session, metadata):
+    """Process request for uploading package."""
+
     debfiles_catalog = dict()
 
     for arch in ['all', 'aarch64', 'arm', 'i686', 'x86_64']:
@@ -140,6 +157,22 @@ def find_and_upload_debs(session, metadata):
         print("[!] No *.deb files to upload.")
         sys.exit(1)
 
+    # Delete entry for package (with all related debfiles).
+    req_delete_package(session, metadata)
+
+    # Create new entry for package.
+    print(f"[*] Creating new entry for package '{metadata.name}'... ", end="", flush=True)
+    response = session.post(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}",
+                            json=metadata.dump())
+    if response.status_code == 201:
+        print("done")
+    elif response.status_code == 409:
+        print("unchanged")
+    else:
+        print("failure")
+        print(f"[!] {response.json()['message']}.")
+        sys.exit(1)
+
     # Go through catalog and upload things.
     for arch, debfile_list in debfiles_catalog.items():
         session.headers.update({
@@ -148,7 +181,7 @@ def find_and_upload_debs(session, metadata):
             "X-Bintray-Debian-Architecture": arch
         })
 
-        for debfile in debfile_list:
+        for debfile in sorted(debfile_list):
             debfile_path = os.path.join(TERMUX_PACKAGES_DEBDIR, debfile)
 
             with open(debfile_path, "rb") as data_stream:
@@ -158,50 +191,15 @@ def find_and_upload_debs(session, metadata):
                                        data=data_stream)
 
                 if response.status_code == 201:
-                    print("okay")
+                    print("done")
                 elif response.status_code == 409:
-                    print("skipping")
+                    print("unchanged")
                 else:
                     print("failure")
                     print(f"[!] {response.json()['message']}.")
                     sys.exit(1)
 
-
-def req_upload_package(session, metadata):
-    """Process request for uploading package."""
-
-    # Create package entry on Bintray if necessary.
-    print(f"[*] Creating new entry for package '{metadata.name}'... ", end="", flush=True)
-    response = session.post(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}",
-                            json=metadata.dump())
-
-    if response.status_code == 201:
-        print("okay")
-    elif response.status_code == 409:
-        print("skipping")
-    else:
-        print("failure")
-        print(f"[!] {response.json()['message']}.")
-        sys.exit(1)
-
-    # Find all *.deb files related to package and upload them.
-    find_and_upload_debs(session, metadata)
-
-
-def req_delete_package(session, metadata):
-    """Process request for deleting package."""
-
-    print(f"[*] Deleting package '{metadata.name}' from remote... ", end="", flush=True)
-    response = session.delete(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}/{metadata.name}")
-
-    if response.status_code == 200:
-        print("okay")
-    elif response.status_code == 404:
-        print("skipping")
-    else:
-        print("failure")
-        print(f"[!] {response.json()['message']}.")
-        sys.exit(1)
+    print(f"[*] Finished publication of package '{metadata.name}'.")
 
 
 def show_usage():
