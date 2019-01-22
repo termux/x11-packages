@@ -24,7 +24,11 @@ import json
 import os
 import sys
 
-import requests
+try:
+    import requests
+except ModuleNotFoundError:
+    print("[!] Please, install 'requests' python module.")
+    sys.exit(1)
 
 # Repository configuration.
 REPO_NAME = "x11-packages"
