@@ -18,15 +18,27 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import fnmatch
+import json
 import os
 import sys
-import json
 
 import requests
 
-from requests.auth import HTTPBasicAuth
+# Repository configuration.
+REPO_NAME = "x11-packages"
+REPO_GITHUB = "termux/x11-packages"
+REPO_DISTRIBUTION = "x11"
+REPO_COMPONENT = "main"
+
+# These variables determined automatically.
+TERMUX_PACKAGES_BASEDIR = None
+TERMUX_PACKAGES_DEBDIR = None
+
 
 class PackageMetadata(object):
+    """Represents metadata structure used by Bintray."""
+
     def __init__(self, build_script_path):
         if not os.path.exists(build_script_path):
             print(f"[!] File {build_script_path} is not exist.")
@@ -41,10 +53,10 @@ class PackageMetadata(object):
         self.name = package_name
         self.desc = None
         self.licenses = None
-        self.vcs_url = "https://github.com/termux/x11-packages"
+        self.vcs_url = f"https://github.com/{REPO_GITHUB}"
         self.website_url = None
-        self.issue_tracker_url = "https://github.com/termux/x11-packages/issues"
-        self.github_repo = "termux/x11-packages"
+        self.issue_tracker_url = f"https://github.com/{REPO_GITHUB}/issues"
+        self.github_repo = f"{REPO_GITHUB}"
         self.public_download_numbers = False
         self.public_stats = False
 
@@ -92,84 +104,129 @@ class PackageMetadata(object):
     def dump(self):
         return self.__dict__
 
-def read_env_var(var_name):
-    if var_name in os.environ:
-        return os.environ[var_name]
-    else:
-        print(f'[!] Environment variable {var_name} is not set.')
+
+def find_and_upload_debs(session, metadata):
+    """Discover and upload all existing *.deb files for specific package."""
+    debfiles_catalog = dict()
+
+    for arch in ['all', 'aarch64', 'arm', 'i686', 'x86_64']:
+        debfiles = set()
+
+        # Regular package.
+        debfiles.add(f"{metadata.name}_{metadata.version}_{arch}.deb")
+
+        # Development package.
+        debfiles.add(f"{metadata.name}-dev_{metadata.version}_{arch}.deb")
+
+        # Discover subpackages.
+        for file in os.listdir(os.path.join(TERMUX_PACKAGES_BASEDIR, "packages", metadata.name)):
+            if fnmatch.fnmatch(file, "*.subpackage.sh"):
+                package_name = file.split(".subpackage.sh")[0]
+                package_file_name = f"{package_name}_{metadata.version}_{arch}.deb"
+                debfiles.add(package_file_name)
+
+        # Filter out nonexistent files.
+        for file in debfiles.copy():
+            file_path = os.path.join(TERMUX_PACKAGES_DEBDIR, file)
+
+            if not os.path.exists(file_path):
+                debfiles.discard(file)
+
+        # Finally append list to catalog.
+        debfiles_catalog[arch] = debfiles
+
+    # Check that our catalog is not empty.
+    if not debfiles_catalog:
+        print("[!] No *.deb files to upload.")
         sys.exit(1)
 
-def req_delete_package(session, metadata):
-    response = session.delete(f"https://api.bintray.com/packages/xeffyr/x11-packages/{metadata.name}")
+    # Go through catalog and upload things.
+    for arch, debfile_list in debfiles_catalog.items():
+        session.headers.update({
+            "X-Bintray-Debian-Distribution": "x11",
+            "X-Bintray-Debian-Component": "main",
+            "X-Bintray-Debian-Architecture": arch
+        })
 
-    if response.status_code == 200:
-        print(f"[*] Package '{metadata.name}' was successfully deleted.")
-    elif response.status_code == 404:
-        print(f"[!] Package '{metadata.name}' was not found.")
-    else:
-        print(f"[!] Unknown error: {response.json()['message']}.")
-        sys.exit(1)
+        for debfile in debfile_list:
+            debfile_path = os.path.join(TERMUX_PACKAGES_DEBDIR, debfile)
+
+            with open(debfile_path, "rb") as data_stream:
+                print(f"[*] Uploading '{debfile}'... ", end="", flush=True)
+
+                response = session.put(f"https://api.bintray.com/content/{session.auth[0]}/{REPO_NAME}/{metadata.name}/{metadata.version}/{arch}/{debfile};publish=1",
+                                       data=data_stream)
+
+                if response.status_code == 201:
+                    print("okay")
+                elif response.status_code == 409:
+                    print("skipping")
+                else:
+                    print("failure")
+                    print(f"[!] {response.json()['message']}.")
+                    sys.exit(1)
+
 
 def req_upload_package(session, metadata):
-    response = session.post("https://api.bintray.com/packages/xeffyr/x11-packages",
+    """Process request for uploading package."""
+
+    # Create package entry on Bintray if necessary.
+    print(f"[*] Creating new entry for package '{metadata.name}'... ", end="", flush=True)
+    response = session.post(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}",
                             json=metadata.dump())
 
     if response.status_code == 201:
-        print(f"[*] New package '{metadata.name}' successfully created.")
+        print("okay")
     elif response.status_code == 409:
-        print(f"[!] Package '{metadata.name}' already exists.")
+        print("skipping")
     else:
-        print(f"[!] Unknown error: {response.json()['message']}.")
+        print("failure")
+        print(f"[!] {response.json()['message']}.")
         sys.exit(1)
 
-    package_uploaded = False
-    for arch in ['all', 'aarch64', 'arm', 'i686', 'x86_64']:
-        package_file_name = f"{metadata.name}_{metadata.version}_{arch}.deb"
-        package_file_path = f"debs/{package_file_name}"
+    # Find all *.deb files related to package and upload them.
+    find_and_upload_debs(session, metadata)
 
-        if os.path.exists(package_file_path):
-            print(f"[*] Uploading '{package_file_path}'...")
-            session.headers.update({
-                "X-Bintray-Debian-Distribution": "x11",
-                "X-Bintray-Debian-Component": "main",
-                "X-Bintray-Debian-Architecture": arch
-            })
 
-            with open(package_file_path, "rb") as package_file:
-                response = session.put(f"https://api.bintray.com/content/xeffyr/x11-packages/{metadata.name}/{metadata.version}/{arch}/{package_file_name};publish=1",
-                                       data=package_file)
+def req_delete_package(session, metadata):
+    """Process request for deleting package."""
 
-                if response.status_code == 201:
-                    package_uploaded = True
-                elif response.status_code == 409:
-                    package_uploaded = True
-                    print(f"[!] File '{package_file_path}' already published.")
-                else:
-                    print(f"[!] Unknown error: {response.json()['message']}.")
-                    sys.exit(1)
+    print(f"[*] Deleting package '{metadata.name}' from remote... ", end="", flush=True)
+    response = session.delete(f"https://api.bintray.com/packages/{session.auth[0]}/{REPO_NAME}/{metadata.name}")
 
-    if not package_uploaded:
-        print(f"[!] Cannot find any *.deb file for package '{metadata.name}'.")
+    if response.status_code == 200:
+        print("okay")
+    elif response.status_code == 404:
+        print("skipping")
+    else:
+        print("failure")
+        print(f"[!] {response.json()['message']}.")
         sys.exit(1)
+
+
+def show_usage():
+    """Print information about usage."""
+
+    print("\nUsage: bintray-add-package.py [-d] [path to build.sh]\n"
+          "\n"
+          "Package uploader script for Bintray.\n"
+          "\n"
+          "Options:\n"
+          "\n"
+          "  -d  Delete package instead of uploading.\n"
+          "\n"
+          "Credentials are specified via environment variables:\n"
+          "\n"
+          "  BINTRAY_USERNAME  - User or organization name.\n"
+          "  BINTRAY_API_KEY   - API key.\n")
+
 
 def main():
-    if len(sys.argv) == 1:
-        print("")
-        print("Usage: bintray-add-package.py [-d] [path to build.sh]")
-        print("")
-        print("Package uploader script for Bintray.")
-        print("")
-        print("Options:")
-        print("")
-        print("  -d  Delete package instead of uploading.")
-        print("")
-        print("Credentials are specified via environment variables:")
-        print("")
-        print("  BINTRAY_USERNAME  - User or organization name.")
-        print("  BINTRAY_API_KEY   - API key.")
-        print("")
-        sys.exit(1)
+    """Handle command line arguments."""
 
+    if len(sys.argv) == 1:
+        show_usage()
+        sys.exit(1)
 
     delete_package = False
 
@@ -184,8 +241,17 @@ def main():
     else:
         metadata = PackageMetadata(sys.argv[1])
 
-    bintray_user = read_env_var("BINTRAY_USERNAME")
-    bintray_api_key = read_env_var("BINTRAY_API_KEY")
+    try:
+        bintray_user = os.environ['BINTRAY_USERNAME']
+    except:
+        print("[!] Environment variable 'BINTRAY_USERNAME' is not set.")
+        sys.exit(1)
+
+    try:
+        bintray_api_key = os.environ['BINTRAY_API_KEY']
+    except:
+        print("[!] Environment variable 'BINTRAY_API_KEY' is not set.")
+        sys.exit(1)
 
     http_session = requests.Session()
     http_session.auth = (bintray_user, bintray_api_key)
@@ -195,5 +261,16 @@ def main():
     else:
         req_upload_package(http_session, metadata)
 
+
 if __name__ == "__main__":
-    main()
+    # Obtain absolute path to the Termux packages repository.
+    # (this script was launched from Termux repository, right ??)
+    script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
+    TERMUX_PACKAGES_BASEDIR = os.path.realpath(os.path.join(script_dir, "../"))
+    TERMUX_PACKAGES_DEBDIR = os.path.join(TERMUX_PACKAGES_BASEDIR, "debs")
+
+    if not os.path.exists(os.path.join(TERMUX_PACKAGES_BASEDIR, "packages")):
+        print("[!] Cannot find packages directory.")
+        sys.exit(1)
+    else:
+        main()
