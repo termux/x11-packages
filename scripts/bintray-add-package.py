@@ -133,10 +133,17 @@ def req_upload_package(session, metadata):
             })
 
             with open(package_file_path, "rb") as package_file:
-                response = session.put(f"https://api.bintray.com/content/xeffyr/x11-packages/{metadata.name}/{metadata.version}/pool/main/l/{package_file_name}",
+                response = session.put(f"https://api.bintray.com/content/xeffyr/x11-packages/{metadata.name}/{metadata.version}/{arch}/{package_file_name};publish=1",
                                        data=package_file)
-                print(f"[!] {response.json()['message']}.")
-                package_uploaded = True
+
+                if response.status_code == 201:
+                    package_uploaded = True
+                elif response.status_code == 409:
+                    package_uploaded = True
+                    print(f"[!] File '{package_file_path}' already published.")
+                else:
+                    print(f"[!] Unknown error: {response.json()['message']}.")
+                    sys.exit(1)
 
     if not package_uploaded:
         print(f"[!] Cannot find any *.deb file for package '{metadata.name}'.")
