@@ -33,16 +33,43 @@ before_script:
   - unzip -q ndk.zip && rm -f ndk.zip
   - mv android-ndk-r${ANDROID_NDK_VERSION} ${HOME}/lib/android-ndk
   - mkdir -p /data/data/com.termux/files/usr
+  - cp -a ./packages/* termux-packages/packages/
 
 stages:
   - build
 
-process-last-commit:
+build-aarch64:
   stage: build
   script:
-    - cp -a ./packages/* termux-packages/packages/
     - cd termux-packages
-    - bash ../scripts/ci-process-last-commit.sh
+    - bash ../scripts/gitlab-ci-build.sh aarch64
   artifacts:
     paths:
-      - termux-packages/binary-packages/*
+      - termux-packages/binary-aarch64/*
+
+build-arm:
+  stage: build
+  script:
+    - cd termux-packages
+    - bash ../scripts/gitlab-ci-build.sh arm
+  artifacts:
+    paths:
+      - termux-packages/binary-arm/*
+
+build-i686:
+  stage: build
+  script:
+    - cd termux-packages
+    - bash ../scripts/gitlab-ci-build.sh i686
+  artifacts:
+    paths:
+      - termux-packages/binary-i686/*
+
+build-x86_64:
+  stage: build
+  script:
+    - cd termux-packages
+    - bash ../scripts/gitlab-ci-build.sh x86_64
+  artifacts:
+    paths:
+      - termux-packages/binary-x86_64/*
