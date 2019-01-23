@@ -37,39 +37,45 @@ before_script:
 
 stages:
   - build
+  - deploy
 
 build-aarch64:
   stage: build
   script:
-    - cd termux-packages
-    - bash ../scripts/gitlab-ci-build.sh aarch64
+    - bash ./scripts/gitlab-ci-build.sh aarch64
   artifacts:
+    expire_in: 48 hrs
     paths:
-      - termux-packages/binary-aarch64/*
+      - deb-packages
 
 build-arm:
   stage: build
   script:
-    - cd termux-packages
-    - bash ../scripts/gitlab-ci-build.sh arm
+    - bash ./scripts/gitlab-ci-build.sh arm
   artifacts:
+    expire_in: 48 hrs
     paths:
-      - termux-packages/binary-arm/*
+      - deb-packages
 
 build-i686:
   stage: build
   script:
-    - cd termux-packages
-    - bash ../scripts/gitlab-ci-build.sh i686
+    - bash ./scripts/gitlab-ci-build.sh i686
   artifacts:
+    expire_in: 48 hrs
     paths:
-      - termux-packages/binary-i686/*
+      - deb-packages
 
 build-x86_64:
   stage: build
   script:
-    - cd termux-packages
-    - bash ../scripts/gitlab-ci-build.sh x86_64
+    - bash ./scripts/gitlab-ci-build.sh x86_64
   artifacts:
+    expire_in: 48 hrs
     paths:
-      - termux-packages/binary-x86_64/*
+      - deb-packages
+
+upload-packages:
+  stage: deploy
+  script:
+    - bash ./scripts/gitlab-ci-upload.sh

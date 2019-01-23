@@ -3,10 +3,17 @@
 SCRIPT_PATH=$(realpath "$0")
 SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 REPO_DIR=$(dirname "$SCRIPT_DIR")
+DEBS_DIR="$REPO_DIR/deb-packages"
 cd "$REPO_DIR" || {
     echo "[!] Failed to cd into '$REPO_DIR'."
     exit 1
 }
+
+## Create directory where *.deb files will be placed.
+if ! mkdir -p "$DEBS_DIR" > /dev/null 2>&1; then
+    echo "[!] Failed to create directory '$DEBS_DIR'."
+    exit 1
+fi
 
 ## Set target architecture.
 if [ $# -ge 1 ]; then
@@ -26,7 +33,11 @@ if [ -z "${CI_COMMIT_SHA}" ]; then
 fi
 
 ## Check for updated files and determine if they are part of packages.
-UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CI_COMMIT_BEFORE_SHA}..${CI_COMMIT_SHA}" | grep -P "packages/")
+if [ "$CI_COMMIT_BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+    UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CI_COMMIT_SHA}" | grep -P "packages/")
+else
+    UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CI_COMMIT_BEFORE_SHA}..${CI_COMMIT_SHA}" | grep -P "packages/")
+fi
 if [ -z "$UPDATED_FILES" ]; then
     echo "[*] No packages changed."
     echo "[*] Finishing with status 'OK'."
@@ -65,14 +76,8 @@ if ! cd "$REPO_DIR/termux-packages" > /dev/null 2>&1; then
     exit 1
 fi
 
-## Create directory where built packages will be placed.
-if ! mkdir -p ./binary-$TERMUX_ARCH > /dev/null 2>&1; then
-    echo "[!] Failed to create directory './binary-$TERMUX_ARCH'."
-    exit 1
-fi
-
 echo "[@] Building packages for architecture '$TERMUX_ARCH':"
-build_log="./binary-${TERMUX_ARCH}/build.log"
+build_log="$DEBS_DIR/build-$TERMUX_ARCH.log"
 
 for pkg in $PACKAGE_NAMES; do
     pkg=$(basename "$pkg")
@@ -81,7 +86,7 @@ for pkg in $PACKAGE_NAMES; do
     for dep_pkg in $(./scripts/buildorder.py "./packages/$pkg"); do
         dep_pkg=$(basename "$dep_pkg")
         echo -n "[+]     Compiling dependency $dep_pkg... "
-        if ./build-package.sh -o "./binary-$TERMUX_ARCH" -a "$TERMUX_ARCH" -s "$dep_pkg" >> "$build_log" 2>&1; then
+        if ./build-package.sh -o "$DEBS_DIR" -a "$TERMUX_ARCH" -s "$dep_pkg" >> "$build_log" 2>&1; then
             echo "ok"
         else
             echo "fail"
@@ -95,9 +100,8 @@ for pkg in $PACKAGE_NAMES; do
         fi
     done
 
-
     echo -n "[+]     Compiling $pkg... "
-    if ./build-package.sh -o "./binary-$TERMUX_ARCH" -a "$TERMUX_ARCH" "$pkg" >> "$build_log" 2>&1; then
+    if ./build-package.sh -o "$DEBS_DIR" -a "$TERMUX_ARCH" "$pkg" >> "$build_log" 2>&1; then
         echo "ok"
     else
         echo "fail"
