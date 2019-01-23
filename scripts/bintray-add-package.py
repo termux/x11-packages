@@ -36,9 +36,8 @@ REPO_GITHUB = "termux/x11-packages"
 REPO_DISTRIBUTION = "x11"
 REPO_COMPONENT = "main"
 
-# These variables determined automatically.
+# This variable is determined automatically.
 TERMUX_PACKAGES_BASEDIR = None
-TERMUX_PACKAGES_DEBDIR = None
 
 
 class PackageMetadata():
@@ -126,7 +125,7 @@ def req_delete_package(session, metadata):
         sys.exit(1)
 
 
-def req_upload_package(session, metadata):
+def req_upload_package(session, metadata, debfiles_dir):
     """Process request for uploading package."""
 
     debfiles_catalog = dict()
@@ -149,7 +148,7 @@ def req_upload_package(session, metadata):
 
         # Filter out nonexistent files.
         for file in debfiles.copy():
-            file_path = os.path.join(TERMUX_PACKAGES_DEBDIR, file)
+            file_path = os.path.join(debfiles_dir, file)
 
             if not os.path.exists(file_path):
                 debfiles.discard(file)
@@ -192,7 +191,7 @@ def req_upload_package(session, metadata):
         })
 
         for debfile in sorted(debfile_list):
-            debfile_path = os.path.join(TERMUX_PACKAGES_DEBDIR, debfile)
+            debfile_path = os.path.join(debfiles_dir, debfile)
 
             with open(debfile_path, "rb") as data_stream:
                 print(f"[*]   Uploading '{debfile}'... ", end="", flush=True)
@@ -240,6 +239,7 @@ def main():
     """Handle command line arguments."""
 
     delete_package = False
+    debfiles_dir = os.path.join(TERMUX_PACKAGES_BASEDIR, "debs")
 
     if len(sys.argv) == 1:
         show_usage()
@@ -247,7 +247,7 @@ def main():
 
     try:
         options, args = getopt.getopt(sys.argv[1:], "dhp:",
-                                      ['--delete', '--help', '--path='])
+                                      ['delete', 'help', 'path='])
     except getopt.GetoptError as err:
         print(f"[!] Error: {err}.")
         sys.exit(1)
@@ -259,7 +259,7 @@ def main():
             show_usage()
             sys.exit(0)
         elif opt in ('-p', '--path'):
-            TERMUX_PACKAGES_DEBDIR = value
+            debfiles_dir = value
         else:
             print("[!] Error while parsing options.")
             sys.exit(1)
@@ -298,7 +298,7 @@ def main():
         if delete_package:
             req_delete_package(http_session, metadata)
         else:
-            req_upload_package(http_session, metadata)
+            req_upload_package(http_session, metadata, debfiles_dir)
 
     sys.exit(0)
 
@@ -307,7 +307,6 @@ if __name__ == "__main__":
     # (this script was launched from Termux repository, right ??)
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
     TERMUX_PACKAGES_BASEDIR = os.path.realpath(os.path.join(script_dir, "../"))
-    TERMUX_PACKAGES_DEBDIR = os.path.join(TERMUX_PACKAGES_BASEDIR, "debs")
 
     if not os.path.exists(os.path.join(TERMUX_PACKAGES_BASEDIR, "packages")):
         print("[!] Cannot find packages directory.")
