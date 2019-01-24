@@ -32,7 +32,9 @@ before_script:
     https://dl.google.com/android/repository/android-ndk-r${ANDROID_NDK_VERSION}-Linux-x86_64.zip
   - unzip -q ndk.zip && rm -f ndk.zip
   - mv android-ndk-r${ANDROID_NDK_VERSION} ${HOME}/lib/android-ndk
-  - mkdir -p /data/data/com.termux/files/usr
+  - mkdir -p /data
+  - mkdir -p ./build-data/data/com.termux/files/usr
+  - mount --bind ./build-data /data
   - cp -a ./packages/* termux-packages/packages/
 
 stages:
@@ -47,6 +49,10 @@ build-aarch64:
     expire_in: 48 hrs
     paths:
       - deb-packages
+  cache:
+    key: aarch64-data
+    paths:
+      - build-data
 
 build-arm:
   stage: build
@@ -56,6 +62,10 @@ build-arm:
     expire_in: 48 hrs
     paths:
       - deb-packages
+  cache:
+    key: arm-data
+    paths:
+      - build-data
 
 build-i686:
   stage: build
@@ -65,6 +75,10 @@ build-i686:
     expire_in: 48 hrs
     paths:
       - deb-packages
+  cache:
+    key: i686-data
+    paths:
+      - build-data
 
 build-x86_64:
   stage: build
@@ -74,6 +88,10 @@ build-x86_64:
     expire_in: 48 hrs
     paths:
       - deb-packages
+  cache:
+    key: x86_64-data
+    paths:
+      - build-data
 
 upload-packages:
   stage: deploy
