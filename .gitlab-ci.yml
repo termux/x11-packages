@@ -45,6 +45,11 @@ build-aarch64:
   stage: build
   script:
     - bash ./scripts/gitlab-ci-build.sh aarch64
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
   artifacts:
     when: always
     expire_in: 1 week
@@ -59,6 +64,11 @@ build-arm:
   stage: build
   script:
     - bash ./scripts/gitlab-ci-build.sh arm
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
   artifacts:
     when: always
     expire_in: 1 week
@@ -73,6 +83,11 @@ build-i686:
   stage: build
   script:
     - bash ./scripts/gitlab-ci-build.sh i686
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
   artifacts:
     when: always
     expire_in: 1 week
@@ -87,6 +102,11 @@ build-x86_64:
   stage: build
   script:
     - bash ./scripts/gitlab-ci-build.sh x86_64
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
   artifacts:
     when: always
     expire_in: 1 week
@@ -103,3 +123,8 @@ upload-packages:
     - master@xeffyr/x11-packages
   script:
     - bash ./scripts/gitlab-ci-upload.sh
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - unknown_failure
