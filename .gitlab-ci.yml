@@ -46,6 +46,7 @@ build-aarch64:
   script:
     - bash ./scripts/gitlab-ci-build.sh aarch64
   artifacts:
+    when: always
     expire_in: 1 week
     paths:
       - deb-packages
@@ -59,6 +60,7 @@ build-arm:
   script:
     - bash ./scripts/gitlab-ci-build.sh arm
   artifacts:
+    when: always
     expire_in: 1 week
     paths:
       - deb-packages
@@ -72,6 +74,7 @@ build-i686:
   script:
     - bash ./scripts/gitlab-ci-build.sh i686
   artifacts:
+    when: always
     expire_in: 1 week
     paths:
       - deb-packages
@@ -85,6 +88,7 @@ build-x86_64:
   script:
     - bash ./scripts/gitlab-ci-build.sh x86_64
   artifacts:
+    when: always
     expire_in: 1 week
     paths:
       - deb-packages
