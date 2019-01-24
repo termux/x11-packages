@@ -67,7 +67,7 @@ class PackageMetadata():
         with open(build_script_path, "r") as build_script:
             for line in build_script:
                 if line.startswith("TERMUX_PKG_LICENSE"):
-                    self.licenses = self.get_value(line, "TERMUX_PKG_LICENSE")
+                    self.licenses = self.get_value(line, "TERMUX_PKG_LICENSE").split(",")
 
                 if line.startswith("TERMUX_PKG_DESCRIPTION"):
                     self.desc = self.get_value(line, "TERMUX_PKG_DESCRIPTION")
@@ -103,7 +103,7 @@ class PackageMetadata():
         for char in "\"'\n":
             value = value.replace(char, '')
 
-        return value.split(",")
+        return value
 
     def dump(self):
         return self.__dict__
