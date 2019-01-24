@@ -101,7 +101,7 @@ for pkg in $PACKAGE_NAMES; do
     done
 
     echo -n "[+]     Compiling $pkg... "
-    if ./build-package.sh -o "$DEBS_DIR" -a "$TERMUX_ARCH" "$pkg" >> "$build_log" 2>&1; then
+    if ./build-package.sh -f -o "$DEBS_DIR" -a "$TERMUX_ARCH" "$pkg" >> "$build_log" 2>&1; then
         echo "ok"
     else
         echo "fail"
