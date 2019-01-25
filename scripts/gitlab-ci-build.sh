@@ -1,4 +1,7 @@
 #!/bin/bash
+##
+## Gitlab CI: determine updated packages and build them.
+##
 
 SCRIPT_PATH=$(realpath "$0")
 SCRIPT_DIR=$(dirname "$SCRIPT_PATH")

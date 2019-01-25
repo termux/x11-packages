@@ -1,0 +1,32 @@
+language: generic
+
+os: linux
+dist: xenial
+services: docker
+sudo: required
+
+git:
+  submodules: true
+
+cache:
+  directories:
+    - build-data
+
+env:
+  matrix:
+    - TERMUX_ARCH=aarch64
+      CACHE_NAME=aarch64-data
+    - TERMUX_ARCH=arm
+      CACHE_NAME=arm-data
+    - TERMUX_ARCH=i686
+      CACHE_NAME=i686-data
+    - TERMUX_ARCH=x86_64
+      CACHE_NAME=x86_64-data
+
+before_script:
+  - mkdir -p ./build-data
+  - cp -a ./packages/* ./termux-packages/packages/
+  - cp ./scripts/setup-build-environment.sh ./termux-packages/
+
+script:
+  - ./scripts/travis-ci-build.sh "$TERMUX_ARCH"
