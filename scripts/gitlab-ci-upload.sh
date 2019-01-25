@@ -1,4 +1,8 @@
 #!/bin/bash
+##
+## Gitlab CI: determine updated packages and upload *.deb files
+## to the bintray.com (packages should be built by gitlab-ci-build.sh).
+##
 
 SCRIPT_PATH=$(realpath "$0")
 SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
