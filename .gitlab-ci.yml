@@ -41,10 +41,8 @@ stages:
   - build
   - deploy
 
-build-aarch64:
+.job_template: &build_job
   stage: build
-  script:
-    - bash ./scripts/gitlab-ci-build.sh aarch64
   retry:
     max: 2
     when:
@@ -55,63 +53,39 @@ build-aarch64:
     expire_in: 1 week
     paths:
       - deb-packages
+
+
+build-aarch64:
+  <<: *build_job
+  script:
+    - bash ./scripts/gitlab-ci-build.sh aarch64
   cache:
     key: aarch64-data
     paths:
       - build-data
 
 build-arm:
-  stage: build
+  <<: *build_job
   script:
     - bash ./scripts/gitlab-ci-build.sh arm
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-      - unknown_failure
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - deb-packages
   cache:
     key: arm-data
     paths:
       - build-data
 
 build-i686:
-  stage: build
+  <<: *build_job
   script:
     - bash ./scripts/gitlab-ci-build.sh i686
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-      - unknown_failure
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - deb-packages
   cache:
     key: i686-data
     paths:
       - build-data
 
 build-x86_64:
-  stage: build
+  <<: *build_job
   script:
     - bash ./scripts/gitlab-ci-build.sh x86_64
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-      - unknown_failure
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - deb-packages
   cache:
     key: x86_64-data
     paths:
