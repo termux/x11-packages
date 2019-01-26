@@ -125,3 +125,5 @@ What is not accepted in pull requests:
 - Implementation of commercial and closed-source packages.
 
 In addition, read the [package request](#package-requests) guide to know that packages are unwanted.
+
+We have continuous integration enabled. It would be perfectly, if build for your pull request finishes successfully (timeouts are not counted as failure).
