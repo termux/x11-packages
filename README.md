@@ -15,7 +15,7 @@ pkg install x11-repo
 
 ## Contributing
 
-If you wish to contribute for this project, take a look on our [contributing guide](./CONTRIBUTING.md).
+If you wish to request package, submit a bug report or pull request for this project, take a look on our [contributing guide](./CONTRIBUTING.md).
 
 ## External links
 
