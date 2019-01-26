@@ -98,16 +98,24 @@ There also some important things that worth to mention:
 
 Many packages should be patched in order to work in the Termux. Before submitting a pull request, take a look on https://wiki.termux.com/wiki/Differences_from_Linux.
 
-You may often see hardcoded paths like:
+1. You may often see hardcoded paths like:
 
-* /bin/sh
-* /etc
-* /tmp
-* /var
+   * /bin
+   * /etc
+   * /tmp
+   * /usr
+   * /var
 
-You should fix them by prepending `@TERMUX_PREFIX@`.
+   You should fix them by prepending `@TERMUX_PREFIX@`.
+   If program use path like /sbin, you will have to rewrite it as `@TERMUX_PREFIX@/bin` because Termux does not have sbin directory.
 
-Another problem is that most programs are written for GNU libc but Termux uses a Bionic libc supplied by Android OS. There are no general recommendations on fixing compatibility so there you should deal on your own.
+2. Make sure that program does not use system calls forbidden on Android 8 or newer. Examples of such calls are: link(), linkat() and some other. You will have to find replacements for them. Usage of uid/gid manipulating system calls like setuid(), setgid(), chown() is unwanted too - at least because these calls blocked by seccomp, also Termux is single-user non-root environment.
+
+3. Programs that use shared memory should be forcely linked with libandroid-shmem. Android's official implementation of shared memory is Ashmem. System calls like shmget() or shmat() (XSI shared memory) are blocked by seccomp on Android 8 or newer.
+
+4. Programs that use shm_open() or shm_unlink() (POSIX shared memory) should be linked with libposix-shm as Android does not provide implementation for these functions.
+
+There are no other recommendations about porting programs to Termux so you will have to deal on your own.
 
 ### Quality control
 
