@@ -52,7 +52,7 @@ if [ -z "$UPDATED_FILES" ]; then
 fi
 
 ## Determine package directories.
-PACKAGE_DIRS=$(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+.-]+" | sort | uniq)
+PACKAGE_DIRS=$(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq)
 if [ -z "$PACKAGE_DIRS" ]; then
     echo "[!] Failed to determine updated packages."
     echo "    Perhaps, script failed ?"
