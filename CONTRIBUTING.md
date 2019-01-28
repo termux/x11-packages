@@ -52,9 +52,8 @@ There are restrictions on accepted packages. Particulary, *never* request follow
 - Packages that are *closed-source*.
 - Packages that work only on specific architectures (e.g. x86 only).
 - Packages that can't work without OpenGL.
-- Packages that require Java.
-- Packages that require additional python modules.
-- Packages that require additional perl modules.
+- Packages that require Java (we don't have OpenJDK).
+- Packages that require additional perl/python/ruby modules.
 - Complex desktop environments like KDE or GNOME.
 
 \- all package requests that require a thing one of listed above will be closed immediately.
