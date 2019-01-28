@@ -62,7 +62,7 @@ There are restrictions on accepted packages. Particulary, *never* request follow
 
 \- all package requests that require a thing one of listed above will be closed immediately.
 
-A template for the package request issue can be found here: https://github.com/termux/x11-packages/issues/new?template=package-request.md.
+A template for the package request issue can be found here: https://github.com/termux/x11-packages/issues/new?template=package_request.md.
 
 **Important**: package requests may not be processed instantly. Developer's time is quite limited. If you want to make package available quickly - implement it yourself and submit a [pull request](#pull-requests).
 
