@@ -1,18 +1,16 @@
 # Contributing guide
 
-You are free to contribute to the [Termux X11 packages](https://github.com/termux/x11-packages) project.
+There are three ways to help improve [Termux X11 packages](https://github.com/termux/x11-packages) project:
 
-There are three ways to contribute:
-
-1. [Submitting bug reports](#bug-reports).
-2. [Submitting package requests](#package-requests).
-3. [Submitting pull requests](#pull-requests).
+1. [Submit bug reports](#bug-reports).
+2. [Submit package requests](#package-requests).
+3. [Submit pull requests](#pull-requests).
 
 This article will describe all recommendations and things that you should know to get started.
 
 ## Bug reports
 
-Porting packages to such non-standard platform like Termux may lead in various bugs in the [x11-related packages](https://github.com/termux/x11-packages). Typical signs that you encountered a bug are messages like "segmentation fault", freezes, attempts to access non-existent files, etc.
+Porting packages to such non-standard platform like Termux may lead to various bugs. Typical signs that you encountered a bug are messages like "segmentation fault", freezes, attempts to access non-existent files, etc.
 
 If you think that you found a bug, please submit a bug report which includes:
 
@@ -29,7 +27,6 @@ If you think that you found a bug, please submit a bug report which includes:
   Your CPU architecture and version of Android. Usually, you can get necessary information by executing command `termux-info`.
 
 Don't forget to use the right template when opening issue. To open issue with a bug report template, use this URL: https://github.com/termux/x11-packages/issues/new?template=bug_report.md.
-
 
 **Important**: do not submit bug reports about third-party, self-compiled and outdated packages. These issues will be considered as "spam". Same goes for corrupted configuration files and questions like "help me, I don't know how to use package".
 
@@ -72,7 +69,7 @@ Instead of waiting when your bug report or package request will be processed, yo
 
 ### Writing a build script
 
-As example, it is recommended to check build scripts of some packages. For example: [gtk2](./packages/gtk2), [liblua52](./packages/liblua52), [libx11](./packages/libx11), [mpv-x](./packages/mpv-x).
+As example, it is recommended to check build scripts of some packages. See: [gtk2](./packages/gtk2), [liblua52](./packages/liblua52), [libx11](./packages/libx11), [mpv-x](./packages/mpv-x).
 
 There also some important things that worth to mention:
 
@@ -119,7 +116,7 @@ There are no other recommendations about porting programs to Termux so you will 
 
 ### Quality control
 
-Build your packages in *latest* docker image provided by [termux-packages](https://github.com/termux/termux-packages) environment so builds will be reproducible.
+Build your packages in the *latest* docker image provided by [termux-packages](https://github.com/termux/termux-packages) environment so builds will be reproducible.
 
 Always test things that you want to be merged at least on *two different CPU architectures*. The device can be either real or AVD (emulator) provided by Android SDK. Testing packages in other software like Anbox, Bluestacks or similar is strongly discouraged.
 
@@ -134,4 +131,4 @@ What is not accepted in pull requests:
 
 In addition, read the [package request](#package-requests) guide to know that packages are unwanted.
 
-We have continuous integration enabled. It would be perfectly, if build for your pull request finishes successfully (timeouts are not counted as failure).
+We have continuous integration enabled. Would be perfectly if build for your pull request finishes successfully (timeouts are not counted as failure).
