@@ -30,6 +30,7 @@ before_script:
   - export ANDROID_HOME=${HOME}/lib/android-sdk
   - mkdir -p ${HOME}/.android
   - echo 'count=0' > ${HOME}/.android/repositories.cfg
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" > /dev/null
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_SDK_BUILD_TOOLS_VERSION}" > /dev/null
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-21" > /dev/null
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-27" > /dev/null
