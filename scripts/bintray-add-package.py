@@ -61,7 +61,7 @@ class PackageMetadata():
         self.website_url = None
         self.issue_tracker_url = f"https://github.com/{REPO_GITHUB}/issues"
         self.github_repo = f"{REPO_GITHUB}"
-        self.public_download_numbers = False
+        self.public_download_numbers = True
         self.public_stats = False
 
         with open(build_script_path, "r") as build_script:
