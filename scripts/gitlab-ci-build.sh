@@ -109,11 +109,9 @@ for pkg in $PACKAGE_NAMES; do
             echo "ok"
         else
             echo "fail"
-            echo "[=] Uploading log file..."
-            log_name="build-${pkg}-${TERMUX_ARCH}-$(date +%d.%m.%Y-%H.%M).log"
-            log_url=$(curl --silent --upload-file "$build_log" "https://transfer.sh/$log_name")
+            echo "[=] LAST 500 LINES OF BUILD LOG:"
             echo
-            echo "    Log: $log_url"
+            tail -n 500 "$build_log"
             echo
             exit 1
         fi
@@ -124,11 +122,9 @@ for pkg in $PACKAGE_NAMES; do
         echo "ok"
     else
         echo "fail"
-        echo "[=] Uploading log file..."
-        log_name="build-${pkg}-${TERMUX_ARCH}-$(date +%d.%m.%Y-%H.%M).log"
-        log_url=$(curl --silent --upload-file "$build_log" "https://transfer.sh/$log_name")
+        echo "[=] LAST 500 LINES OF BUILD LOG:"
         echo
-        echo "    Log: $log_url"
+        tail -n 500 "$build_log"
         echo
         exit 1
     fi
