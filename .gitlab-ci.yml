@@ -51,6 +51,7 @@ before_script:
   retry:
     max: 2
     when:
+      - script_failure
       - runner_system_failure
       - unknown_failure
   artifacts:
