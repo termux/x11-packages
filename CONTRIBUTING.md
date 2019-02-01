@@ -8,6 +8,14 @@ There are three ways to help improve [Termux X11 packages](https://github.com/te
 
 This article will describe all recommendations and things that you should know to get started.
 
+Common rules for everything:
+
+1. Do not open issues about packages from other repositories. *They are a spam.*
+2. Do not open issues about packages if your Termux installation is outdated. *User-generated errors are spam too.*
+3. Do not open issues if you messed up with your configuration files. *Same as above, user errors are spam.*
+4. Do not open issues to gather knowledge about specific package. *Those questions are considered as a spam. Nowadays Internet has answers for everything. Just search for them.*
+5. Do not request things that are not portable, have compilcated implementation or just "customizations".
+
 ## Bug reports
 
 Porting packages to such non-standard platform like Termux may lead to various bugs. Typical signs that you encountered a bug are messages like "segmentation fault", freezes, attempts to access non-existent files, etc.
@@ -27,8 +35,6 @@ If you think that you found a bug, please submit a bug report which includes:
   Your CPU architecture and version of Android. Usually, you can get necessary information by executing command `termux-info`.
 
 Don't forget to use the right template when opening issue. To open issue with a bug report template, use this URL: https://github.com/termux/x11-packages/issues/new?template=bug_report.md.
-
-**Important**: do not submit bug reports about third-party, self-compiled and outdated packages. These issues will be considered as "spam". Same goes for corrupted configuration files and questions like "help me, I don't know how to use package".
 
 ## Package requests
 
