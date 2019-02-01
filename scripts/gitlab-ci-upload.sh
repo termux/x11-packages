@@ -54,9 +54,9 @@ fi
 ## Determine package directories.
 PACKAGE_DIRS=$(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq)
 if [ -z "$PACKAGE_DIRS" ]; then
-    echo "[!] Failed to determine updated packages."
-    echo "    Perhaps, script failed ?"
-    exit 1
+    echo "[*] No packages changed."
+    echo "[*] Finishing with status 'OK'."
+    exit 0
 fi
 
 ## Filter directories to include only ones that actually exist.
