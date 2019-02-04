@@ -1,7 +1,7 @@
 #!/bin/bash
 ##
-##  Determine updated packages and build them.
-##  Used with GitLab CI.
+##  Determine updated packages, build them and upload to bintray.com
+##  if requested. This script should be used with GitLab CI.
 ##
 ##  Leonid Plyushch <leonid.plyushch@gmail.com> (C) 2019
 ##
@@ -19,9 +19,7 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-SCRIPT_PATH=$(realpath "$0")
-SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
-REPO_DIR=$(dirname "$SCRIPT_DIR")
+REPO_DIR=$(realpath "$(dirname "$(realpath "$0")")/../../")
 DEBS_DIR="$REPO_DIR/deb-packages"
 cd "$REPO_DIR" || {
     echo "[!] Failed to cd into '$REPO_DIR'."
@@ -51,29 +49,16 @@ if [ -z "${CI_COMMIT_SHA}" ]; then
     exit 1
 fi
 
-## Check for updated files and determine if they are part of packages.
+## Check for updated files.
 if [ "$CI_COMMIT_BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
     UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CI_COMMIT_SHA}" | grep -P "packages/")
 else
     UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CI_COMMIT_BEFORE_SHA}..${CI_COMMIT_SHA}" | grep -P "packages/")
 fi
-if [ -z "$UPDATED_FILES" ]; then
-    echo "[*] No packages changed."
-    echo "[*] Finishing with status 'OK'."
-    exit 0
-fi
 
-## Determine package directories.
-PACKAGE_DIRS=$(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq)
-if [ -z "$PACKAGE_DIRS" ]; then
-    echo "[*] No packages changed."
-    echo "[*] Finishing with status 'OK'."
-    exit 0
-fi
-
-## Filter directories to include only ones that actually exist.
+## Determine modified packages.
 existing_dirs=""
-for dir in $PACKAGE_DIRS; do
+for dir in $(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq); do
     if [ -d "$REPO_DIR/$dir" ]; then
         existing_dirs+=" $dir"
     fi
@@ -81,12 +66,11 @@ done
 PACKAGE_DIRS="$existing_dirs"
 unset dir existing_dirs
 
-## Determine package names.
+## Get names of modified packages.
 PACKAGE_NAMES=$(echo "$PACKAGE_DIRS" | sed 's/packages\///g')
 if [ -z "$PACKAGE_NAMES" ]; then
-    echo "[!] Failed to determine package names."
-    echo "    Perhaps, script failed ?"
-    exit 1
+    echo "[*] No modified packages found."
+    exit 0
 fi
 
 ## Go to build environment.
@@ -132,3 +116,13 @@ for pkg in $PACKAGE_NAMES; do
     echo "[+]   Successfully built $pkg."
 done
 echo "[@] Finished successfully."
+
+## Upload packages if requested.
+if [ $# -ge 1 ]; then
+    if [ "$1" = "--upload" ]; then
+        "$REPO_DIR/scripts/bintray-add-package.py" --path "$DEBS_DIR" $PACKAGE_NAMES
+    else
+        echo "[!] Unknown argument '$1'."
+        exit 1
+    fi
+fi
