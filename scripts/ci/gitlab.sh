@@ -93,9 +93,9 @@ for pkg in $PACKAGE_NAMES; do
             echo "ok"
         else
             echo "fail"
-            echo "[=] LAST 500 LINES OF BUILD LOG:"
+            echo "[=] LAST 1000 LINES OF BUILD LOG:"
             echo
-            tail -n 500 "$build_log"
+            tail -n 1000 "$build_log"
             echo
             exit 1
         fi
@@ -106,9 +106,9 @@ for pkg in $PACKAGE_NAMES; do
         echo "ok"
     else
         echo "fail"
-        echo "[=] LAST 500 LINES OF BUILD LOG:"
+        echo "[=] LAST 1000 LINES OF BUILD LOG:"
         echo
-        tail -n 500 "$build_log"
+        tail -n 1000 "$build_log"
         echo
         exit 1
     fi
