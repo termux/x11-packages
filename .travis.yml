@@ -39,4 +39,4 @@ before_script:
 
 ## Execute build-dispatching script.
 script:
-  - ./scripts/travis-ci-build.sh "$TERMUX_ARCH"
+  - ./scripts/ci/travis.sh "$TERMUX_ARCH"

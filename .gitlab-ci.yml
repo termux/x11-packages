@@ -47,7 +47,7 @@ before_script:
 .job_template: &build_job
   stage: build
   script:
-    - bash ./scripts/gitlab-ci-build.sh $TERMUX_ARCH
+    - bash ./scripts/ci/gitlab.sh $TERMUX_ARCH
   retry:
     max: 2
     when:
@@ -108,7 +108,7 @@ upload-packages:
   only:
     - master@xeffyr/x11-packages
   script:
-    - bash ./scripts/gitlab-ci-upload.sh
+    - bash ./scripts/ci/gitlab.sh --upload
   retry:
     max: 2
     when:

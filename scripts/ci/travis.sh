@@ -19,9 +19,7 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-SCRIPT_PATH=$(realpath "$0")
-SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
-REPO_DIR=$(dirname "$SCRIPT_DIR")
+REPO_DIR=$(realpath "$(dirname "$(realpath "$0")")/../../")
 cd "$REPO_DIR" || {
     echo "[!] Failed to cd into '$REPO_DIR'."
     exit 1
@@ -40,25 +38,12 @@ if [ -z "${TRAVIS_COMMIT_RANGE}" ]; then
     exit 1
 fi
 
-## Check for updated files and determine if they are part of packages.
+## Check for updated files.
 UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${TRAVIS_COMMIT_RANGE//.../..}" | grep -P "packages/")
-if [ -z "$UPDATED_FILES" ]; then
-    echo "[*] No packages changed."
-    echo "[*] Finishing with status 'OK'."
-    exit 0
-fi
 
-## Determine package directories.
-PACKAGE_DIRS=$(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq)
-if [ -z "$PACKAGE_DIRS" ]; then
-    echo "[*] No packages changed."
-    echo "[*] Finishing with status 'OK'."
-    exit 0
-fi
-
-## Filter directories to include only ones that actually exist.
+## Determine modified packages.
 existing_dirs=""
-for dir in $PACKAGE_DIRS; do
+for dir in $(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq); do
     if [ -d "$REPO_DIR/$dir" ]; then
         existing_dirs+=" $dir"
     fi
@@ -66,12 +51,11 @@ done
 PACKAGE_DIRS="$existing_dirs"
 unset dir existing_dirs
 
-## Determine package names.
+## Get names of modified packages.
 PACKAGE_NAMES=$(echo "$PACKAGE_DIRS" | sed 's/packages\///g')
 if [ -z "$PACKAGE_NAMES" ]; then
-    echo "[!] Failed to determine package names."
-    echo "    Perhaps, script failed ?"
-    exit 1
+    echo "[*] No modified packages found."
+    exit 0
 fi
 
 ## Go to build environment.
