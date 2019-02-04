@@ -118,11 +118,11 @@ done
 echo "[@] Finished successfully."
 
 ## Upload packages if requested.
-if [ $# -ge 1 ]; then
-    if [ "$1" = "--upload" ]; then
+if [ $# -ge 2 ]; then
+    if [ "$2" = "--upload" ]; then
         "$REPO_DIR/scripts/bintray-add-package.py" --path "$DEBS_DIR" $PACKAGE_NAMES
     else
-        echo "[!] Unknown argument '$1'."
+        echo "[!] Unknown argument '$2'."
         exit 1
     fi
 fi
