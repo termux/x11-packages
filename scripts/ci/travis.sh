@@ -116,9 +116,9 @@ for pkg in $PACKAGE_NAMES; do
     if [ $? != 0 ]; then
         echo "[!] Build failed."
         echo
-        echo "LAST 500 LINES FROM BUILD LOG:"
+        echo "LAST 1000 LINES FROM BUILD LOG:"
         echo
-        tail -n 500 "$build_log"
+        tail -n 1000 "$build_log"
         exit 1
     fi
 
