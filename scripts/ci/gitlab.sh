@@ -32,13 +32,6 @@ if ! mkdir -p "$DEBS_DIR" > /dev/null 2>&1; then
     exit 1
 fi
 
-## Set target architecture.
-if [ $# -ge 1 ]; then
-    TERMUX_ARCH="$1"
-else
-    TERMUX_ARCH="aarch64"
-fi
-
 ## Verify that script is running under CI (GitLab).
 if [ -z "${CI_COMMIT_BEFORE_SHA}" ]; then
     echo "[!] CI_COMMIT_BEFORE_SHA is not set !"
@@ -71,6 +64,20 @@ PACKAGE_NAMES=$(echo "$PACKAGE_DIRS" | sed 's/packages\///g')
 if [ -z "$PACKAGE_NAMES" ]; then
     echo "[*] No modified packages found."
     exit 0
+fi
+
+## Handle arguments.
+## Script expects only one command line argument.
+## It should be either architecture (aarch64, arm, i686, x86_64)
+## or '--upload'.
+if [ $# -ge 1 ]; then
+    if [ "$1" = "--upload" ]; then
+        exec "$REPO_DIR/scripts/bintray-add-package.py" --path "$DEBS_DIR" $PACKAGE_NAMES
+    else
+        TERMUX_ARCH="$1"
+    fi
+else
+    TERMUX_ARCH="aarch64"
 fi
 
 ## Go to build environment.
@@ -116,13 +123,3 @@ for pkg in $PACKAGE_NAMES; do
     echo "[+]   Successfully built $pkg."
 done
 echo "[@] Finished successfully."
-
-## Upload packages if requested.
-if [ $# -ge 2 ]; then
-    if [ "$2" = "--upload" ]; then
-        "$REPO_DIR/scripts/bintray-add-package.py" --path "$DEBS_DIR" $PACKAGE_NAMES
-    else
-        echo "[!] Unknown argument '$2'."
-        exit 1
-    fi
-fi
