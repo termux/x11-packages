@@ -1,0 +1,11 @@
+diff -uNr TeXmacs-1.99.8-src/CMakeLists.txt TeXmacs-1.99.8-src.mod/CMakeLists.txt
+--- TeXmacs-1.99.8-src/CMakeLists.txt	2018-07-04 09:50:00.000000000 +0300
++++ TeXmacs-1.99.8-src.mod/CMakeLists.txt	2019-02-05 22:29:34.437055807 +0200
+@@ -319,7 +319,6 @@
+ set(PDF_RENDERER 1)
+ set(SIZEOF_VOID_P 8)
+ set(STDC_HEADERS 1)
+-set(USE_STACK_TRACE 1)
+ 
+ set(CONFIG_STD_SETENV "#define STD_SETENV")
+ set(tm_orig ${TEXMACS_SOURCE_DIR})
