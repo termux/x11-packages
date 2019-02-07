@@ -20,8 +20,8 @@ before_script:
     libexpat1-dev libgdk-pixbuf2.0-dev libgmp-dev libgtk-3-bin libglib2.0-dev libisl-dev
     libjpeg-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libssl-dev libtool-bin
     lzip m4 openjdk-8-jdk-headless pax-utils pkg-config python-pip python3.7 python3-docutils
-    python3-pip python3-setuptools python3-sphinx ruby scons texinfo unzip xfonts-utils xmlto
-    zip zlib1g-dev > /dev/null
+    python3-pip python3-setuptools python3-sphinx ruby scons texinfo unzip valac xfonts-utils
+    xmlto zip zlib1g-dev > /dev/null
   - mkdir -p ${HOME}/lib
   - curl --silent --location --output sdk.zip
     https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS_REVISION}.zip
