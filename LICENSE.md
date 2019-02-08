@@ -11,10 +11,7 @@ that package is licensed under GNU GPL v2.0.
 
 Following scripts are licensed under GNU GPL v3.0:
 
- * bintray-add-package.py
- * get-latest-version.sh
- * get-sha256.sh
- * gitlab-ci-build.sh
- * gitlab-ci-upload.sh
- * setup-build-environment.sh
- * travis-ci-build.sh
+ * scripts/ci/gitlab.sh
+ * scripts/bintray-add-package.py
+ * scripts/get-latest-version.sh
+ * scripts/get-sha256.sh
