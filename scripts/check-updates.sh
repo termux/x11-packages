@@ -55,6 +55,9 @@ translate_package_name() {
 
 		google-glog) translated_name="glog";;
 
+		# Do not check the legacy version Guile for updates.
+		guile18) translated_name="/hidden/";;
+
 		imagemagick-x) translated_name="imagemagick";;
 
 		# Custom package.
@@ -228,8 +231,35 @@ check_packages_for_updates() {
 					if $DISPLAY_SOURCE_SHA256; then
 						# Download source archives and compute SHA-256 checksums
 						# if requested.
+
+						# It is not possible to use 'get_value_from_buildsh()' here
+						# since we need to modify build.sh file in order to get
+						# correct link for latest sources.
 						local package_src_urls
-						package_src_urls=$(get_value_from_buildsh "$package_name" "TERMUX_PKG_SRCURL")
+						package_src_urls=$(set -o noglob
+								if [ -e "$TERMUX_PACKAGES_BASEDIR/scripts/properties.sh" ]; then
+									. "$TERMUX_PACKAGES_BASEDIR/scripts/properties.sh"
+								fi
+
+								local new_ver_buildsh
+								new_ver_buildsh=$(mktemp "/tmp/.build.sh.XXXXXXXX")
+
+								cat "$TERMUX_PACKAGES_BASEDIR/packages/$package_name/build.sh" \
+									> "$new_ver_buildsh"
+
+								# Set custom TERMUX_PKG_VERSION.
+								sed -i "s/^TERMUX_PKG_VERSION=/_TERMUX_PKG_VERSION=/g" \
+									"$new_ver_buildsh"
+								sed -i "/^_TERMUX_PKG_VERSION=.*/i TERMUX_PKG_VERSION=$package_latest_version" \
+									"$new_ver_buildsh"
+
+								. "$new_ver_buildsh" 2>/dev/null
+
+								local i
+								for i in "${TERMUX_PKG_SRCURL[@]}"; do
+									echo "$i"
+								done
+						)
 
 						if [ -n "$package_src_urls" ]; then
 							updatable_packages_data["${package_name}-sha256"]=$(
