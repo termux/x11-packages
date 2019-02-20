@@ -33,7 +33,7 @@ compare_versions() {
 	test "$(printf '%s\n%s' "$1" "$2" | sort -V | head -n 1)" != "$1"
 }
 
-# Some packages have different name that actual in
+# Some packages have different name than actual in
 # our repository. This should be fixed in order to
 # be able get a latest version from the database.
 #
