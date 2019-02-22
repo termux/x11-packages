@@ -1,7 +1,8 @@
 # Contributing guide
 
 This is an issue tracker for the [x11-packages] project. It is expected that
-there will be submitted [bug reports](#bug-reports) or [pull requests](#pull-requests).
+there will be submitted [bug reports](#bug-reports), [package requests](#package-requests)
+or [pull requests](#pull-requests).
 
 Personal support requests as well as general questions are discouraged here.
 
@@ -46,40 +47,58 @@ immediately.
 
 ## Package requests
 
-First of all, never request packages that:
+If you found that specific package is not available, you may [request](package-request-template)
+it.
 
-- Cannot work without root.
-- Require kernel features that are not available for Android devices.
-- Developed specially for multi-user environments.
-- Commercial, closed source.
-- Work only on specific architectures (e.g. x86 only).
-- Cannot work without OpenGL.
-- Require Java (we don't have OpenJDK).
-- Require additional perl/python/ruby modules.
-- Complex desktop environments like KDE or GNOME.
+1. Make sure that it comply with the following restrictions:
 
-When you are sure that package is suitable for this repository, use the
-[package request] template and fill the following information:
+	- Package should not require root, custom ROM or custom kernel.
 
-- **Package description**
+	- Package should not be developed specially for multi-user environments.
 
-  A short and clear description of package, what it doing and why it should be packaged for Termux.
+	- Package should not be closed source.
 
-- **Package's location**
+	- Package should not be designed for working only on specific architecture.
 
-  An URL to the package's home page and sources. Use only *official* links - various unofficial modifications are generally *unwanted*, same goes for *unauthorized* mirrors.
+	- Package should not require OpenGL.
+
+	- Package should not require Java.
+
+	- Package should not depend on specific perl/python/ruby modules.
+
+	- Package should not be complex desktop environment (e.g. like KDE or GNOME).
+
+2. When you are sure that package is suitable for this repository, use the
+[package request template][package-request-template].
+
+	Fill the following information:
+
+	- **Package description**
+
+		A short and clear description of package, what it doing and why it
+		should be packaged for Termux.
+
+	- **Package's location**
+
+		An official URL to the package's home page and sources.
+
+Please note that you should not expect that your package will be available
+immediately. Mantainer also has right to decline package request even if it
+met all conditions to be packaged.
+
+## Feature requests
+
+Decision on which features will be available or not is done solely by core
+maintainer ([@xeffyr]). We do not accept feature requests for X11-related
+stuff regardless of how useful they are.
 
 ## Pull requests
-
-It is expected that pull request you are submitting is a bugfix or improvement.
-Package implementations are not accepted here same as package requests. Exceptions
-are only when package is moved from another repository.
 
 1. Before opening a pull request, make sure there no other pull requests similar
 to yours.
 
 2. Make sure that your changes do not break existing stuff and do not violate
-our coding practices and formatting guidelines (see [termux-packages/docs][termux-packages-docs]).
+our coding practices and formatting guidelines (see [termux-packages/docs]).
 
 3. Make sure that your changes do not introduce code that perform undesirable
 actions like using `su` or `sudo` commands or modifying files outside of the
@@ -96,10 +115,11 @@ that simple (for example version upgrade or typo fix) pull request will be merge
 by collaborators without reviewing by core maintainer. Though it is expected that
 all changes are carefully reviewed to avoid having nasty things in our code.
 
-Everything else must be reviewed by the core maintainer ([@xeffyr][xeffyr-github]).
+Everything else must be reviewed by the core maintainer ([@xeffyr]).
 
 [termux-packages]: <https://github.com/termux/termux-packages>
-[termux-packages-docs]: <https://github.com/termux/termux-packages/tree/master/docs>
-[unstable-packages]: <https://github.com/termux/unstable-packages>
+[termux-packages/docs]: <https://github.com/termux/termux-packages/tree/master/docs>
+[x11-packages]: <https://github.com/termux/x11-packages>
 [bug-report-template]: <https://github.com/termux/unstable-packages/issues/new?template=BUG_REPORT.md>
-[xeffyr-github]: <https://github.com/xeffyr>
+[package-request-template]: <https://github.com/termux/unstable-packages/issues/new?template=PACKAGE_REQUEST.md>
+[@xeffyr]: <https://github.com/xeffyr>
