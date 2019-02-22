@@ -120,6 +120,6 @@ Everything else must be reviewed by the core maintainer ([@xeffyr]).
 [termux-packages]: <https://github.com/termux/termux-packages>
 [termux-packages/docs]: <https://github.com/termux/termux-packages/tree/master/docs>
 [x11-packages]: <https://github.com/termux/x11-packages>
-[bug-report-template]: <https://github.com/termux/unstable-packages/issues/new?template=BUG_REPORT.md>
-[package-request-template]: <https://github.com/termux/unstable-packages/issues/new?template=PACKAGE_REQUEST.md>
+[bug-report-template]: <https://github.com/termux/x11-packages/issues/new?template=BUG_REPORT.md>
+[package-request-template]: <https://github.com/termux/x11-packages/issues/new?template=PACKAGE_REQUEST.md>
 [@xeffyr]: <https://github.com/xeffyr>
