@@ -1,46 +1,65 @@
 # Contributing guide
 
-There are three ways to help improve [Termux X11 packages](https://github.com/termux/x11-packages) project:
+This is an issue tracker for the [x11-packages] project. It is expected that
+there will be submitted [bug reports](#bug-reports) or [pull requests](#pull-requests).
 
-1. [Submit bug reports](#bug-reports).
-2. [Submit package requests](#package-requests).
-3. [Submit pull requests](#pull-requests).
+Personal support requests as well as general questions are discouraged here.
 
-This article will describe all recommendations and things that you should know to get started.
-
-Common rules for everything:
-
-1. Do not open issues about packages from other repositories. *They are a spam.*
-2. Do not open issues about packages if your Termux installation is outdated. *User-generated errors are spam too.*
-3. Do not open issues if you messed up with your configuration files. *Same as above, user errors are spam.*
-4. Do not open issues to gather knowledge about specific package. *Those questions are considered as a spam. Nowadays Internet has answers for everything. Just search for them.*
-5. Do not request things that are not portable, have compilcated implementation or just "customizations".
+**Important note**: *unacceptible behaviour including toxic language, trolling,
+spam is prohibited here.*
 
 ## Bug reports
 
-Porting packages to such non-standard platform like Termux may lead to various bugs. Typical signs that you encountered a bug are messages like "segmentation fault", freezes, attempts to access non-existent files, etc.
+If you are constantly observing "segmentation fault" or "Bad system call",
+freezes, attempts to access non-existent files or similar behaviour, you
+may [submit a bug report][bug-report-template].
 
-If you think that you found a bug, please submit a bug report which includes:
+1. Before opening a new issue, search for previous discussions about your topic.
+There is a chance that your issue was reported already.
 
-- **Description**
+2. Make sure that your Termux installation is up-to-date. If not, please upgrade
+all your packages to the latest version and try to reproduce problem again. If
+software update solved your problem, do not open issue.
 
-  Clear description of the problem you encountered. If error related to graphics, please attach a screenshot.
+3. Make sure that you did not mistype or broke configuration files. Just
+configuration typo is not worth of opening bug report.
 
-- **Steps to reproduce**
+4. Open new issue with [bug report template][bug-report-template]. Remove all
+comments and put all necessary information according to the fields.
 
-  What you did to encounter the problem. Ideally, attach the script which will execute all necessary commands. If program fails only on certain configuration, attach the configuration files.
+	You have to fill at least the following fields:
 
-- **System information**
+	- **Description**
 
-  Your CPU architecture and version of Android. Usually, you can get necessary information by executing command `termux-info`.
+		Clear description of the problem you encountered.
 
-Don't forget to use the right template when opening issue. To open issue with a bug report template, use this URL: https://github.com/termux/x11-packages/issues/new?template=bug_report.md.
+	- **Steps to reproduce**
+
+		Exact steps to reproduce the problem.
+
+	- **System information**
+
+		Just post output of the `termux-info`.
+
+Please note that you should not expect that your problem will be solved
+immediately.
 
 ## Package requests
 
-You are free to request specific package if you found it important but not available in repository.
+First of all, never request packages that:
 
-Each package request should include:
+- Cannot work without root.
+- Require kernel features that are not available for Android devices.
+- Developed specially for multi-user environments.
+- Commercial, closed source.
+- Work only on specific architectures (e.g. x86 only).
+- Cannot work without OpenGL.
+- Require Java (we don't have OpenJDK).
+- Require additional perl/python/ruby modules.
+- Complex desktop environments like KDE or GNOME.
+
+When you are sure that package is suitable for this repository, use the
+[package request] template and fill the following information:
 
 - **Package description**
 
@@ -50,90 +69,37 @@ Each package request should include:
 
   An URL to the package's home page and sources. Use only *official* links - various unofficial modifications are generally *unwanted*, same goes for *unauthorized* mirrors.
 
-There are restrictions on accepted packages. Particulary, *never* request following stuff here:
-
-- Packages that cannot work without root.
-- Packages that require kernel features that are not available for Android devices.
-- Packages that are developed for *multi-user* environments.
-- Packages that are *closed-source*.
-- Packages that work only on specific architectures (e.g. x86 only).
-- Packages that can't work without OpenGL.
-- Packages that require Java (we don't have OpenJDK).
-- Packages that require additional perl/python/ruby modules.
-- Complex desktop environments like KDE or GNOME.
-
-\- all package requests that require a thing one of listed above will be closed immediately.
-
-A template for the package request issue can be found here: https://github.com/termux/x11-packages/issues/new?template=package_request.md.
-
-**Important**: package requests may not be processed instantly. Developer's time is quite limited. If you want to make package available quickly - implement it yourself and submit a [pull request](#pull-requests).
-
 ## Pull requests
 
-Instead of waiting when your bug report or package request will be processed, you are free to implement all necessary changes by yourself.
+It is expected that pull request you are submitting is a bugfix or improvement.
+Package implementations are not accepted here same as package requests. Exceptions
+are only when package is moved from another repository.
 
-### Writing a build script
+1. Before opening a pull request, make sure there no other pull requests similar
+to yours.
 
-As example, it is recommended to check build scripts of some packages. See: [gtk2](./packages/gtk2), [liblua52](./packages/liblua52), [libx11](./packages/libx11), [mpv-x](./packages/mpv-x).
+2. Make sure that your changes do not break existing stuff and do not violate
+our coding practices and formatting guidelines (see [termux-packages/docs][termux-packages-docs]).
 
-There also some important things that worth to mention:
+3. Make sure that your changes do not introduce code that perform undesirable
+actions like using `su` or `sudo` commands or modifying files outside of the
+build directories.
 
-- **Maintainer field**
+When you opened a pull request, repository maintainers should review it. In review
+process you may be requested to apply additional changes. If you will not do this,
+maintainers always can modify or close your pull request if necessary.
 
-  Always set maintainer field. Either to yourself or me. Example:
-  ```
-  TERMUX_PKG_MAINTAINER="Leonid Plyushch <leonid.plyushch@gmail.com> @xeffyr"
-  ```
+### For maintainers
 
-- **License field**
+Since we use CI/CD for automatic package building and publishing, it is acceptable
+that simple (for example version upgrade or typo fix) pull request will be merged
+by collaborators without reviewing by core maintainer. Though it is expected that
+all changes are carefully reviewed to avoid having nasty things in our code.
 
-  Another important field is a package license. Inspect package's source code and read files like "LICENSE" or "COPYING".
-  
-  Valid license names: AFL-2.1, AFL-3.0, AGPL-V3, Apache-1.0, Apache-1.1, Apache-2.0, APL-1.0, APSL-2.0, Artistic-License-2.0, Attribution, Bouncy-Castle, BSD, BSD 2-Clause, BSD 3-Clause, BSL-1.0, CA-TOSL-1.1, CC0-1.0, CDDL-1.0, Codehaus, CPAL-1.0, CPL-1.0, CPOL-1.02, CUAOFFICE-1.0, Day, Day-Addendum, ECL2, Eiffel-2.0, Entessa-1.0, EPL-1.0, EPL-2.0, EUDATAGRID, EUPL-1.1, EUPL-1.2, Fair, Facebook-Platform, Frameworx-1.0, Go, GPL-2.0, GPL-2.0+CE, GPL-3.0, Historical, HSQLDB, IBMPL-1.0, IJG, ImageMagick, IPAFont-1.0, ISC, IU-Extreme-1.1.1, JA-SIG, JSON, JTidy, LGPL-2.0, LGPL-2.1, LGPL-3.0, Libpng, LPPL-1.0, Lucent-1.02, MirOS, MIT, Motosoto-0.9.1, Mozilla-1.1, MPL-2.0, MS-PL, MS-RL, Multics, NASA-1.3, NAUMEN, NCSA, Nethack, Nokia-1.0a, NOSL-3.0, NTP, NUnit-2.6.3, NUnit-Test-Adapter-2.6.3, OCLC-2.0, Openfont-1.1, Opengroup, OpenSSL, OSL-3.0, PHP-3.0, PostgreSQL, Public Domain, Public Domain - SUN, PythonPL, PythonSoftFoundation, QTPL-1.0, Real-1.0, RicohPL, RPL-1.5, Scala, SimPL-2.0, Sleepycat, SUNPublic-1.0, Sybase-1.0, TMate, Unicode-DFS-2015, Unlicense, UoI-NCSA, UPL-1.0, VIM License, VovidaPL-1.0, W3C, WTFPL, wxWindows, Xnet, ZLIB, ZPL-2.0.
-  
-  Example of specifying license for GNU GPL v3 package:
-  ```
-  TERMUX_PKG_LICENSE="GPL-3.0"
-  ```
+Everything else must be reviewed by the core maintainer ([@xeffyr][xeffyr-github]).
 
-### Patching
-
-Many packages should be patched in order to work in the Termux. Before submitting a pull request, take a look on https://wiki.termux.com/wiki/Differences_from_Linux.
-
-1. You may often see hardcoded paths like:
-
-   * /bin
-   * /etc
-   * /tmp
-   * /usr
-   * /var
-
-   You should fix them by prepending `@TERMUX_PREFIX@`.
-   If program use path like /sbin, you will have to rewrite it as `@TERMUX_PREFIX@/bin` because Termux does not have sbin directory.
-
-2. Make sure that program does not use system calls forbidden on Android 8 or newer. Examples of such calls are: link(), linkat() and some other. You will have to find replacements for them. Usage of uid/gid manipulating system calls like setuid(), setgid(), chown() is unwanted too - at least because these calls blocked by seccomp, also Termux is single-user non-root environment.
-
-3. Programs that use shared memory should be forcely linked with libandroid-shmem. Android's official implementation of shared memory is Ashmem. System calls like shmget() or shmat() (XSI shared memory) are blocked by seccomp on Android 8 or newer.
-
-4. Programs that use shm_open() or shm_unlink() (POSIX shared memory) should be linked with libposix-shm as Android does not provide implementation for these functions.
-
-There are no other recommendations about porting programs to Termux so you will have to deal on your own.
-
-### Quality control
-
-Build your packages in the *latest* docker image provided by [termux-packages](https://github.com/termux/termux-packages) environment so builds will be reproducible.
-
-Always test things that you want to be merged at least on *two different CPU architectures*. The device can be either real or AVD (emulator) provided by Android SDK. Testing packages in other software like Anbox, Bluestacks or similar is strongly discouraged.
-
-What is not accepted in pull requests:
-
-- Breakage of existing stuff.
-- Usage of sudo-enabled commands.
-- Usage of commands that create or modify files outside the build directory.
-- Introducing *custom* global variables outside functions in the build script.
-- Implementation of unknown, dead, trash-like, poor-quality packages.
-- Implementation of commercial and closed-source packages.
-
-In addition, read the [package request](#package-requests) guide to know that packages are unwanted.
-
-We have continuous integration enabled. Would be perfectly if build for your pull request finishes successfully (timeouts are not counted as failure).
+[termux-packages]: <https://github.com/termux/termux-packages>
+[termux-packages-docs]: <https://github.com/termux/termux-packages/tree/master/docs>
+[unstable-packages]: <https://github.com/termux/unstable-packages>
+[bug-report-template]: <https://github.com/termux/unstable-packages/issues/new?template=BUG_REPORT.md>
+[xeffyr-github]: <https://github.com/xeffyr>
