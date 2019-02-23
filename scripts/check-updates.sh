@@ -195,7 +195,7 @@ check_packages_for_updates() {
 			fi
 
 			local api_response
-			api_response=$(curl --silent "https://repology.org/api/v1/metapackage/$translated_package_name")
+			api_response=$(curl --silent --location "https://repology.org/api/v1/metapackage/$translated_package_name")
 			package_latest_version=$(echo "$api_response" | jq -r ".[] | select(.repo == \"$repo\" and .name == \"$translated_package_name\").version")
 
 			if [ -z "$package_latest_version" ]; then
