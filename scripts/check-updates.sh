@@ -69,6 +69,8 @@ translate_package_name() {
 
 		liblua52) translated_name="lua52";;
 
+		lua-lpeg) translated_name="lua:lpeg";;
+
 		# Should not be updated because newer versions use
 		# libc features that are not available in API 21.
 		mesa) translated_name="/hidden/";;
