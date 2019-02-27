@@ -54,10 +54,10 @@ fi
 
 		if [ "$(id -u)" -ne 0 ] && [ "$(id -u)" -ne 1000 ]; then
 			echo "Changed builder uid/gid... (this may take a while)"
-			docker exec --tty "$CONTAINER_NAME" chown -R $(id -u) "/home/builder"
-			docker exec --tty "$CONTAINER_NAME" chown -R $(id -u) /data
-			docker exec --tty "$CONTAINER_NAME" usermod -u $(id -u) builder
-			docker exec --tty "$CONTAINER_NAME" groupmod -g $(id -g) builder
+			docker exec --tty "$CONTAINER_NAME" sudo chown -R $(id -u) "/home/builder"
+			docker exec --tty "$CONTAINER_NAME" sudo chown -R $(id -u) /data
+			docker exec --tty "$CONTAINER_NAME" sudo usermod -u $(id -u) builder
+			docker exec --tty "$CONTAINER_NAME" sudo groupmod -g $(id -g) builder
 		fi
 	fi
 
