@@ -22,7 +22,7 @@ else
 		(cd "$REPOROOT"/unstable-packages && git clean -fdxq && git checkout -- .)
 
 		echo "[*] Copying packages from './packages' to build environment..."
-		for pkg in "$REPOROOT"/packages/*; do
+		for pkg in $(find "$REPOROOT"/packages -mindepth 1 -maxdepth 1 -type d); do
 			if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
 				cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
 			else
@@ -31,7 +31,7 @@ else
 		done
 
 		echo "[*] Copying packages from './unstable-packages/packages' to build environment..."
-		for pkg in "$REPOROOT"/unstable-packages/packages/*; do
+		for pkg in $(find "$REPOROOT"/unstable-packages/packages -mindepth 1 -maxdepth 1 -type d); do
 			if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
 				cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
 			else
