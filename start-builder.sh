@@ -13,33 +13,31 @@ if [ ! -e "$LOCKFILE" ]; then
 	touch "$LOCKFILE"
 fi
 
-if [ ! -e "$REPOROOT/termux-packages/build-package.sh" ]; then
+(flock -n 3 || exit 0
+	docker stop "$CONTAINER_NAME" >/dev/null 2>&1
+
 	echo "[*] Setting up repository submodules..."
+	git submodule deinit --all --force
 	git submodule update --init
-else
-	(flock -n 3 || exit 0
-		(cd "$REPOROOT"/termux-packages && git clean -fdxq && git checkout -- .)
-		(cd "$REPOROOT"/unstable-packages && git clean -fdxq && git checkout -- .)
 
-		echo "[*] Copying packages from './packages' to build environment..."
-		for pkg in $(find "$REPOROOT"/packages -mindepth 1 -maxdepth 1 -type d); do
-			if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
-				cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
-			else
-				echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
-			fi
-		done
+	echo "[*] Copying packages from './packages' to build environment..."
+	for pkg in $(find "$REPOROOT"/packages -mindepth 1 -maxdepth 1 -type d); do
+		if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
+			cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
+		else
+			echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
+		fi
+	done
 
-		echo "[*] Copying packages from './unstable-packages/packages' to build environment..."
-		for pkg in $(find "$REPOROOT"/unstable-packages/packages -mindepth 1 -maxdepth 1 -type d); do
-			if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
-				cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
-			else
-				echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
-			fi
-		done
-	) 3< "$LOCKFILE"
-fi
+	echo "[*] Copying packages from './unstable-packages/packages' to build environment..."
+	for pkg in $(find "$REPOROOT"/unstable-packages/packages -mindepth 1 -maxdepth 1 -type d); do
+		if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
+			cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
+		else
+			echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
+		fi
+	done
+) 3< "$LOCKFILE"
 
 (flock -n 3 || true
 	echo "[*] Running container '$CONTAINER_NAME' from image '$IMAGE_NAME'..."
