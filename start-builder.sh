@@ -14,7 +14,7 @@ if [ ! -e "$LOCKFILE" ]; then
 fi
 
 (flock -n 3 || exit 0
-	docker stop "$CONTAINER_NAME" >/dev/null 2>&1
+	docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
 	echo "[*] Setting up repository submodules..."
 	git submodule deinit --all --force
