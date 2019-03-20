@@ -261,7 +261,8 @@ delete_old_versions_from_package() {
 
 	if [ "$http_status_code" = "200" ]; then
 		package_latest_version=$(
-			echo "$curl_response" | cut -d'|' -f1 | jq -r .latest_version
+			echo "$curl_response" | cut -d'|' -f1 | jq -r .latest_version | \
+				sed 's/\./\\./g'
 		)
 
 		package_versions=$(
@@ -310,7 +311,7 @@ delete_old_versions_from_package() {
 		done
 	fi
 
-	msg -e "\\r\\e[2K    ${1}: success"
+	msg -e "\\r\\e[2K    * ${1}: success"
 }
 
 
@@ -333,18 +334,18 @@ upload_package() {
 	local arch
 	for arch in all aarch64 arm i686 x86_64; do
 		# Regular package.
-		if [ -f "$DEBFILES_DIR_PATH/${package_name}_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb" ]; then
-			debfiles_catalog["${package_name}_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb"]=${arch}
+		if [ -f "$DEBFILES_DIR_PATH/${1}_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb" ]; then
+			debfiles_catalog["${1}_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb"]=${arch}
 		fi
 
 		# Development package.
-		if [ -f "$DEBFILES_DIR_PATH/${package_name}-dev_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb" ]; then
-			debfiles_catalog["${package_name}-dev_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb"]=${arch}
+		if [ -f "$DEBFILES_DIR_PATH/${1}-dev_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb" ]; then
+			debfiles_catalog["${1}-dev_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb"]=${arch}
 		fi
 
 		# Discover subpackages.
 		local file
-		for file in $(find "$TERMUX_PACKAGES_BASEDIR/packages/$package_name/" -maxdepth 1 -type f -iname \*.subpackage.sh | sort); do
+		for file in $(find "$TERMUX_PACKAGES_BASEDIR/packages/${1}/" -maxdepth 1 -type f -iname \*.subpackage.sh | sort); do
 			file=$(basename "$file")
 
 			if [ -f "$DEBFILES_DIR_PATH/${file%%.subpackage.sh}_${PACKAGE_METADATA['VERSION_FULL']}_${arch}.deb" ]; then
@@ -407,7 +408,7 @@ upload_package() {
 				--header "X-Bintray-Debian-Distribution: $BINTRAY_REPO_DISTRIBUTION" \
 				--header "X-Bintray-Debian-Component: $BINTRAY_REPO_COMPONENT" \
 				--header "X-Bintray-Debian-Architecture: $package_arch" \
-				--header "X-Bintray-Package: ${package_name}" \
+				--header "X-Bintray-Package: ${1}" \
 				--header "X-Bintray-Version: ${PACKAGE_METADATA['VERSION_FULL']}" \
 				--upload-file "$DEBFILES_DIR_PATH/$item" \
 				--write-out "|%{http_code}" \
@@ -439,13 +440,13 @@ upload_package() {
 			--header "Content-Type: application/json" \
 			--data "{\"subject\":\"${BINTRAY_GPG_SUBJECT}\",\"passphrase\":\"$BINTRAY_GPG_PASSPHRASE\"}" \
 			--write-out "|%{http_code}" \
-			"https://api.bintray.com/content/${BINTRAY_SUBJECT}/${BINTRAY_REPO_NAME}/${package_name}/${PACKAGE_METADATA['VERSION_FULL']}/publish"
+			"https://api.bintray.com/content/${BINTRAY_SUBJECT}/${BINTRAY_REPO_NAME}/${1}/${PACKAGE_METADATA['VERSION_FULL']}/publish"
 	)
 
 	http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
 	api_response_message=$(echo "$curl_response" | cut -d'|' -f1 | jq -r .message)
 
-	if [ "$http_status_code" ]; then
+	if [ "$http_status_code" = "200" ]; then
 		msg -e "\\r\\e[2K    * ${1}: success"
 	else
 		msg "$api_response_message"
@@ -518,57 +519,59 @@ process_packages() {
 			emergency_exit
 		fi
 
-		if [ ! -f "$TERMUX_PACKAGES_BASEDIR/packages/$1/build.sh" ]; then
-			msg "    * ${package_name}: skipping because such package does not exist."
-			continue
-		fi
-
-		PACKAGE_METADATA["NAME"]="$package_name"
-
-		PACKAGE_METADATA["LICENSES"]=$(get_package_property "$package_name" "TERMUX_PKG_LICENSE")
-		if [ -z "${PACKAGE_METADATA['LICENSES']}" ]; then
-			msg "    * ${package_name}: skipping because field 'TERMUX_PKG_LICENSE' is empty."
-			continue
-		elif grep -qP '.*custom.*' <(echo "${PACKAGE_METADATA['LICENSES']}"); then
-			msg "    * ${package_name}: skipping because it has custom license."
-			continue
-		fi
-
-		PACKAGE_METADATA["DESCRIPTION"]=$(get_package_property "$package_name" "TERMUX_PKG_DESCRIPTION")
-		if [ -z "${PACKAGE_METADATA['DESCRIPTION']}" ]; then
-			msg "    * ${package_name}: skipping because field 'TERMUX_PKG_DESCRIPTION' is empty."
-			continue
-		fi
-
-		PACKAGE_METADATA["WEBSITE_URL"]=$(get_package_property "$package_name" "TERMUX_PKG_HOMEPAGE")
-		if [ -z "${PACKAGE_METADATA['WEBSITE_URL']}" ]; then
-			msg "    * ${package_name}: skipping because field 'TERMUX_PKG_HOMEPAGE' is empty."
-			continue
-		fi
-
-		PACKAGE_METADATA["VERSION"]=$(get_package_property "$package_name" "TERMUX_PKG_VERSION")
-		if [ -z "${PACKAGE_METADATA['VERSION']}" ]; then
-			msg "    * ${package_name}: skipping because field 'TERMUX_PKG_VERSION' is empty."
-			continue
-		fi
-
-		PACKAGE_METADATA["REVISION"]=$(get_package_property "$package_name" "TERMUX_PKG_REVISION")
-		if [ -n "${PACKAGE_METADATA['REVISION']}" ]; then
-			PACKAGE_METADATA["VERSION_FULL"]="${PACKAGE_METADATA['VERSION']}-${PACKAGE_METADATA['REVISION']}"
-		else
-			if [ "${PACKAGE_METADATA['VERSION']}" != "${PACKAGE_METADATA['VERSION']/-/}" ]; then
-				PACKAGE_METADATA["VERSION_FULL"]="${PACKAGE_METADATA['VERSION']}-0"
-			else
-				PACKAGE_METADATA["VERSION_FULL"]="${PACKAGE_METADATA['VERSION']}"
-			fi
-		fi
-
-		if $PACKAGE_CLEANUP_MODE; then
-			delete_old_versions_from_package "$package_name" || continue
-		elif $PACKAGE_DELETION_MODE; then
+		if $PACKAGE_DELETION_MODE; then
 			delete_package "$package_name" || continue
 		else
-			upload_package "$package_name" || continue
+			if [ ! -f "$TERMUX_PACKAGES_BASEDIR/packages/$1/build.sh" ]; then
+				msg "    * ${package_name}: skipping because such package does not exist."
+				continue
+			fi
+
+			PACKAGE_METADATA["NAME"]="$package_name"
+
+			PACKAGE_METADATA["LICENSES"]=$(get_package_property "$package_name" "TERMUX_PKG_LICENSE")
+			if [ -z "${PACKAGE_METADATA['LICENSES']}" ]; then
+				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_LICENSE' is empty."
+				continue
+			elif grep -qP '.*custom.*' <(echo "${PACKAGE_METADATA['LICENSES']}"); then
+				msg "    * ${package_name}: skipping because it has custom license."
+				continue
+			fi
+
+			PACKAGE_METADATA["DESCRIPTION"]=$(get_package_property "$package_name" "TERMUX_PKG_DESCRIPTION")
+			if [ -z "${PACKAGE_METADATA['DESCRIPTION']}" ]; then
+				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_DESCRIPTION' is empty."
+				continue
+			fi
+
+			PACKAGE_METADATA["WEBSITE_URL"]=$(get_package_property "$package_name" "TERMUX_PKG_HOMEPAGE")
+			if [ -z "${PACKAGE_METADATA['WEBSITE_URL']}" ]; then
+				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_HOMEPAGE' is empty."
+				continue
+			fi
+
+			PACKAGE_METADATA["VERSION"]=$(get_package_property "$package_name" "TERMUX_PKG_VERSION")
+			if [ -z "${PACKAGE_METADATA['VERSION']}" ]; then
+				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_VERSION' is empty."
+				continue
+			fi
+
+			PACKAGE_METADATA["REVISION"]=$(get_package_property "$package_name" "TERMUX_PKG_REVISION")
+			if [ -n "${PACKAGE_METADATA['REVISION']}" ]; then
+				PACKAGE_METADATA["VERSION_FULL"]="${PACKAGE_METADATA['VERSION']}-${PACKAGE_METADATA['REVISION']}"
+			else
+				if [ "${PACKAGE_METADATA['VERSION']}" != "${PACKAGE_METADATA['VERSION']/-/}" ]; then
+					PACKAGE_METADATA["VERSION_FULL"]="${PACKAGE_METADATA['VERSION']}-0"
+				else
+					PACKAGE_METADATA["VERSION_FULL"]="${PACKAGE_METADATA['VERSION']}"
+				fi
+			fi
+
+			if $PACKAGE_CLEANUP_MODE; then
+				delete_old_versions_from_package "$package_name" || continue
+			else
+				upload_package "$package_name" || continue
+			fi
 		fi
 	done
 
