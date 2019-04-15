@@ -6,6 +6,8 @@
 
 There are located build scripts and patches for Termux X11 packages.
 
+**Important:** for now, some packages like tigervnc are unavailable in API-24 repository.
+
 Programs that use [X11 Windowing System] cannot be used standalone like normal
 command line utilities. Termux does not provide native way for video output and
 therefore you will need to do additional setup. Recommended way is to use either
