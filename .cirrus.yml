@@ -1,0 +1,94 @@
+container:
+  image: xeffyr/termux-extra-packages-builder:latest
+  cpu: 8
+  memory: 16
+
+# Build packages.
+build_task:
+  # Run task only if packages were modified.
+  # Note that similar check is done in 'scripts/get-modified-packages.sh'.
+  only_if: "changesInclude('packages/**')"
+
+  # 2 hours is a maximal timeout for free use.
+  timeout_in: 120m
+
+  environment:
+    matrix:
+      TERMUX_ARCH: aarch64
+      TERMUX_ARCH: arm
+      TERMUX_ARCH: i686
+      TERMUX_ARCH: x86_64
+
+  # Do not use built-in git client provided by Cirrus as it
+  # causes problems when determining changed files.
+  clone_script: |
+    if [[ -z "$CIRRUS_PR" ]]; then
+      git clone --recursive --branch=$CIRRUS_BRANCH https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
+      git reset --hard $CIRRUS_CHANGE_IN_REPO
+    else
+      git clone --recursive https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
+      git fetch origin pull/$CIRRUS_PR/head:pull/$CIRRUS_PR
+      git reset --hard $CIRRUS_CHANGE_IN_REPO
+    fi
+
+  # Copy packages into 'termux-packages' build environment.
+  prepare_script: |
+    [ -n "$CIRRUS_PR" ] && echo "CIRRUS_PR: $CIRRUS_PR"
+    [ -n "$CIRRUS_BASE_SHA" ] && echo "CIRRUS_BASE_SHA: $CIRRUS_BASE_SHA"
+    [ -n "$CIRRUS_LAST_GREEN_CHANGE" ] && echo "CIRRUS_LAST_GREEN_CHANGE: $CIRRUS_LAST_GREEN_CHANGE"
+    [ -n "$CIRRUS_CHANGE_IN_REPO" ] && echo "CIRRUS_CHANGE_IN_REPO: $CIRRUS_CHANGE_IN_REPO"
+    for pkg in ./packages/*; do
+        if [ ! -d "./termux-packages/packages/$(basename "$pkg")" ]; then
+            cp -a "$pkg" ./termux-packages/packages/
+        else
+            echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
+        fi
+    done
+
+  # Determine changes in repository and build modified packages.
+  build_script: |
+    MODIFIED_PACKAGES=$(./scripts/get-modified-packages.sh)
+    if [ -n "$MODIFIED_PACKAGES" ]; then
+        cd ./termux-packages
+        for package in $MODIFIED_PACKAGES; do
+            ./build-package.sh -i -a "$TERMUX_ARCH" "$package"
+        done
+        if [ -d ./debs ]; then
+            rm -rf ../debs
+            mv ./debs ../
+        fi
+    fi
+
+  # Make built packages available for the next tasks.
+  share_packages_cache:
+    folder: "./debs"
+    fingerprint_script: echo "$CIRRUS_CHANGE_IN_REPO"
+
+  # Also make them downloadable from the UI.
+  store_packages_artifacts:
+    path: "./debs/*.deb"
+
+# Publish packages to Bintray.
+publish_task:
+  only_if: $CIRRUS_BRANCH == 'master'
+
+  timeout_in: 30m
+
+  depends_on:
+    - build
+
+  environment:
+    BINTRAY_USERNAME: ENCRYPTED[5977e6c0f069d0bc9be4ed09044d59835767a5c71c541cbe47cd56736cc43f5191a9291bbc3031a9267f0be105651f25]
+    BINTRAY_API_KEY: ENCRYPTED[04f4ee0fc194ca2f94959a623388d4c3ae1bf874e8fa876f79b2659fc9e8f6fea952275e97f2d022e43e2ab6c67d1198]
+
+  # Retrieve built packages.
+  share_packages_cache:
+    folder: "./debs"
+    fingerprint_script: echo "$CIRRUS_CHANGE_IN_REPO"
+
+  # Publish.
+  upload_to_bintray_script: |
+    MODIFIED_PACKAGES=$(./scripts/get-modified-packages.sh)
+    if [ -n "$MODIFIED_PACKAGES" ]; then
+        ./scripts/package_uploader.sh $MODIFIED_PACKAGES
+    fi
