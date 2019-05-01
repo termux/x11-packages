@@ -2,7 +2,7 @@
 
 [![Powered by JFrog Bintray](./.github/static/powered-by-bintray.png)](https://bintray.com)
 
-[![pipeline status](https://gitlab.com/xeffyr/x11-packages/badges/master/pipeline.svg)](https://gitlab.com/xeffyr/x11-packages/commits/master)
+[![Build Status](https://api.cirrus-ci.com/github/termux/x11-packages.svg?branch=master)](https://cirrus-ci.com/github/termux/x11-packages)
 
 There are located build scripts and patches for Termux X11 packages.
 

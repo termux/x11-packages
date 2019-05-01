@@ -59,6 +59,16 @@ PACKAGE_CLEANUP_MODE=false
 PACKAGE_DELETION_MODE=false
 SCRIPT_EMERG_EXIT=false
 
+# Special variable to force script to exit with error status
+# when everything finished. Should be set only when non-script
+# errors occur, e.g. curl request failure.
+#
+# Useful in case if there was an error when uploading packages
+# via CI/CD so packages are still uploaded where possible but
+# maintainers will be notified about error because pipeline
+# will be marked as "failed".
+SCRIPT_ERROR_EXIT=false
+
 # Bintray-specific configuration.
 BINTRAY_REPO_NAME="x11-packages-24"
 BINTRAY_REPO_GITHUB="termux/x11-packages"
@@ -78,7 +88,7 @@ if [ -z "$BINTRAY_GPG_SUBJECT" ]; then
 	BINTRAY_GPG_SUBJECT="$BINTRAY_USERNAME"
 fi
 
-# Packages are built and uploaded by xeffyr.
+# Xeffyr is the maintainer of Termux X11 packages repository.
 BINTRAY_SUBJECT="xeffyr"
 
 ###################################################################
@@ -180,15 +190,13 @@ recalculate_metadata() {
 	http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
 	api_response_message=$(echo "$curl_response" | cut -d'|' -f1 | jq -r .message)
 
-	case "$http_status_code" in
-		202)
-			msg "done"
-			;;
-		*)
-			msg "failure"
-			msg "[!] $api_response_message"
-			;;
-	esac
+	if [ "$http_status_code" = "202" ]; then
+		msg "done"
+	else
+		msg "failure"
+		msg "[!] $api_response_message"
+		SCRIPT_ERROR_EXIT=true
+	fi
 }
 
 
@@ -225,6 +233,7 @@ delete_package() {
 		msg "success"
 	else
 		msg "$api_response_message"
+		SCRIPT_ERROR_EXIT=true
 	fi
 
 	if $SCRIPT_EMERG_EXIT; then
@@ -271,6 +280,7 @@ delete_old_versions_from_package() {
 		)
 	else
 		msg "$api_response_message."
+		SCRIPT_ERROR_EXIT=true
 		return 1
 	fi
 
@@ -302,6 +312,7 @@ delete_old_versions_from_package() {
 
 			if [ "$http_status_code" != "200" ] && [ "$http_status_code" != "404" ]; then
 				msg "$api_response_message"
+				SCRIPT_ERROR_EXIT=true
 				return 1
 			fi
 
@@ -359,6 +370,7 @@ upload_package() {
 	if [ ${#debfiles_catalog[@]} -eq 0 ]; then
 		set -o nounset
 		msg "    * ${1}: skipping because no files to upload."
+		SCRIPT_ERROR_EXIT=true
 		return 1
 	fi
 	set -o nounset
@@ -385,6 +397,7 @@ upload_package() {
 
 	if [ "$http_status_code" != "201" ] && [ "$http_status_code" != "409" ]; then
 		msg "$api_response_message"
+		SCRIPT_ERROR_EXIT=true
 		return 1
 	fi
 
@@ -420,6 +433,7 @@ upload_package() {
 
 		if [ "$http_status_code" != "201" ] && [ "$http_status_code" != "409" ]; then
 			msg "$api_response_message"
+			SCRIPT_ERROR_EXIT=true
 			return 1
 		fi
 
@@ -450,6 +464,7 @@ upload_package() {
 		msg -e "\\r\\e[2K    * ${1}: success"
 	else
 		msg "$api_response_message"
+		SCRIPT_ERROR_EXIT=true
 		return 1
 	fi
 }
@@ -474,10 +489,10 @@ get_package_property() {
 		unset BINTRAY_USERNAME
 
 		if [ -e "$TERMUX_PACKAGES_BASEDIR/scripts/properties.sh" ]; then
-			. "$TERMUX_PACKAGES_BASEDIR/scripts/properties.sh"
+			. "$TERMUX_PACKAGES_BASEDIR/scripts/properties.sh" 2>/dev/null
 		fi
 
-		. "$buildsh_path"
+		. "$buildsh_path" 2>/dev/null
 
 		echo "${!2}"
 
@@ -522,8 +537,9 @@ process_packages() {
 		if $PACKAGE_DELETION_MODE; then
 			delete_package "$package_name" || continue
 		else
-			if [ ! -f "$TERMUX_PACKAGES_BASEDIR/packages/$1/build.sh" ]; then
+			if [ ! -f "$TERMUX_PACKAGES_BASEDIR/packages/$package_name/build.sh" ]; then
 				msg "    * ${package_name}: skipping because such package does not exist."
+				SCRIPT_ERROR_EXIT=true
 				continue
 			fi
 
@@ -532,27 +548,32 @@ process_packages() {
 			PACKAGE_METADATA["LICENSES"]=$(get_package_property "$package_name" "TERMUX_PKG_LICENSE")
 			if [ -z "${PACKAGE_METADATA['LICENSES']}" ]; then
 				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_LICENSE' is empty."
+				SCRIPT_ERROR_EXIT=true
 				continue
 			elif grep -qP '.*custom.*' <(echo "${PACKAGE_METADATA['LICENSES']}"); then
 				msg "    * ${package_name}: skipping because it has custom license."
+				SCRIPT_ERROR_EXIT=true
 				continue
 			fi
 
 			PACKAGE_METADATA["DESCRIPTION"]=$(get_package_property "$package_name" "TERMUX_PKG_DESCRIPTION")
 			if [ -z "${PACKAGE_METADATA['DESCRIPTION']}" ]; then
 				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_DESCRIPTION' is empty."
+				SCRIPT_ERROR_EXIT=true
 				continue
 			fi
 
 			PACKAGE_METADATA["WEBSITE_URL"]=$(get_package_property "$package_name" "TERMUX_PKG_HOMEPAGE")
 			if [ -z "${PACKAGE_METADATA['WEBSITE_URL']}" ]; then
 				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_HOMEPAGE' is empty."
+				SCRIPT_ERROR_EXIT=true
 				continue
 			fi
 
 			PACKAGE_METADATA["VERSION"]=$(get_package_property "$package_name" "TERMUX_PKG_VERSION")
 			if [ -z "${PACKAGE_METADATA['VERSION']}" ]; then
 				msg "    * ${package_name}: skipping because field 'TERMUX_PKG_VERSION' is empty."
+				SCRIPT_ERROR_EXIT=true
 				continue
 			fi
 
@@ -600,7 +621,7 @@ show_usage() {
 	msg
 	msg "=========================================================="
 	msg
-	msg "Primarily indended to be used by Gitlab CI for automatic"
+	msg "Primarily indended to be used by CI systems for automatic"
 	msg "package uploads but it can be used for manual uploads too."
 	msg
 	msg "Before using this script, check that you have all"
@@ -751,4 +772,9 @@ if [ -z "$BINTRAY_GPG_SUBJECT" ]; then
 fi
 
 process_packages "$@"
-exit 0
+
+if $SCRIPT_ERROR_EXIT; then
+	exit 1
+else
+	exit 0
+fi
