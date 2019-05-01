@@ -51,7 +51,7 @@ build_task:
     if [ -n "$MODIFIED_PACKAGES" ]; then
         cd ./termux-packages
         for package in $MODIFIED_PACKAGES; do
-            ./build-package.sh -i -a "$TERMUX_ARCH" "$package"
+            ./build-package.sh -I -a "$TERMUX_ARCH" "$package"
         done
         if [ -d ./debs ]; then
             rm -rf ../debs
