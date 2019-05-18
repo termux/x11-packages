@@ -1,14 +1,10 @@
 container:
-  image: xeffyr/termux-extra-packages-builder:latest
+  image: xeffyr/termux-advanced-builder:latest
   cpu: 8
   memory: 16
 
 # Build packages.
 build_task:
-  # Run task only if packages were modified.
-  # Note that similar check is done in 'scripts/get-modified-packages.sh'.
-  only_if: "changesInclude('packages/**')"
-
   # 2 hours is a maximal timeout for free use.
   timeout_in: 120m
 
@@ -23,20 +19,16 @@ build_task:
   # causes problems when determining changed files.
   clone_script: |
     if [[ -z "$CIRRUS_PR" ]]; then
-      git clone --recursive --branch=$CIRRUS_BRANCH https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
-      git reset --hard $CIRRUS_CHANGE_IN_REPO
+      git clone --recursive --branch="$CIRRUS_BRANCH" "https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git" "$CIRRUS_WORKING_DIR"
+      git reset --hard "$CIRRUS_CHANGE_IN_REPO"
     else
-      git clone --recursive https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git $CIRRUS_WORKING_DIR
-      git fetch origin pull/$CIRRUS_PR/head:pull/$CIRRUS_PR
-      git reset --hard $CIRRUS_CHANGE_IN_REPO
+      git clone --recursive "https://x-access-token:${CIRRUS_REPO_CLONE_TOKEN}@github.com/${CIRRUS_REPO_FULL_NAME}.git" "$CIRRUS_WORKING_DIR"
+      git fetch origin "pull/$CIRRUS_PR/head:pull/$CIRRUS_PR"
+      git reset --hard "$CIRRUS_CHANGE_IN_REPO"
     fi
 
   # Copy packages into 'termux-packages' build environment.
   prepare_script: |
-    [ -n "$CIRRUS_PR" ] && echo "CIRRUS_PR: $CIRRUS_PR"
-    [ -n "$CIRRUS_BASE_SHA" ] && echo "CIRRUS_BASE_SHA: $CIRRUS_BASE_SHA"
-    [ -n "$CIRRUS_LAST_GREEN_CHANGE" ] && echo "CIRRUS_LAST_GREEN_CHANGE: $CIRRUS_LAST_GREEN_CHANGE"
-    [ -n "$CIRRUS_CHANGE_IN_REPO" ] && echo "CIRRUS_CHANGE_IN_REPO: $CIRRUS_CHANGE_IN_REPO"
     for pkg in ./packages/*; do
         if [ ! -d "./termux-packages/packages/$(basename "$pkg")" ]; then
             cp -a "$pkg" ./termux-packages/packages/
@@ -47,37 +39,51 @@ build_task:
 
   # Determine changes in repository and build modified packages.
   build_script: |
+    if grep -qiP '^\s*%ci:reset-backlog\s*$' <(git log --format="%B" -n 1 "$CIRRUS_CHANGE_IN_REPO"); then
+        # If commit message contains line '%ci:reset-backlog', builds will be done
+        # only for current commit.
+        unset CIRRUS_LAST_GREEN_CHANGE
+        unset CIRRUS_BASE_SHA
+    fi
     MODIFIED_PACKAGES=$(./scripts/get-modified-packages.sh)
-    if [ -n "$MODIFIED_PACKAGES" ]; then
-        cd ./termux-packages
-        for package in $MODIFIED_PACKAGES; do
-            if [ -n "$CIRRUS_PR" ]; then
-                # Perform full builds for PR.
-                ./build-package.sh -a "$TERMUX_ARCH" "$package"
-            else
-                ./build-package.sh -I -a "$TERMUX_ARCH" "$package"
-            fi
-        done
-        if [ -d ./debs ]; then
-            rm -rf ../debs
-            mv ./debs ../
+    cd ./termux-packages
+    for package in $MODIFIED_PACKAGES; do
+        if [ -n "$CIRRUS_PR" ]; then
+            # Perform full builds for PR.
+            ./build-package.sh -a "$TERMUX_ARCH" "$package"
+        else
+            ./build-package.sh -I -a "$TERMUX_ARCH" "$package"
         fi
+    done
+    if [ -d ./debs ]; then
+        # Upload packages to cache.
+        tar zcf "debs-${TERMUX_ARCH}.tar.gz" debs
+        curl -s --upload-file "debs-${TERMUX_ARCH}.tar.gz" "http://$CIRRUS_HTTP_CACHE_HOST/debs-${TERMUX_ARCH}-${CIRRUS_CHANGE_IN_REPO}"
     fi
 
-  # Make built packages available for the next tasks.
-  share_packages_cache:
-    folder: "./debs"
-    fingerprint_script: echo "$CIRRUS_CHANGE_IN_REPO"
+  # Make packages downloadable via UI.
+  output_artifacts:
+    path: "./termux-packages/debs/*.deb"
 
-  # Also make them downloadable from the UI.
-  store_packages_artifacts:
-    path: "./debs/*.deb"
+  # Debug SSH shell in case of failure.
+  on_failure:
+    ssh_service_script: |
+      sudo service ssh start
+      mkdir -p "$HOME/.ssh"
+      # Maintainer's (@xeffyr) SSH public key.
+      echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH5jsA0CQfw+um7V7BGxERRKQSnKM8B1Wl33zieAu7/z" > "$HOME/.ssh/authorized_keys"
+      # Allow to stop debug shell on exit.
+      echo "kill \$(pgrep -f \"ssh -R \${CIRRUS_TASK_ID}\") &" > "$HOME/.shutdown_script"
+      echo "nohup bash \${HOME}/.shutdown_script > /dev/null 2>&1" > "$HOME/.bash_logout"
+      # Reverse SSH via Serveo.net.
+      # Connect with: ssh -J serveo.net builder@${CIRRUS_TASK_ID}
+      ssh -R "${CIRRUS_TASK_ID}:22:localhost:22" serveo.net || true
 
 # Publish packages to Bintray.
 publish_task:
-  only_if: $CIRRUS_BRANCH == 'master'
+  only_if: $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'android-5'
 
-  timeout_in: 30m
+  timeout_in: 60m
 
   depends_on:
     - build
@@ -86,14 +92,17 @@ publish_task:
     BINTRAY_USERNAME: ENCRYPTED[90abba51ac0c50d868f2d78ac4d48ed0fe8ecb79d53f15697afd261c440c7999cbe910696a65221668b3826cff3c756f]
     BINTRAY_API_KEY: ENCRYPTED[0329a0c1d74d51a02f47e1ab5a079a017959bafa8b241cbc6a0404217a8719ed7ded99837db9c1846cb17309657dfc8d]
 
-  # Retrieve built packages.
-  share_packages_cache:
-    folder: "./debs"
-    fingerprint_script: echo "$CIRRUS_CHANGE_IN_REPO"
-
-  # Publish.
   upload_to_bintray_script: |
+    if grep -qiP '^\s*%ci:reset-backlog\s*$' <(git log --format="%B" -n 1 "$CIRRUS_CHANGE_IN_REPO"); then
+        unset CIRRUS_LAST_GREEN_CHANGE
+        unset CIRRUS_BASE_SHA
+    fi
     MODIFIED_PACKAGES=$(./scripts/get-modified-packages.sh)
     if [ -n "$MODIFIED_PACKAGES" ]; then
+        for arch in aarch64 arm i686 x86_64; do
+            curl -s -o "/tmp/debs-${arch}.tar.gz" "http://$CIRRUS_HTTP_CACHE_HOST/debs-${arch}-${CIRRUS_CHANGE_IN_REPO}"
+            tar xvf "/tmp/debs-${arch}.tar.gz"
+            rm -f "/tmp/debs-${arch}.tar.gz"
+        done
         ./scripts/package_uploader.sh $MODIFIED_PACKAGES
     fi
