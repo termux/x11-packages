@@ -2,8 +2,6 @@
 
 [![Powered by JFrog Bintray](./.github/static/powered-by-bintray.png)](https://bintray.com)
 
-[![Build Status](https://api.cirrus-ci.com/github/termux/x11-packages.svg?branch=master&kill_cache=1)](https://cirrus-ci.com/github/termux/x11-packages)
-
 There are located build scripts and patches for Termux X11 packages.
 
 **Important:** only AArch64 package set is complete for Android 7 (api24) X11 repository. Users of other architectures (e.g. ARM) may see that a lot of packages not available.
