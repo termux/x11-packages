@@ -181,7 +181,6 @@ if [ "$CIRRUS_BRANCH" = "master" ]; then
 
 		echo "[*] Uploading packages to Bintray:"
 		echo
-		echo "${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" \
-			$PACKAGE_NAMES
+		"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
 	fi
 fi
