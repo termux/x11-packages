@@ -1,16 +1,23 @@
 #!/bin/sh
 set -e -u
 
+SCRIPT_NAME=$(basename "$0")
 REPOROOT=$(dirname "$(realpath "$0")")
-LOCKFILE="/tmp/.termux-x11_24-builder.lck"
 
 IMAGE_NAME="xeffyr/termux-advanced-builder"
-: ${CONTAINER_NAME:=termux-x11_24-packages-builder}
+
+if [ "$SCRIPT_NAME" = "start-builder-legacy.sh" ]; then
+	LOCK_FILE="/tmp/.termux-x11-builder-legacy.lck"
+	CONTAINER_NAME=termux-x11-buildenv-legacy
+else
+	LOCK_FILE="/tmp/.termux-x11-builder.lck"
+	CONTAINER_NAME=termux-x11-buildenv
+fi
 
 cd "$REPOROOT"
 
-if [ ! -e "$LOCKFILE" ]; then
-	touch "$LOCKFILE"
+if [ ! -e "$LOCK_FILE" ]; then
+	touch "$LOCK_FILE"
 fi
 
 (flock -n 3 || exit 0
@@ -28,7 +35,7 @@ fi
 			echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
 		fi
 	done
-) 3< "$LOCKFILE"
+) 3< "$LOCK_FILE"
 
 (flock -n 3 || true
 	echo "[*] Running container '$CONTAINER_NAME' from image '$IMAGE_NAME'..."
@@ -55,4 +62,4 @@ fi
 	else
 		docker exec --interactive --tty "$CONTAINER_NAME" bash
 	fi
-) 3< "$LOCKFILE"
+) 3< "$LOCK_FILE"
