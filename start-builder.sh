@@ -8,10 +8,12 @@ IMAGE_NAME="xeffyr/termux-advanced-builder"
 
 if [ "$SCRIPT_NAME" = "start-builder-legacy.sh" ]; then
 	LOCK_FILE="/tmp/.termux-x11-builder-legacy.lck"
-	CONTAINER_NAME=termux-x11-buildenv-legacy
+	CONTAINER_NAME="termux-x11-buildenv-legacy"
+	BUILD_ENVIRONMENT="termux-packages-legacy"
 else
 	LOCK_FILE="/tmp/.termux-x11-builder.lck"
-	CONTAINER_NAME=termux-x11-buildenv
+	CONTAINER_NAME="termux-x11-buildenv"
+	BUILD_ENVIRONMENT="termux-packages"
 fi
 
 cd "$REPOROOT"
@@ -29,8 +31,8 @@ fi
 
 	echo "[*] Copying packages from './packages' to build environment..."
 	for pkg in $(find "$REPOROOT"/packages -mindepth 1 -maxdepth 1 -type d); do
-		if [ ! -d "$REPOROOT/termux-packages/packages/$(basename "$pkg")" ]; then
-			cp -a "$pkg" "$REPOROOT"/termux-packages/packages/
+		if [ ! -d "${REPOROOT}/${BUILD_ENVIRONMENT}/packages/$(basename "$pkg")" ]; then
+			cp -a "$pkg" "${REPOROOT}/${BUILD_ENVIRONMENT}"/packages/
 		else
 			echo "[!] Package '$(basename "$pkg")' already exists in build environment. Skipping."
 		fi
@@ -44,7 +46,7 @@ fi
 		docker run \
 			--detach \
 			--name "$CONTAINER_NAME" \
-			--volume "$REPOROOT/termux-packages:/home/builder/packages" \
+			--volume "${REPOROOT}/${BUILD_ENVIRONMENT}:/home/builder/packages" \
 			--tty \
 			"$IMAGE_NAME"
 
