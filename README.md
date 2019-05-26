@@ -51,6 +51,8 @@ requirements are Linux-based host with Docker installed.
 	cd ./x11-packages
 	./start-builder.sh
 	```
+	Command shown above will start builder for Android 7 (API level 24). If you
+	need to build package for Android 5, use `./start-builder-legacy.sh`.
 
 3. Choose package you want to build and run:
 	```ShellSession
