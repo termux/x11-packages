@@ -4,8 +4,6 @@
 
 There are located build scripts and patches for Termux X11 packages.
 
-**Important:** only AArch64 package set is complete for Android 7 (api24) X11 repository. Users of other architectures (e.g. ARM) may see that a lot of packages not available.
-
 Programs that use [X11 Windowing System] cannot be used standalone like normal
 command line utilities. Termux does not provide native way for video output and
 therefore you will need to do additional setup. Recommended way is to use either
