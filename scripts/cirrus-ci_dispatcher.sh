@@ -181,6 +181,10 @@ if [ "$CIRRUS_BRANCH" = "master" ]; then
 
 		echo "[*] Uploading packages to Bintray:"
 		echo
-		"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
+		if [ "$LEGACY_ANDROID" = "true" ]; then
+			"${REPO_DIR}/scripts/package_uploader_legacy.sh" -p "${PWD}/debs" $PACKAGE_NAMES
+		else
+			"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
+		fi
 	fi
 fi
