@@ -70,7 +70,7 @@ SCRIPT_EMERG_EXIT=false
 SCRIPT_ERROR_EXIT=false
 
 # Bintray-specific configuration.
-if [ "${LEGACY_ANDROID-false}" = "true" ]; then
+if [ "$(basename "$0")" = "package_uploader_legacy.sh" ]; then
     BINTRAY_REPO_NAME="x11-packages-21"
 else
     BINTRAY_REPO_NAME="x11-packages-24"
@@ -514,6 +514,10 @@ process_packages() {
 	local package_name
 	local package_name_list
 	local buildsh_path
+
+	msg
+	msg "Repository: $BINTRAY_REPO_NAME"
+	msg
 
 	if $PACKAGE_CLEANUP_MODE; then
 		msg "[@] Removing old versions:"
