@@ -20,7 +20,7 @@
 ! PREFIX = @TERMUX_PREFIX@
   MANPREFIX = ${PREFIX}/share/man
   
-! X11INC = @TERMUX_PREFIX@/include/X11
+! X11INC = @TERMUX_PREFIX@/include
 ! X11LIB = @TERMUX_PREFIX@/lib
   
   # Xinerama, comment if you don't want it
