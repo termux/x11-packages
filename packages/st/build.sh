@@ -6,7 +6,7 @@ TERMUX_PKG_VERSION=0.8.2
 TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL="http://dl.suckless.org/st/st-$TERMUX_PKG_VERSION.tar.gz"
 TERMUX_PKG_SHA256=aeb74e10aa11ed364e1bcc635a81a523119093e63befd2f231f8b0705b15bf35
-TERMUX_PKG_DEPENDS="libxft, libxext, xorg-fonts-misc"
+TERMUX_PKG_DEPENDS="libxft, libxext"
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_configure() {
