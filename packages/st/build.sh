@@ -14,7 +14,6 @@ termux_step_configure() {
 }
 
 termux_step_make() {
-  export CC=${CC/clang/gcc}
   make X11INC=/data/data/com.termux/files/usr/include/X11 X11LIB=/data/data/com.termux/files/usr/lib/X11
 }
 
