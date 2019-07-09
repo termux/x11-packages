@@ -1,0 +1,44 @@
+*** dwm-6.2/config.mk	2019-07-09 10:52:49.377810389 -0700
+--- dwm-6.2/config.mk	2019-07-09 10:57:06.847810291 -0700
+***************
+*** 4,14 ****
+  # Customize below to fit your system
+  
+  # paths
+! PREFIX = /usr/local
+  MANPREFIX = ${PREFIX}/share/man
+  
+! X11INC = /usr/X11R6/include
+! X11LIB = /usr/X11R6/lib
+  
+  # Xinerama, comment if you don't want it
+  XINERAMALIBS  = -lXinerama
+--- 4,14 ----
+  # Customize below to fit your system
+  
+  # paths
+! PREFIX = @TERMUX_PREFIX@
+  MANPREFIX = ${PREFIX}/share/man
+  
+! X11INC = @TERMUX_PREFIX@/include/X11
+! X11LIB = @TERMUX_PREFIX@/lib
+  
+  # Xinerama, comment if you don't want it
+  XINERAMALIBS  = -lXinerama
+***************
+*** 16,22 ****
+  
+  # freetype
+  FREETYPELIBS = -lfontconfig -lXft
+! FREETYPEINC = /usr/include/freetype2
+  # OpenBSD (uncomment)
+  #FREETYPEINC = ${X11INC}/freetype2
+  
+--- 16,22 ----
+  
+  # freetype
+  FREETYPELIBS = -lfontconfig -lXft
+! FREETYPEINC = @TERMUX_PREFIX@/include/freetype2
+  # OpenBSD (uncomment)
+  #FREETYPEINC = ${X11INC}/freetype2
+  
