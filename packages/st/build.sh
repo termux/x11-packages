@@ -19,3 +19,4 @@ termux_step_make() {
 
 termux_step_make_install() {
   make PREFIX=/usr DESTDIR="$TERMUX_PREFIX" TERMINFO="$TERMUX_PREFIX/share/terminfo" install
+}
