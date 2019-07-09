@@ -9,6 +9,10 @@ TERMUX_PKG_SHA256=aeb74e10aa11ed364e1bcc635a81a523119093e63befd2f231f8b0705b15bf
 TERMUX_PKG_DEPENDS="libxft, libxext"
 TERMUX_PKG_BUILD_IN_SRC=true
 
+termux_step_pre_configure() {
+  export CFLAGS=${CFLAGS/ -0z/}
+}
+
 termux_step_configure() {
   cp "$TERMUX_PKG_BUILDER_DIR/config.h" "config.h"
 }
