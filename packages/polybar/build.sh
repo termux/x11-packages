@@ -10,5 +10,5 @@ TERMUX_PKG_DEPENDS="fontconfig, freetype, libandroid-glob, libandroid-shmem, lib
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_pre_configure() {
-	LDFLAGS+=" -landroid-glob"
+	LDFLAGS+=" -landroid-glob -landroid-shmem"
 }
