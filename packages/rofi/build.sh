@@ -1,6 +1,6 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/DaveDavenport/rofi
 TERMUX_PKG_DESCRIPTION="A window switcher, application launcher and dmenu replacement"
-TERMUX_PKG_LICENSE=MIT
+TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="Tristan Ross <spaceboyross@yandex.com>"
 TERMUX_PKG_VERSION=1.5.4
 TERMUX_PKG_REVISION=1
@@ -11,6 +11,5 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-check"
 
 termux_step_pre_configure() {
-	autoreconf -i
 	export LIBS="-landroid-glob -landroid-shmem"
 }
