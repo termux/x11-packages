@@ -1,12 +1,19 @@
 *** polybar/src/CMakeLists.txt	2019-07-09 18:18:19.656495709 -0700
---- polybar/src/CMakeLists.txt	2019-07-09 18:19:04.606495691 -0700
+--- polybar/src/CMakeLists.txt	2019-07-09 18:58:57.226494779 -0700
 ***************
-*** 69,74 ****
---- 69,75 ----
+*** 71,77 ****
   
-  # Target: polybar {{{
-  
-+ add_library(poly STATIC android-shmem)
   add_library(poly STATIC ${files})
   target_include_directories(poly PUBLIC ${dirs})
-  target_link_libraries(poly ${libs} Threads::Threads)
+! target_link_libraries(poly ${libs} Threads::Threads)
+  target_compile_options(poly PUBLIC $<$<CXX_COMPILER_ID:GNU>:$<$<CONFIG:MinSizeRel>:-flto>>)
+  
+  add_executable(polybar main.cpp)
+--- 71,77 ----
+  
+  add_library(poly STATIC ${files})
+  target_include_directories(poly PUBLIC ${dirs})
+! target_link_libraries(poly android-shmem ${libs} Threads::Threads)
+  target_compile_options(poly PUBLIC $<$<CXX_COMPILER_ID:GNU>:$<$<CONFIG:MinSizeRel>:-flto>>)
+  
+  add_executable(polybar main.cpp)
