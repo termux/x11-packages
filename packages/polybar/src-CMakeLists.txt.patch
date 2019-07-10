@@ -1,0 +1,12 @@
+*** polybar/src/CMakeLists.txt	2019-07-09 18:18:19.656495709 -0700
+--- polybar/src/CMakeLists.txt	2019-07-09 18:19:04.606495691 -0700
+***************
+*** 69,74 ****
+--- 69,75 ----
+  
+  # Target: polybar {{{
+  
++ add_library(poly STATIC android-shmem)
+  add_library(poly STATIC ${files})
+  target_include_directories(poly PUBLIC ${dirs})
+  target_link_libraries(poly ${libs} Threads::Threads)
