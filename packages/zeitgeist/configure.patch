@@ -1,0 +1,131 @@
+diff -uNr zeitgeist-1.0.2/configure zeitgeist-1.0.2.mod/configure
+--- zeitgeist-1.0.2/configure	2019-01-31 20:34:19.000000000 +0200
++++ zeitgeist-1.0.2.mod/configure	2019-07-15 00:00:41.295696225 +0300
+@@ -19423,115 +19423,18 @@
+   ENABLE_DOCS_FALSE=
+ fi
+ 
+-
+-
+-# Check whether --enable-introspection was given.
+-if test "${enable_introspection+set}" = set; then :
+-  enableval=$enable_introspection; enable_introspection=$enableval
+-else
+-  enable_introspection="yes"
+-fi
+-
+- if test "x$enable_introspection" != "xno"; then
+-  HAVE_INTROSPECTION_TRUE=
+-  HAVE_INTROSPECTION_FALSE='#'
+-else
+-  HAVE_INTROSPECTION_TRUE='#'
+-  HAVE_INTROSPECTION_FALSE=
+-fi
+-
+-
+-if test "x$enable_introspection" != "xno"; then
+-    # this will set HAVE_INTROSPECTION
+-
+-
+-
+-                enable_introspection=yes
+-
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gobject-introspection" >&5
+-$as_echo_n "checking for gobject-introspection... " >&6; }
+-
+-        case $enable_introspection in #(
+-  no) :
+-            found_introspection="no (disabled, use --enable-introspection to enable)"
+-     ;; #(
+-      yes) :
+-            if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gobject-introspection-1.0\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gobject-introspection-1.0") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  :
+-else
+-  as_fn_error $? "gobject-introspection-1.0 is not installed" "$LINENO" 5
+-fi
+-        if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gobject-introspection-1.0 >= 1.30\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gobject-introspection-1.0 >= 1.30") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  found_introspection=yes
+-else
+-  as_fn_error $? "You need to have gobject-introspection >= 1.30 installed to build zeitgeist" "$LINENO" 5
+-fi
+-     ;; #(
+-      auto) :
+-            if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gobject-introspection-1.0 >= 1.30\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gobject-introspection-1.0 >= 1.30") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  found_introspection=yes
+-else
+-  found_introspection=no
+-fi
+-		enable_introspection=$found_introspection
+-     ;; #(
+-  *) :
+-                as_fn_error $? "invalid argument passed to --enable-introspection, should be one of [no/auto/yes]" "$LINENO" 5
+-     ;;
+-esac
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $found_introspection" >&5
+-$as_echo "$found_introspection" >&6; }
+-
+-    INTROSPECTION_SCANNER=
+-    INTROSPECTION_COMPILER=
+-    INTROSPECTION_GENERATE=
+-    INTROSPECTION_GIRDIR=
+-    INTROSPECTION_TYPELIBDIR=
+-    if test "x$found_introspection" = "xyes"; then
+-       INTROSPECTION_SCANNER=`$PKG_CONFIG --variable=g_ir_scanner gobject-introspection-1.0`
+-       INTROSPECTION_COMPILER=`$PKG_CONFIG --variable=g_ir_compiler gobject-introspection-1.0`
+-       INTROSPECTION_GENERATE=`$PKG_CONFIG --variable=g_ir_generate gobject-introspection-1.0`
+-       INTROSPECTION_GIRDIR=`$PKG_CONFIG --variable=girdir gobject-introspection-1.0`
+-       INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG --variable=typelibdir gobject-introspection-1.0)"
+-       INTROSPECTION_CFLAGS=`$PKG_CONFIG --cflags gobject-introspection-1.0`
+-       INTROSPECTION_LIBS=`$PKG_CONFIG --libs gobject-introspection-1.0`
+-       INTROSPECTION_MAKEFILE=`$PKG_CONFIG --variable=datadir gobject-introspection-1.0`/gobject-introspection-1.0/Makefile.introspection
+-    fi
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-     if test "x$found_introspection" = "xyes"; then
+-  HAVE_INTROSPECTION_TRUE=
+-  HAVE_INTROSPECTION_FALSE='#'
+-else
+-  HAVE_INTROSPECTION_TRUE='#'
+-  HAVE_INTROSPECTION_FALSE=
+-fi
+-
+-
+-
+-fi
++enable_introspection="yes"
++HAVE_INTROSPECTION_TRUE=
++HAVE_INTROSPECTION_FALSE='#'
++found_introspection=yes
++INTROSPECTION_SCANNER=/usr/bin/g-ir-scanner
++INTROSPECTION_COMPILER=/usr/bin/g-ir-compiler
++INTROSPECTION_GENERATE=/usr/bin/g-ir-generate
++INTROSPECTION_GIRDIR=/usr/share/gir-1.0
++INTROSPECTION_TYPELIBDIR=/usr/lib/x86_64-linux-gnu/girepository-1.0
++INTROSPECTION_CFLAGS="-I@TERMUX_PREFIX@/include/gobject-introspection-1.0 -I@TERMUX_PREFIX@/include/glib-2.0"
++INTROSPECTION_LIBS="-lgirepository-1.0 -lgobject-2.0 -lglib-2.0"
++INTROSPECTION_MAKEFILE=/usr/share/gobject-introspection-1.0/Makefile.introspection
+ 
+ #################################################
+ # Ontology parsing dependencies
