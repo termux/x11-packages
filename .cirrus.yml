@@ -1,13 +1,14 @@
 container:
   image: xeffyr/termux-advanced-builder:latest
-  cpu: 8
-  memory: 16
+  cpu: 4
+  memory: 8
 
 
 build_task:
   timeout_in: 120m
 
   environment:
+    TERMUX_MAKE_PROCESSES: 4
     matrix:
       - TERMUX_ARCH: aarch64
         LEGACY_ANDROID: false
