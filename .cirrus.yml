@@ -3,9 +3,32 @@ container:
   cpu: 4
   memory: 8
 
+##
+##  Perform basic check for errors in build.sh package scripts.
+##  If error found, exit with error code to stop build.
+##
+task:
+  name: Lint packages
 
-build_task:
+  timeout_in: 5m
+
+  lint_script: |
+    bash ./scripts/lint-packages.sh
+
+##
+##  Determine changes in the last push, find modified packages and
+##  build them for aarch64/arm/i686/x86_64 architectures for both
+##  Android API 21 and 24.
+##
+##  Built packages are accessible from Cirrus CI web interface.
+##
+task:
+  name: Build packages
+
   timeout_in: 120m
+
+  depends_on:
+    - Lint packages
 
   environment:
     TERMUX_MAKE_PROCESSES: 4
@@ -27,23 +50,25 @@ build_task:
       - TERMUX_ARCH: x86_64
         LEGACY_ANDROID: true
 
-  # Build modified packages.
   build_script: |
     bash ./scripts/cirrus-ci_dispatcher.sh
 
-  # Make built packages downloadable from web UI.
   output_artifacts:
     path: "./termux-packages/debs/*.deb"
 
-
-# Upload packages to Bintray.
-publish_task:
+##
+##  When doing release build (branch 'master'), upload built packages
+##  to APT repository on Bintray.
+##
+task:
   only_if: $CIRRUS_BRANCH == 'master'
+
+  name: Upload packages to Bintray
 
   timeout_in: 60m
 
   depends_on:
-    - build
+    - Build packages
 
   environment:
     BINTRAY_USERNAME: ENCRYPTED[90abba51ac0c50d868f2d78ac4d48ed0fe8ecb79d53f15697afd261c440c7999cbe910696a65221668b3826cff3c756f]
