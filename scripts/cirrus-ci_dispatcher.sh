@@ -123,18 +123,26 @@ if ! $DO_UPLOAD; then
 		fi
 	done
 
-	echo "[*] Building packages:" $PACKAGE_NAMES
-
 	cd "${REPO_DIR}/${BUILD_ENVIRONMENT}" || {
 		echo "[!] Failed to cd into '${REPO_DIR}/${BUILD_ENVIRONMENT}'."
 		exit 1
 	}
 
-	echo
+	if [ -n "$EXCLUDED_PACKAGES" ]; then
+		echo "[*] Excluded packages:" $EXCLUDED_PACKAGES
+	fi
+
+	if [ -z "$PACKAGE_NAMES" ]; then
+		echo "[*] No modified packages detected."
+		exit 0
+	else
+		echo "[*] Building packages:" $PACKAGE_NAMES
+	fi
+
 	for pkg in $PACKAGE_NAMES; do
+		echo
 		./build-package.sh -a "$TERMUX_ARCH" -I "$pkg"
 	done
-	echo
 fi
 
 ###############################################################################
