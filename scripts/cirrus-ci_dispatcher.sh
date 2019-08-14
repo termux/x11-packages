@@ -113,9 +113,6 @@ set -e
 ###############################################################################
 
 if ! $DO_UPLOAD; then
-	echo "[*] Initializing submodules:"
-	git submodule update --init
-
 	echo "[*] Copying packages to build environment:"
 	for pkg in "${REPO_DIR}"/packages/*; do
 		if [ ! -e "${REPO_DIR}/${BUILD_ENVIRONMENT}/packages/$(basename "$pkg")" ]; then
