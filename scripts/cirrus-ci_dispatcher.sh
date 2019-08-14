@@ -9,7 +9,7 @@ set -e
 EXCLUDED_PACKAGES=""
 
 ## Some packages are unsupported on Android 5/6.
-ANDROID5_EXCLUDED_PACKAGES=""
+ANDROID5_EXCLUDED_PACKAGES="i3 i3status"
 
 ###############################################################################
 ##
@@ -33,12 +33,15 @@ if [ $# -ge 1 ]; then
 fi
 
 if [ "$LEGACY_ANDROID" = "true" ]; then
-	BUILD_ENVIRONMENT="termux-packages-legacy"
-	EXCLUDED_PACKAGES+=" $ANDROID5_EXCLUDED_PACKAGES"
 	echo "[*] Target OS: Android 5 (API level 21)"
+	BUILD_ENVIRONMENT="termux-packages-legacy"
+
+	if [ -n "$ANDROID5_EXCLUDED_PACKAGES" ]; then
+		EXCLUDED_PACKAGES+=" $ANDROID5_EXCLUDED_PACKAGES"
+	fi
 else
-	BUILD_ENVIRONMENT="termux-packages"
 	echo "[*] Target OS: Android 7 (API level 24)"
+	BUILD_ENVIRONMENT="termux-packages"
 fi
 
 # Some environment variables are important for correct functionality
