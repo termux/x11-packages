@@ -37,6 +37,10 @@ lint_package() {
 	(set +e +u
 		local pkg_lint_error
 
+		# Certain fields may be API-specific.
+		# Using API 24 here.
+		TERMUX_PKG_API_LEVEL=24
+
 		. "$package_script"
 
 		pkg_lint_error=false
@@ -55,7 +59,15 @@ lint_package() {
 
 		echo -n "TERMUX_PKG_DESCRIPTION: "
 		if [ -n "$TERMUX_PKG_DESCRIPTION" ]; then
-			echo "OK"
+			str_length=$(($(wc -c <<< "$TERMUX_PKG_DESCRIPTION") - 1))
+
+			if [ $str_length -gt 100 ]; then
+				echo "TOO LONG"
+			else
+				echo "OK"
+			fi
+
+			unset str_length
 		else
 			echo "NOT SET"
 			pkg_lint_error=true
@@ -160,7 +172,7 @@ lint_package() {
 					fi
 					unset sha256_ok
 				else
-					echo "LENGTHS OF 'TERMUX_PKG_SRCURL' AND '$TERMUX_PKG_SHA256' ARE NOT EQUAL"
+					echo "LENGTHS OF 'TERMUX_PKG_SRCURL' AND 'TERMUX_PKG_SHA256' ARE NOT EQUAL"
 					pkg_lint_error=true
 				fi
 			else
@@ -169,7 +181,7 @@ lint_package() {
 			fi
 		else
 			if [ "$TERMUX_PKG_SKIP_SRC_EXTRACT" != "true" ]; then
-				echo "TERMUX_PKG_SRCURL: NOT SET (and \$TERMUX_PKG_SKIP_SRC_EXTRACT == false)"
+				echo "TERMUX_PKG_SRCURL: NOT SET (set TERMUX_PKG_SKIP_SRC_EXTRACT to 'true' if no sources downloaded)"
 				pkg_lint_error=true
 			fi
 		fi
@@ -260,6 +272,50 @@ lint_package() {
 				echo "INVALID (allowed: true / false)"
 				pkg_lint_error=true
 			fi
+		fi
+
+		if [ -n "$TERMUX_PKG_RM_AFTER_INSTALL" ]; then
+			echo -n "TERMUX_PKG_RM_AFTER_INSTALL: "
+			file_path_ok=true
+
+			while read -r file_path; do
+				[ -z "$file_path" ] && continue
+
+				if grep -qP '^(\.\.)?/' <<< "$file_path"; then
+					echo "INVALID (file path should be relative to prefix)"
+					file_path_ok=false
+					pkg_lint_error=true
+					break
+				fi
+			done <<< "$TERMUX_PKG_RM_AFTER_INSTALL"
+			unset file_path
+
+			if $file_path_ok; then
+				echo "OK"
+			fi
+			unset file_path_ok
+		fi
+
+		if [ -n "$TERMUX_PKG_CONFFILES" ]; then
+			echo -n "TERMUX_PKG_CONFFILES: "
+			file_path_ok=true
+
+			while read -r file_path; do
+				[ -z "$file_path" ] && continue
+
+				if grep -qP '^(\.\.)?/' <<< "$file_path"; then
+					echo "INVALID (file path should be relative to prefix)"
+					file_path_ok=false
+					pkg_lint_error=true
+					break
+				fi
+			done <<< "$TERMUX_PKG_CONFFILES"
+			unset file_path
+
+			if $file_path_ok; then
+				echo "OK"
+			fi
+			unset file_path_ok
 		fi
 
 		if $pkg_lint_error; then
