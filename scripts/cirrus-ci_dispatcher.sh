@@ -5,11 +5,19 @@
 
 set -e
 
+## Some packages should be excluded from auto builds.
+EXCLUDED_PACKAGES=""
+
+## Some packages are unsupported on Android 5/6.
+ANDROID5_EXCLUDED_PACKAGES=""
+
 ###############################################################################
 ##
-##  Preparation.
+##  Determining changes.
 ##
 ###############################################################################
+
+set +e
 
 REPO_DIR=$(realpath "$(dirname "$(realpath "$0")")/../")
 cd "$REPO_DIR" || {
@@ -26,72 +34,75 @@ fi
 
 if [ "$LEGACY_ANDROID" = "true" ]; then
 	BUILD_ENVIRONMENT="termux-packages-legacy"
+	EXCLUDED_PACKAGES+=" $ANDROID5_EXCLUDED_PACKAGES"
+	echo "[*] Target OS: Android 5 (API level 21)"
 else
 	BUILD_ENVIRONMENT="termux-packages"
+	echo "[*] Target OS: Android 7 (API level 24)"
 fi
 
-if ! $DO_UPLOAD; then
-	echo "[*] Initializing submodules:"
-	echo
-	git submodule update --init
-	echo
-
-	echo "[*] Copying packages to build environment:"
-	echo
-	for pkg in "${REPO_DIR}"/packages/*; do
-		if [ ! -e "${REPO_DIR}/${BUILD_ENVIRONMENT}/packages/$(basename "$pkg")" ]; then
-			echo "    - $(basename "$pkg")"
-			cp -a "$pkg" "${REPO_DIR}/${BUILD_ENVIRONMENT}"/packages/
-		else
-			echo "    - $(basename "$pkg"): package already exist, skipping"
-		fi
-	done
-	echo
+# Some environment variables are important for correct functionality
+# of this script.
+if [ -z "$CIRRUS_CHANGE_IN_REPO" ]; then
+	echo "[!] CIRRUS_CHANGE_IN_REPO is not set."
+	exit 1
 fi
 
-###############################################################################
-##
-##  Determining changes.
-##
-###############################################################################
+if [ -n "$CIRRUS_PR" ] && [ -z "$CIRRUS_BASE_SHA" ]; then
+	echo "[!] CIRRUS_BASE_SHA is not set."
+	exit 1
+fi
 
-set +e
+# Process tag '%ci:no-build' that may be added as line to commit message.
+# Will force CI to exit with status 'passed' without performing build.
+if grep -qiP '^\s*%ci:no-build\s*$' <(git log --format="%B" -n 1 "$CIRRUS_CHANGE_IN_REPO"); then
+	echo "[!] Exiting with status 'passed' (tag '%ci:no-build' applied)."
+	exit 0
+fi
 
 # Process tag '%ci:reset-backlog' that may be added as line to commit message.
 # Will force CI to build changes only for the current commit.
 if grep -qiP '^\s*%ci:reset-backlog\s*$' <(git log --format="%B" -n 1 "$CIRRUS_CHANGE_IN_REPO"); then
-	echo "[*] Building only last pushed commit (tag '%ci:reset-backlog' applied)."
+	echo "[!] Building only last pushed commit (tag '%ci:reset-backlog' applied)."
 	unset CIRRUS_LAST_GREEN_CHANGE
 	unset CIRRUS_BASE_SHA
 fi
 
 if [ -z "$CIRRUS_PR" ]; then
+	# Changes determined from the last commit where CI finished with status
+	# 'passed' (green) and the top commit.
 	if [ -z "$CIRRUS_LAST_GREEN_CHANGE" ]; then
-		UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "$CIRRUS_CHANGE_IN_REPO" 2>/dev/null | grep -P "packages/")
+		GIT_CHANGES="$CIRRUS_CHANGE_IN_REPO"
 	else
-		UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CIRRUS_LAST_GREEN_CHANGE}..${CIRRUS_CHANGE_IN_REPO}" 2>/dev/null | grep -P "packages/")
+		GIT_CHANGES="${CIRRUS_LAST_GREEN_CHANGE}..${CIRRUS_CHANGE_IN_REPO}"
 	fi
+	echo "[*] Changes: $GIT_CHANGES"
 else
-	# Pull requests are handled in a bit different way.
-	UPDATED_FILES=$(git diff-tree --no-commit-id --name-only -r "${CIRRUS_BASE_SHA}..${CIRRUS_CHANGE_IN_REPO}" 2>/dev/null | grep -P "packages/")
+	# Changes in pull request are determined from commits between the
+	# top commit of base branch and latest commit of PR's branch.
+	GIT_CHANGES="${CIRRUS_BASE_SHA}..${CIRRUS_CHANGE_IN_REPO}"
+	echo "[*] Pull request: https://github.com/termux/termux-packages/pull/${CIRRUS_PR}"
 fi
 
-## Determine modified packages.
-existing_dirs=""
-for dir in $(echo "$UPDATED_FILES" | grep -oP "packages/[a-z0-9+._-]+" | sort | uniq); do
-	if [ -d "${REPO_DIR}/${dir}" ]; then
-		existing_dirs+=" $dir"
+# Determine changes from commit range.
+CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r "$GIT_CHANGES" 2>/dev/null)
+
+# Modified packages.
+PACKAGE_NAMES=$(sed -nE 's@^packages/([^/]*)/build.sh@\1@p' <<< "$CHANGED_FILES")
+unset CHANGED_FILES
+
+## Filter deleted packages.
+for pkg in $PACKAGE_NAMES; do
+	if [ ! -d "${REPO_DIR}/packages/${pkg}" ]; then
+		PACKAGE_NAMES=$(sed -E "s/(^|\s\s*)${pkg}(\$|\s\s*)/ /g" <<< "$PACKAGE_NAMES")
 	fi
 done
-PACKAGE_DIRS="$existing_dirs"
-unset dir existing_dirs
 
-## Get names of modified packages.
-PACKAGE_NAMES=$(echo "$PACKAGE_DIRS" | sed 's/packages\///g')
-if [ -z "$PACKAGE_NAMES" ]; then
-	echo "[*] No modified packages found." >&2
-	exit 0
-fi
+## Filter excluded packages.
+for pkg in $EXCLUDED_PACKAGES; do
+	PACKAGE_NAMES=$(sed -E "s/(^|\s\s*)${pkg}(\$|\s\s*)/ /g" <<< "$PACKAGE_NAMES")
+done
+unset pkg
 
 set -e
 
@@ -102,22 +113,20 @@ set -e
 ###############################################################################
 
 if ! $DO_UPLOAD; then
-	echo "[*] Building packages: $PACKAGE_NAMES"
-	echo
-	if [ "$LEGACY_ANDROID" = "true" ]; then
-		echo "    Target OS: Android 5 (API level 21)"
-	else
-		echo "    Target OS: Android 7 (API level 24)"
-	fi
-	if [ -n "$CIRRUS_PR" ]; then
-		echo "    Pull request: https://github.com/termux/x11-packages/pull/${CIRRUS_PR}"
-	else
-		if [ -n "$CIRRUS_LAST_GREEN_CHANGE" ]; then
-			echo "    Changes: ${CIRRUS_LAST_GREEN_CHANGE}..${CIRRUS_CHANGE_IN_REPO}"
+	echo "[*] Initializing submodules:"
+	git submodule update --init
+
+	echo "[*] Copying packages to build environment:"
+	for pkg in "${REPO_DIR}"/packages/*; do
+		if [ ! -e "${REPO_DIR}/${BUILD_ENVIRONMENT}/packages/$(basename "$pkg")" ]; then
+			echo "    - $(basename "$pkg")"
+			cp -a "$pkg" "${REPO_DIR}/${BUILD_ENVIRONMENT}"/packages/
 		else
-			echo "    Changes: ${CIRRUS_CHANGE_IN_REPO}"
+			echo "    - $(basename "$pkg"): package already exist, skipping"
 		fi
-	fi
+	done
+
+	echo "[*] Building packages:" $PACKAGE_NAMES
 
 	cd "${REPO_DIR}/${BUILD_ENVIRONMENT}" || {
 		echo "[!] Failed to cd into '${REPO_DIR}/${BUILD_ENVIRONMENT}'."
@@ -133,7 +142,7 @@ fi
 
 ###############################################################################
 ##
-##  Storing packages in cache.
+##  Uploading.
 ##
 ###############################################################################
 
