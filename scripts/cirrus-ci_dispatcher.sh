@@ -112,6 +112,17 @@ set -e
 ##
 ###############################################################################
 
+if [ -n "$EXCLUDED_PACKAGES" ]; then
+	echo "[*] Excluded packages:" $EXCLUDED_PACKAGES
+fi
+
+if [ -z "$PACKAGE_NAMES" ]; then
+	echo "[*] No modified packages detected."
+	exit 0
+else
+	echo "[*] Modified packages:" $PACKAGE_NAMES
+fi
+
 if ! $DO_UPLOAD; then
 	echo "[*] Copying packages to build environment:"
 	for pkg in "${REPO_DIR}"/packages/*; do
@@ -127,17 +138,6 @@ if ! $DO_UPLOAD; then
 		echo "[!] Failed to cd into '${REPO_DIR}/${BUILD_ENVIRONMENT}'."
 		exit 1
 	}
-
-	if [ -n "$EXCLUDED_PACKAGES" ]; then
-		echo "[*] Excluded packages:" $EXCLUDED_PACKAGES
-	fi
-
-	if [ -z "$PACKAGE_NAMES" ]; then
-		echo "[*] No modified packages detected."
-		exit 0
-	else
-		echo "[*] Building packages:" $PACKAGE_NAMES
-	fi
 
 	for pkg in $PACKAGE_NAMES; do
 		echo
@@ -170,10 +170,6 @@ if [ "$CIRRUS_BRANCH" = "master" ]; then
 			echo
 		fi
 	else
-		if [ -z "$PACKAGE_NAMES" ]; then
-			echo "[*] No modified packages detected."
-			exit 0
-		fi
 		for arch in aarch64 arm i686 x86_64; do
 			if [ "$LEGACY_ANDROID" = "true" ]; then
 				ARCHIVE_NAME="debs-legacy-${arch}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
