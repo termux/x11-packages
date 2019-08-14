@@ -170,6 +170,10 @@ if [ "$CIRRUS_BRANCH" = "master" ]; then
 			echo
 		fi
 	else
+		if [ -z "$PACKAGE_NAMES" ]; then
+			echo "[*] No modified packages detected."
+			exit 0
+		fi
 		for arch in aarch64 arm i686 x86_64; do
 			if [ "$LEGACY_ANDROID" = "true" ]; then
 				ARCHIVE_NAME="debs-legacy-${arch}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
