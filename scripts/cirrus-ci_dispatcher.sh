@@ -115,11 +115,11 @@ set -e
 ##
 ###############################################################################
 
-if [ -n "$EXCLUDED_PACKAGES" ]; then
+if [ -n "${EXCLUDED_PACKAGES/ /}" ]; then
 	echo "[*] Excluded packages:" $EXCLUDED_PACKAGES
 fi
 
-if [ -z "$PACKAGE_NAMES" ]; then
+if [ -z "${PACKAGE_NAMES/ /}" ]; then
 	echo "[*] No modified packages detected."
 	exit 0
 else
