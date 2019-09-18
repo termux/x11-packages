@@ -4,28 +4,18 @@
 
 There are located build scripts and patches for Termux X11 packages.
 
-Programs that use [X11 Windowing System] cannot be used standalone like normal
-command line utilities. Termux does not provide native way for video output and
-therefore you will need to do additional setup. Recommended way is to use either
-`tigervnc` as [VNC] server and [VNC Viewer] for accessing video output. You can
-also use [XServer XSDL], though it is a bit outdated - do not complain about
-something that works via VNC but is not working via [XServer XSDL]. Other
-variants of the X server implementations for Android may work but they are
-*completely unsupported*. Video output to the remote X server (directly or via
-SSH X forwarding) should work without additional setup required.
+Programs using the [X11 Windowing System] cannot be used standalone like normal
+command line utilities. Termux does not provide native way for a video output
+and therefore you will need to install additional software.
 
-Current X11 setup is quite limited in functionality. There no hardware
-acceleration. OpenGL support is very basic so GLX extension is not available.
-Also, do not expect support for the wide range of GUI programs. Large desktop
-environments like KDE and GNOME are *out of scope*.
+Recommended setup is a [VNC] server (package `tigervnc`) running on localhost
+and a [VNC Viewer] (by RealVNC Limited) Android application for accessing the
+video output.
 
-Do not forget to set a `DISPLAY` environment variable when launching X11-enabled
-programs from the Termux console. In most cases, you will need to do
-`export DISPLAY=:1` when using VNC and `export DISPLAY=127.0.0.1:0` when using
-[XServer XSDL].
+There possible to use other Xserver solutions like [XServer XSDL], but they are
+not guaranteed to work properly with our packages.
 
-More complete information about setting up graphical environment is on the
-[Termux Wiki].
+More information about setting up graphical environment is on the [Termux Wiki].
 
 **Warning:** packages for legacy Android versions (Android OS 5/6) will no longer
 have primary support. Legacy branch will continue receive updates & bugfixes but
@@ -35,7 +25,7 @@ will not be tested.
 ## How to enable this repository
 
 To enable this package repository run:
-```ShellSession
+```
 pkg install x11-repo
 ```
 
@@ -45,20 +35,18 @@ You can build all packages manually by using provided docker image. The only
 requirements are Linux-based host with Docker installed.
 
 1. Clone this repository:
-	```ShellSession
+	```
 	git clone https://github.com/termux/x11-packages
 	```
 
 2. Enter build environment (will download docker image if necessary):
-	```ShellSession
+	```
 	cd ./x11-packages
 	./start-builder.sh
 	```
-	Command shown above will start builder for Android 7 (API level 24). If you
-	need to build package for Android 5, use `./start-builder-legacy.sh`.
 
 3. Choose package you want to build and run:
-	```ShellSession
+	```
 	./build-package.sh -a ${arch} ${package name}
 	```
 	Replace `${arch}` with target CPU architecture and `${package name}` with
@@ -70,5 +58,6 @@ If you wish to contribute, please take a look on our [contributing guide](./CONT
 
 [X11 Windowing System]: <https://en.wikipedia.org/wiki/X_Window_System>
 [Termux Wiki]: <https://wiki.termux.com/wiki/Graphical_Environment>
+[VNC]: <https://en.wikipedia.org/wiki/Virtual_Network_Computing>
 [VNC Viewer]: <https://play.google.com/store/apps/details?id=com.realvnc.viewer.android>
 [XServer XSDL]: <https://play.google.com/store/apps/details?id=x.org.server>
