@@ -8,9 +8,6 @@ set -e
 ## Some packages should be excluded from auto builds.
 EXCLUDED_PACKAGES=""
 
-## Some packages are unsupported on Android 5/6.
-ANDROID5_EXCLUDED_PACKAGES="i3 i3status"
-
 ###############################################################################
 ##
 ##  Determining changes.
@@ -32,17 +29,8 @@ if [ $# -ge 1 ]; then
 	fi
 fi
 
-if [ "$LEGACY_ANDROID" = "true" ]; then
-	echo "[*] Target OS: Android 5 (API level 21)"
-	BUILD_ENVIRONMENT="termux-packages-legacy"
-
-	if [ -n "$ANDROID5_EXCLUDED_PACKAGES" ]; then
-		EXCLUDED_PACKAGES+=" $ANDROID5_EXCLUDED_PACKAGES"
-	fi
-else
-	echo "[*] Target OS: Android 7 (API level 24)"
-	BUILD_ENVIRONMENT="termux-packages"
-fi
+echo "[*] Target OS: Android 5 (API level 21)"
+BUILD_ENVIRONMENT="termux-packages"
 
 # Some environment variables are important for correct functionality
 # of this script.
@@ -156,11 +144,7 @@ fi
 
 if [ "$CIRRUS_BRANCH" = "master" ]; then
 	if ! $DO_UPLOAD; then
-		if [ "$LEGACY_ANDROID" = "true" ]; then
-			ARCHIVE_NAME="debs-legacy-${TERMUX_ARCH}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
-		else
-			ARCHIVE_NAME="debs-${TERMUX_ARCH}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
-		fi
+		ARCHIVE_NAME="debs-legacy-${TERMUX_ARCH}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
 
 		if [ -d "${REPO_DIR}/${BUILD_ENVIRONMENT}/debs" ]; then
 			echo "[*] Archiving packages into '${ARCHIVE_NAME}'."
@@ -174,11 +158,7 @@ if [ "$CIRRUS_BRANCH" = "master" ]; then
 		fi
 	else
 		for arch in aarch64 arm i686 x86_64; do
-			if [ "$LEGACY_ANDROID" = "true" ]; then
-				ARCHIVE_NAME="debs-legacy-${arch}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
-			else
-				ARCHIVE_NAME="debs-${arch}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
-			fi
+			ARCHIVE_NAME="debs-legacy-${arch}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
 
 			echo "[*] Downloading '$ARCHIVE_NAME' from cache:"
 			echo
@@ -198,10 +178,6 @@ if [ "$CIRRUS_BRANCH" = "master" ]; then
 
 		echo "[*] Uploading packages to Bintray:"
 		echo
-		if [ "$LEGACY_ANDROID" = "true" ]; then
-			"${REPO_DIR}/scripts/package_uploader_legacy.sh" -p "${PWD}/debs" $PACKAGE_NAMES
-		else
-			"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
-		fi
+		"${REPO_DIR}/scripts/package_uploader_legacy.sh" -p "${PWD}/debs" $PACKAGE_NAMES
 	fi
 fi

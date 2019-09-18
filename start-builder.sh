@@ -6,15 +6,9 @@ REPOROOT=$(dirname "$(realpath "$0")")
 
 IMAGE_NAME="xeffyr/termux-advanced-builder"
 
-if [ "$SCRIPT_NAME" = "start-builder-legacy.sh" ]; then
-	LOCK_FILE="/tmp/.termux-x11-builder-legacy.lck"
-	CONTAINER_NAME="termux-x11-buildenv-legacy"
-	BUILD_ENVIRONMENT="termux-packages-legacy"
-else
-	LOCK_FILE="/tmp/.termux-x11-builder.lck"
-	CONTAINER_NAME="termux-x11-buildenv"
-	BUILD_ENVIRONMENT="termux-packages"
-fi
+LOCK_FILE="/tmp/.termux-x11-builder-legacy.lck"
+CONTAINER_NAME="termux-x11-buildenv-legacy"
+BUILD_ENVIRONMENT="termux-packages"
 
 cd "$REPOROOT"
 
