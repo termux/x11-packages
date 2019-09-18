@@ -2,7 +2,3 @@
 	path = termux-packages
 	url = https://github.com/termux/termux-packages
 	branch = master
-[submodule "termux-packages-legacy"]
-	path = termux-packages-legacy
-	url = https://github.com/termux/termux-packages
-	branch = android-5

@@ -27,6 +27,11 @@ programs from the Termux console. In most cases, you will need to do
 More complete information about setting up graphical environment is on the
 [Termux Wiki].
 
+**Warning:** packages for legacy Android versions (Android OS 5/6) will no longer
+have primary support. Legacy branch will continue receive updates & bugfixes but
+no new packages will be added (except special cases). Packages for Android 5/6
+will not be tested.
+
 ## How to enable this repository
 
 To enable this package repository run:
