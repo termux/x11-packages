@@ -2,9 +2,9 @@
 
 [![Powered by JFrog Bintray](./.github/static/powered-by-bintray.png)](https://bintray.com)
 
-There are located build scripts and patches for legacy Termux X11 packages which
-are no longer on primary support. These packages are untested and receive only
-updates & fixes.
+There are located build scripts and patches for legacy (Android 5/6) Termux X11
+packages. **This branch receives only updates and fixes. Packages are not tested
+and provided as-is.**
 
 Programs using the [X11 Windowing System] cannot be used standalone like normal
 command line utilities. Termux does not provide native way for a video output
