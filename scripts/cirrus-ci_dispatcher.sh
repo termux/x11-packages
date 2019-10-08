@@ -100,7 +100,7 @@ set -e
 case "$1" in
 	--upload)
 		if [ -n "$PACKAGE_NAMES" ]; then
-			if [ "$CIRRUS_BRANCH" != "master" ]; then
+			if [ "$CIRRUS_BRANCH" != "legacy" ]; then
 				echo "[!] Refusing to upload packages on non-master branch."
 				exit 1
 			fi
