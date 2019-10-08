@@ -121,4 +121,4 @@ task:
     fingerprint_script: echo "${CIRRUS_CHANGE_IN_REPO}-x86_64"
 
   script: |
-    bash ./scripts/build/ci/cirrus-ci_dispatcher.sh --upload
+    bash ./scripts/cirrus-ci_dispatcher.sh --upload
