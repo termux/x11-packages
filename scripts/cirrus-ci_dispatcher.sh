@@ -22,16 +22,6 @@ cd "$REPO_DIR" || {
 	exit 1
 }
 
-DO_UPLOAD=false
-if [ $# -ge 1 ]; then
-	if [ "$1" = "--upload" ]; then
-		DO_UPLOAD=true
-	fi
-fi
-
-echo "[*] Target OS: Android 7 (API level 24)"
-BUILD_ENVIRONMENT="termux-packages"
-
 # Some environment variables are important for correct functionality
 # of this script.
 if [ -z "$CIRRUS_CHANGE_IN_REPO" ]; then
@@ -72,7 +62,7 @@ else
 	# Changes in pull request are determined from commits between the
 	# top commit of base branch and latest commit of PR's branch.
 	GIT_CHANGES="${CIRRUS_BASE_SHA}..${CIRRUS_CHANGE_IN_REPO}"
-	echo "[*] Pull request: https://github.com/termux/termux-packages/pull/${CIRRUS_PR}"
+	echo "[*] Pull request: https://github.com/termux/x11-packages/pull/${CIRRUS_PR}"
 fi
 
 # Determine changes from commit range.
@@ -80,6 +70,7 @@ CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r "$GIT_CHANGES" 2>/de
 
 # Modified packages.
 PACKAGE_NAMES=$(sed -nE 's@^packages/([^/]*)/build.sh@\1@p' <<< "$CHANGED_FILES")
+
 unset CHANGED_FILES
 
 ## Filter deleted packages.
@@ -95,89 +86,58 @@ for pkg in $EXCLUDED_PACKAGES; do
 done
 unset pkg
 
+## Remove trailing spaces.
+PACKAGE_NAMES=$(sed 's/[[:blank:]]*$//' <<< "$PACKAGE_NAMES")
+
 set -e
 
 ###############################################################################
 ##
-##  Building packages.
+##  Executing requested actions. Only one per script session.
 ##
 ###############################################################################
 
-if [ -n "${EXCLUDED_PACKAGES/ /}" ]; then
-	echo "[*] Excluded packages:" $EXCLUDED_PACKAGES
-fi
-
-if [ -z "${PACKAGE_NAMES/ /}" ]; then
-	echo "[*] No modified packages detected."
-	exit 0
-else
-	echo "[*] Modified packages:" $PACKAGE_NAMES
-fi
-
-if ! $DO_UPLOAD; then
-	echo "[*] Copying packages to build environment:"
-	for pkg in "${REPO_DIR}"/packages/*; do
-		if [ ! -e "${REPO_DIR}/${BUILD_ENVIRONMENT}/packages/$(basename "$pkg")" ]; then
-			echo "    - $(basename "$pkg")"
-			cp -a "$pkg" "${REPO_DIR}/${BUILD_ENVIRONMENT}"/packages/
-		else
-			echo "    - $(basename "$pkg"): package already exist, skipping"
-		fi
-	done
-
-	cd "${REPO_DIR}/${BUILD_ENVIRONMENT}" || {
-		echo "[!] Failed to cd into '${REPO_DIR}/${BUILD_ENVIRONMENT}'."
-		exit 1
-	}
-
-	for pkg in $PACKAGE_NAMES; do
-		echo
-		./build-package.sh -a "$TERMUX_ARCH" -I "$pkg"
-	done
-fi
-
-###############################################################################
-##
-##  Uploading.
-##
-###############################################################################
-
-if [ "$CIRRUS_BRANCH" = "master" ]; then
-	if ! $DO_UPLOAD; then
-		ARCHIVE_NAME="debs-${TERMUX_ARCH}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
-
-		if [ -d "${REPO_DIR}/${BUILD_ENVIRONMENT}/debs" ]; then
-			echo "[*] Archiving packages into '${ARCHIVE_NAME}'."
-			tar zcf "$ARCHIVE_NAME" debs
-
-			echo "[*] Uploading '${ARCHIVE_NAME}' to cache:"
-			echo
-			curl --upload-file "$ARCHIVE_NAME" \
-				"http://$CIRRUS_HTTP_CACHE_HOST/${ARCHIVE_NAME}"
-			echo
-		fi
-	else
-		for arch in aarch64 arm i686 x86_64; do
-			ARCHIVE_NAME="debs-${arch}-${CIRRUS_CHANGE_IN_REPO}.tar.gz"
-
-			echo "[*] Downloading '$ARCHIVE_NAME' from cache:"
-			echo
-			curl --output "/tmp/${ARCHIVE_NAME}" \
-				"http://$CIRRUS_HTTP_CACHE_HOST/${ARCHIVE_NAME}"
-			echo
-
-			if [ -s "/tmp/${ARCHIVE_NAME}" ]; then
-				echo "[*] Unpacking '/tmp/${ARCHIVE_NAME}':"
-				echo
-				tar xvf "/tmp/${ARCHIVE_NAME}"
-				echo
-			else
-				echo "[!] Empty archive '/tmp/${ARCHIVE_NAME}'."
+case "$1" in
+	--upload)
+		if [ -n "$PACKAGE_NAMES" ]; then
+			if [ "$CIRRUS_BRANCH" != "master" ]; then
+				echo "[!] Refusing to upload packages on non-master branch."
+				exit 1
 			fi
-		done
 
-		echo "[*] Uploading packages to Bintray:"
-		echo
-		"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
-	fi
-fi
+			if [ -z "$BINTRAY_API_KEY" ]; then
+				echo "[!] Can't upload packages without Bintray API key."
+				exit 1
+			fi
+
+			if [ -z "$BINTRAY_GPG_PASSPHRASE" ]; then
+				echo "[!] Can't upload packages without GPG passphrase."
+				exit 1
+			fi
+
+			echo "[*] Uploading packages to Bintray:"
+			"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
+		else
+			echo "[*] No modified packages found."
+			exit 0
+		fi
+		;;
+	*)
+		if [ -n "$PACKAGE_NAMES" ]; then
+			echo "[*] Building packages:" $PACKAGE_NAMES
+			echo "[*] Copying packages to build environment:"
+			for pkg in "${REPO_DIR}"/packages/*; do
+				if [ ! -e "${REPO_DIR}/termux-packages/packages/$(basename "$pkg")" ]; then
+					echo "    - $(basename "$pkg")"
+					cp -a "$pkg" "${REPO_DIR}"/termux-packages/packages/
+				else
+					echo "    - $(basename "$pkg"): package already exist, skipping"
+				fi
+			done
+			cd ./termux-packages && ./build-package.sh -a "$TERMUX_ARCH" -I $PACKAGE_NAMES
+		else
+			echo "[*] No modified packages found."
+			exit 0
+		fi
+		;;
+esac
