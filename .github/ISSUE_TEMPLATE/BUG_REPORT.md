@@ -8,6 +8,8 @@ about: Create a report to help us improve
 <!--
 A clear and concise description of what the problem is. You may attach a
 screenshot.
+
+* Bugs about outdated packages are NOT ACCEPTED.
 -->
 
 **Steps to reproduce**
