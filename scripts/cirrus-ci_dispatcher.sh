@@ -110,10 +110,10 @@ case "$1" in
 				exit 1
 			fi
 
-			if [ -z "$BINTRAY_GPG_PASSPHRASE" ]; then
-				echo "[!] Can't upload packages without GPG passphrase."
-				exit 1
-			fi
+			#if [ -z "$BINTRAY_GPG_PASSPHRASE" ]; then
+			#	echo "[!] Can't upload packages without GPG passphrase."
+			#	exit 1
+			#fi
 
 			echo "[*] Uploading packages to Bintray:"
 			"${REPO_DIR}/scripts/package_uploader.sh" -p "${PWD}/debs" $PACKAGE_NAMES
