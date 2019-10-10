@@ -1,3 +1,7 @@
+##
+## Package freezed at version 5.11.3 and will not be updated.
+##
+
 TERMUX_PKG_HOMEPAGE=https://qt-project.org/
 TERMUX_PKG_DESCRIPTION="A cross-platform application and UI framework"
 TERMUX_PKG_LICENSE="LGPL-3.0"
