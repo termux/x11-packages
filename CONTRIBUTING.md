@@ -1,7 +1,7 @@
 # Contributing guide
 
 This is an issue tracker for the [x11-packages] project. It is expected that
-there will be submitted [bug reports](#bug-reports), [~~package requests~~](#package-requests)
+there will be submitted [bug reports](#bug-reports), [~~package requests~~](#package-and-feature-requests)
 or [pull requests](#pull-requests).
 
 Personal support requests as well as general questions are discouraged here.
