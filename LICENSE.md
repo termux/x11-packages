@@ -7,10 +7,8 @@ Licenses for packages specified in the field "TERMUX_PKG_LICENSE" of build
 script file (build.sh). For example, `TERMUX_PKG_LICENSE="GPL-2.0"` means
 that package is licensed under GNU GPL v2.0.
 
-## License for the special purpose scripts (in folder ./scripts/)
+## License for the build infrastructure
 
-Following scripts are licensed under GNU GPL v3.0:
-
-- [check-updates.sh](./scripts/check-updates.sh)
-- [get-modified-packages.sh](./scripts/get-modified-packages.sh)
-- [package_uploader.sh](./scripts/package_uploader.sh)
+For build infrastructure outside the `packages/` folder the license is
+[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+unless other license is explicitly specified in file content.
