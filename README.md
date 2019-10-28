@@ -2,9 +2,7 @@
 
 [![Powered by JFrog Bintray](./.github/static/powered-by-bintray.png)](https://bintray.com)
 
-There are located build scripts and patches for legacy (Android 5/6) Termux X11
-packages. **This branch receives only updates and fixes. Packages are not tested
-and provided as-is.**
+There are located build scripts and patches for Termux X11 packages (legacy branch).
 
 Programs using the [X11 Windowing System] cannot be used standalone like normal
 command line utilities. Termux does not provide native way for a video output
@@ -51,7 +49,9 @@ requirements are Linux-based host with Docker installed.
 
 ## Contributing
 
-If you wish to contribute, please take a look on our [contributing guide](./CONTRIBUTING.md).
+No packages accepted for Android 5.
+
+This branch reaches its end-of-life after 01.01.2020.
 
 [X11 Windowing System]: <https://en.wikipedia.org/wiki/X_Window_System>
 [Termux Wiki]: <https://wiki.termux.com/wiki/Graphical_Environment>
