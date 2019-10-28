@@ -40,33 +40,33 @@ comments and put all necessary information according to the fields.
 
 	- **System information**
 
-		Just post output of the `termux-info`.
+		Put here the complete output of the `termux-info`.
 
-Please note that you should not expect that your problem will be solved
-immediately.
+Please note that your problem may not be solved immediately.
 
 ## Package requests
 
 If you found that specific package is not available, you may [request](package-request-template)
 it.
 
-1. Make sure that it comply with the following restrictions:
+1. Make sure that it comply with the following restrictions otherwise your request
+   will be denied:
 
 	- Package should not require root, custom ROM or custom kernel.
 
 	- Package should not be developed specially for multi-user environments.
 
-	- Package should not be closed source.
+	- Package should not be closed source or have non-free license.
 
 	- Package should not be designed for working only on specific architecture.
 
-	- Package should not require OpenGL.
+	- Package should not require OpenGL (due to unsupported GLX).
 
 	- Package should not require Java.
 
 	- Package should not depend on specific perl/python/ruby modules.
 
-	- Package should not be complex desktop environment (e.g. like KDE or GNOME).
+	- Package should not be part of complex desktop environment like KDE or GNOME.
 
 2. When you are sure that package is suitable for this repository, use the
 [package request template][package-request-template].
@@ -82,15 +82,15 @@ it.
 
 		An official URL to the package's home page and sources.
 
-Please note that you should not expect that your package will be available
-immediately. Mantainer also has right to decline package request even if it
-met all conditions to be packaged.
+Please note that request may not be processed immediately.
 
 ## Feature requests
 
 Decision on which features will be available or not is done solely by core
-maintainer ([@xeffyr]). We do not accept feature requests for X11-related
-stuff regardless of how useful they are.
+maintainer ([@xeffyr]).
+
+Packages available here usually compiled with maximal amount of features enabled
+if they are not introducing various issues at a build- & run- time.
 
 ## Pull requests
 
