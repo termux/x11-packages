@@ -17,10 +17,8 @@ not guaranteed to work properly with our packages.
 
 More information about setting up graphical environment is on the [Termux Wiki].
 
-**Warning:** packages for legacy Android versions (Android OS 5/6) will no longer
-have primary support. Legacy branch will continue receive updates & bugfixes but
-no new packages will be added (except special cases). Packages for Android 5/6
-will not be tested.
+**Warning:** Android 5 branch is reaches its end-of-life after 01.01.2020 and
+legacy binary packages will no longer be available for installation.
 
 ## How to enable this repository
 
