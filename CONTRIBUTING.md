@@ -46,7 +46,7 @@ Please note that your problem may not be solved immediately.
 
 ## Package requests
 
-If you found that specific package is not available, you may [request](package-request-template)
+If you found that specific package is not available, you may [request][package-request-template]
 it.
 
 1. Make sure that it comply with the following restrictions otherwise your request
@@ -98,7 +98,7 @@ if they are not introducing various issues at a build- & run- time.
 to yours.
 
 2. Make sure that your changes do not break existing stuff and do not violate
-our coding practices and formatting guidelines (see [termux-packages/docs]).
+our coding practices and formatting guidelines (see our [coding guidelines][coding-guideline]).
 
 3. Make sure that your changes do not introduce code that perform undesirable
 actions like using `su` or `sudo` commands or modifying files outside of the
@@ -117,9 +117,8 @@ all changes are carefully reviewed to avoid having nasty things in our code.
 
 Everything else must be reviewed by the core maintainer ([@xeffyr]).
 
-[termux-packages]: <https://github.com/termux/termux-packages>
-[termux-packages/docs]: <https://github.com/termux/termux-packages/tree/master/docs>
-[x11-packages]: <https://github.com/termux/x11-packages>
 [bug-report-template]: <https://github.com/termux/x11-packages/issues/new?template=BUG_REPORT.md>
+[coding-guideline]: <https://github.com/termux/termux-packages/wiki/Coding-guideline>
 [package-request-template]: <https://github.com/termux/x11-packages/issues/new?template=PACKAGE_REQUEST.md>
+[x11-packages]: <https://github.com/termux/x11-packages>
 [@xeffyr]: <https://github.com/xeffyr>
