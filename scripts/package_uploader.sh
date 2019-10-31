@@ -69,7 +69,7 @@ SCRIPT_EMERG_EXIT=false
 SCRIPT_ERROR_EXIT=false
 
 # Bintray-specific configuration.
-BINTRAY_REPO_NAME="x11-packages-24"
+BINTRAY_REPO_NAME="x11-packages"
 BINTRAY_REPO_GITHUB="termux/x11-packages"
 BINTRAY_REPO_DISTRIBUTION="x11"
 BINTRAY_REPO_COMPONENT="main"
