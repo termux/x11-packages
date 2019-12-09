@@ -1,5 +1,5 @@
 container:
-  image: xeffyr/termux-advanced-builder:latest
+  image: xeffyr/docker-androiddev:latest
   cpu: 4
   memory: 8
 
