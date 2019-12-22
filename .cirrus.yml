@@ -55,7 +55,7 @@ task:
     fi
 
   build_script: |
-    sudo apt update && sudo apt install itstool
+    sudo apt update -yq && sudo apt install -yq itstool
     export TERMUX_DEBDIR="/tmp/debs-${TERMUX_ARCH}"
     ln -s "$TERMUX_DEBDIR" debs
     bash ./scripts/cirrus-ci_dispatcher.sh
