@@ -22,7 +22,7 @@ set -e -u
 SCRIPT_NAME=$(basename "$0")
 REPOROOT=$(dirname "$(realpath "$0")")
 
-IMAGE_NAME="xeffyr/termux-advanced-builder"
+IMAGE_NAME="termux-x11-packages-builder-legacy"
 
 LOCK_FILE="/tmp/.termux-x11-builder-legacy.lck"
 CONTAINER_NAME="termux-x11-buildenv-legacy"
