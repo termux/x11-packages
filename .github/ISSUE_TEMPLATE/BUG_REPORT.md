@@ -9,7 +9,8 @@ about: Create a report to help us improve
 A clear and concise description of what the problem is. You may attach a
 screenshot.
 
-* Bugs about outdated packages are NOT ACCEPTED.
+* Bugs of outdated packages are NOT ACCEPTED.
+* Bugs of legacy (Android 5/6) packages are NOT ACCEPTED.
 -->
 
 **Steps to reproduce**
@@ -27,4 +28,6 @@ A clear and concise description of what you expected to happen.
 <!--
 Please, post output of command `termux-info`. If it is not working for you
 for whatever reason, post Android OS version and what CPU architecture you have.
+
+Markdown code formatting should be applied.
 -->
