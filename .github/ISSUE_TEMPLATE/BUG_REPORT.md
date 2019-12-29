@@ -28,6 +28,5 @@ A clear and concise description of what you expected to happen.
 <!--
 Please, post output of command `termux-info`. If it is not working for you
 for whatever reason, post Android OS version and what CPU architecture you have.
-
 Markdown code formatting should be applied.
 -->
