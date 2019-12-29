@@ -5,10 +5,7 @@ about: Suggest us a new package
 ---
 
 <!--
-* Package SHOULD NOT be a desktop environment (GNOME, KDE, etc...).
-* Package SHOULD NOT be a Java, Perl, Python, Ruby based.
-* Package SHOULD NOT require root.
-* You acknowledge that package will not be available for legacy Android (OS versions 5 - 6).
+Make sure you have read https://github.com/termux/x11-packages/blob/master/CONTRIBUTING.md#general-requirements
 -->
 
 **Package description**
