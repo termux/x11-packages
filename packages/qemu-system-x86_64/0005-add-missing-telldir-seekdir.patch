@@ -1,6 +1,6 @@
-diff -uNr qemu-3.1.0/hw/9pfs/9p-local.c qemu-3.1.0.mod/hw/9pfs/9p-local.c
---- qemu-3.1.0/hw/9pfs/9p-local.c	2018-12-11 19:44:34.000000000 +0200
-+++ qemu-3.1.0.mod/hw/9pfs/9p-local.c	2019-02-14 00:29:24.568616982 +0200
+diff -uNr qemu-4.2.0/hw/9pfs/9p-local.c qemu-4.2.0.mod/hw/9pfs/9p-local.c
+--- qemu-4.2.0/hw/9pfs/9p-local.c	2019-12-12 20:20:47.000000000 +0200
++++ qemu-4.2.0.mod/hw/9pfs/9p-local.c	2019-12-15 00:12:11.073725293 +0200
 @@ -535,9 +535,23 @@
      rewinddir(fs->dir.stream);
  }
@@ -35,10 +35,10 @@ diff -uNr qemu-3.1.0/hw/9pfs/9p-local.c qemu-3.1.0.mod/hw/9pfs/9p-local.c
  }
  
  static ssize_t local_preadv(FsContext *ctx, V9fsFidOpenState *fs,
-diff -uNr qemu-3.1.0/hw/9pfs/9p-proxy.c qemu-3.1.0.mod/hw/9pfs/9p-proxy.c
---- qemu-3.1.0/hw/9pfs/9p-proxy.c	2018-12-11 19:44:34.000000000 +0200
-+++ qemu-3.1.0.mod/hw/9pfs/9p-proxy.c	2019-02-14 00:29:30.425318357 +0200
-@@ -674,9 +674,23 @@
+diff -uNr qemu-4.2.0/hw/9pfs/9p-proxy.c qemu-4.2.0.mod/hw/9pfs/9p-proxy.c
+--- qemu-4.2.0/hw/9pfs/9p-proxy.c	2019-12-12 20:20:47.000000000 +0200
++++ qemu-4.2.0.mod/hw/9pfs/9p-proxy.c	2019-12-15 00:12:11.074725297 +0200
+@@ -675,9 +675,23 @@
      rewinddir(fs->dir.stream);
  }
  
@@ -63,7 +63,7 @@ diff -uNr qemu-3.1.0/hw/9pfs/9p-proxy.c qemu-3.1.0.mod/hw/9pfs/9p-proxy.c
  }
  
  static struct dirent *proxy_readdir(FsContext *ctx, V9fsFidOpenState *fs)
-@@ -686,7 +700,7 @@
+@@ -687,7 +701,7 @@
  
  static void proxy_seekdir(FsContext *ctx, V9fsFidOpenState *fs, off_t off)
  {
