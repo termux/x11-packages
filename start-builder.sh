@@ -22,10 +22,10 @@ set -e -u
 SCRIPT_NAME=$(basename "$0")
 REPOROOT=$(dirname "$(realpath "$0")")
 
-IMAGE_NAME="xeffyr/docker-androiddev"
+IMAGE_NAME="termux/package-builder"
 
 LOCK_FILE="/tmp/.termux-x11-builder.lck"
-CONTAINER_NAME="termux-x11-buildenv"
+CONTAINER_NAME="termux-x11-buildenv-v1"
 BUILD_ENVIRONMENT="termux-packages"
 
 cd "$REPOROOT"
@@ -59,8 +59,8 @@ fi
 			--tty \
 			--detach \
 			--name "$CONTAINER_NAME" \
-			--volume "${REPOROOT}/${BUILD_ENVIRONMENT}:/home/builder/packages" \
-			--workdir "/home/builder/packages" \
+			--volume "${REPOROOT}/${BUILD_ENVIRONMENT}:/home/builder/termux-packages" \
+			--workdir "/home/builder/termux-packages" \
 			"$IMAGE_NAME"
 
 		if [ "$(id -u)" -ne 0 ] && [ "$(id -u)" -ne 1000 ]; then
