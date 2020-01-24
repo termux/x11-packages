@@ -119,5 +119,4 @@ You can now visit your repo in a browser and open a pull request against this re
 pressing "New pull request". See [creating-a-pull-request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request)
 for more information on how to do this.
 
-Once a pull request has been created cirrus-ci will attempt to build the changes.
-The status of the build can be seen by visiting https://cirrus-ci.com/github/termux/x11-packages.
+Once a pull request has been created CI system will attempt to build the changes.
