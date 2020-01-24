@@ -34,6 +34,13 @@ if [ ! -e "$LOCK_FILE" ]; then
 	touch "$LOCK_FILE"
 fi
 
+if [ "${GITHUB_EVENT_PATH-x}" != "x" ]; then
+	# On CI/CD tty may not be available.
+	DOCKER_TTY=""
+else
+	DOCKER_TTY=" --tty"
+fi
+
 (flock -n 3 || exit 0
 	docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
@@ -65,16 +72,16 @@ fi
 
 		if [ "$(id -u)" -ne 0 ] && [ "$(id -u)" -ne 1000 ]; then
 			echo "Changed builder uid/gid... (this may take a while)"
-			docker exec --tty "$CONTAINER_NAME" sudo chown -R $(id -u) "/home/builder"
-			docker exec --tty "$CONTAINER_NAME" sudo chown -R $(id -u) /data
-			docker exec --tty "$CONTAINER_NAME" sudo usermod -u $(id -u) builder
-			docker exec --tty "$CONTAINER_NAME" sudo groupmod -g $(id -g) builder
+			docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo chown -R $(id -u) "/home/builder"
+			docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo chown -R $(id -u) /data
+			docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo usermod -u $(id -u) builder
+			docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo groupmod -g $(id -g) builder
 		fi
 	fi
 
 	if [ $# -ge 1 ]; then
-		docker exec --interactive --tty "$CONTAINER_NAME" "$@"
+		docker exec --interactive $DOCKER_TTY "$CONTAINER_NAME" "$@"
 	else
-		docker exec --interactive --tty "$CONTAINER_NAME" bash
+		docker exec --interactive $DOCKER_TTY "$CONTAINER_NAME" bash
 	fi
 ) 3< "$LOCK_FILE"
