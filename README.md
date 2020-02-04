@@ -7,17 +7,18 @@
 There are located build scripts and patches for Termux X11 packages.
 
 Programs using the [X11 Windowing System] cannot be used standalone like normal
-command line utilities. Termux does not provide native way for a video output
+command-line utilities. Termux does not provide a native way for video output
 and therefore you will need to install additional software.
 
-Recommended setup is a [VNC] server (package `tigervnc`) running on localhost
-and a [VNC Viewer] (by RealVNC Limited) Android application for accessing the
-video output.
+The recommended setup is a [VNC] server (package `tigervnc`) running on
+localhost and a [VNC Viewer] (by RealVNC Limited) Android application for
+accessing the video output.
 
 There possible to use other Xserver solutions like [XServer XSDL], but they are
 not guaranteed to work properly with our packages.
 
-More information about setting up graphical environment is on the [Termux Wiki].
+More information about setting up a graphical environment is on the
+[Termux Wiki].
 
 ## How to enable this repository
 
@@ -28,7 +29,7 @@ pkg install x11-repo
 
 ## Building packages
 
-You can build all packages manually by using provided docker image. The only
+You can build all packages manually by using the provided docker image. The only
 requirements are Linux-based host with Docker installed.
 
 1. Clone this repository:
@@ -51,7 +52,8 @@ requirements are Linux-based host with Docker installed.
 
 ## Contributing
 
-If you wish to contribute, please take a look on our [contributing guide](./CONTRIBUTING.md).
+If you wish to contribute, please take a look at our
+[contributing guide](./CONTRIBUTING.md).
 
 [X11 Windowing System]: <https://en.wikipedia.org/wiki/X_Window_System>
 [Termux Wiki]: <https://wiki.termux.com/wiki/Graphical_Environment>
