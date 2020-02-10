@@ -52,8 +52,11 @@ requirements are Linux-based host with Docker installed.
 
 ## Contributing
 
-If you wish to contribute, please take a look at our
-[contributing guide](./CONTRIBUTING.md).
+[I](https://github.com/xeffyr) am working on packages in my spare time. I probably
+will not process your issues instantly. It would be very helpful if you submit a
+pull request with new package or bug fix.
+
+If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md).
 
 [X11 Windowing System]: <https://en.wikipedia.org/wiki/X_Window_System>
 [Termux Wiki]: <https://wiki.termux.com/wiki/Graphical_Environment>
