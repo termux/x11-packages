@@ -20,6 +20,8 @@ not guaranteed to work properly with our packages.
 More information about setting up a graphical environment is on the
 [Termux Wiki].
 
+**Only for Termux installations on Android 7.0 or higher.**
+
 ## How to enable this repository
 
 To enable this package repository run:
