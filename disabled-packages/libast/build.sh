@@ -1,6 +1,6 @@
 ## Dependency for Eterm
 
-TERMUX_PKG_MAINTAINER="Leonid Plyushch <leonid.plyushch@gmail.com> @xeffyr"
+TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
 
 TERMUX_PKG_HOMEPAGE=http://eterm.sourceforge.net
 TERMUX_PKG_DESCRIPTION="The Library of Assorted Spiffy Things."
