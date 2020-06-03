@@ -14,5 +14,7 @@ jobs:
       env:
         BINTRAY_USERNAME: xeffyr
         BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
+        BINTRAY_GPG_SUBJECT: xeffyr
+        BINTRAY_GPG_PASSPHRASE: ${{ secrets.BINTRAY_GPG_PASSWORD }}
       run: |
         ./scripts/package_uploader.sh -c $(cd ./packages; echo *)

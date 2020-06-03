@@ -22,6 +22,8 @@ jobs:
       NDK: "/opt/termux/android-ndk"
       BINTRAY_USERNAME: xeffyr
       BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
+      BINTRAY_GPG_SUBJECT: xeffyr
+      BINTRAY_GPG_PASSPHRASE: ${{ secrets.BINTRAY_GPG_PASSWORD }}
     strategy:
       matrix:
         target_arch: [aarch64, arm, i686, x86_64]
