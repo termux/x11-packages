@@ -1,122 +1,164 @@
-# Contributing guide
+# Contributing
 
-A simple way to help out is to check if new versions of packages have been
-released, and then open a pull request to update it. The following instructions
-can be run both from a GNU/Linux computer and from Termux.
+Termux is an open source application and it is built on users' contributions.
+However, most of work is done by Termux maintainers on their spare time and
+therefore only priority tasks are being completed.
 
-Starting from scratch you need to:
+Here are ways how you can help:
+- [Fixing issues](#fixing-issues)
+- [Hosting a mirror](#hosting-a-mirror)
+- [Updating packages](#updating-packages)
 
- - [Learn general requirements](#general-requirements)
- - [Fork this repo](#forking-this-repo)
- - [Clone your fork](#clone-your-fork)
- - [Create a new branch](#creating-a-new-branch)
- - [Update a package](#updating-a-package)
- - [Commit changes and push to your fork](#commiting-changes-and-pushing-to-your-fork)
- - [Open a pull request](#opening-a-pull-request)
+Developer's wiki is available at https://github.com/termux/termux-packages/wiki.
 
-## General requirements
+## Fixing issues
 
-Requested and submitted packages must comply with following requirements:
+Contribute to Termux by submitting new packages or fixing bugs. Pay attention to
+[issues](https://github.com/termux/x11-packages/issues) labeled as
+["bug report"](https://github.com/termux/x11-packages/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug+report%22)
+and ["help wanted"](https://github.com/termux/x11-packages/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
 
- - Should be licensed under free open source license.
- - Should work on non-rooted average device with Android 7.0 or higher.
- - Not part of complex desktop environment like KDE or GNOME.
- - No Java dependency.
- - No external perl/python/ruby module dependencies.
- - No OpenGL, DRI and hardware acceleration requirement.
+Note that issue solving may not be easy. If you decided to contribute to @termux,
+ensure that you read the [developer's wiki](https://github.com/termux/termux-packages/wiki)
+and you are ready to deal with errors on your own.
 
-All scripts should be formatted according to [our guideline](https://github.com/termux/termux-packages/wiki/Coding-guideline).
+Pull requests containing incomplete work are not being merged.
 
-## Forking this repo
+### A note about package requests
 
-To be able to open a pull request you need to first fork this repo to your own
-[Github](https://github.com) account. The changes you do will first be pushed
-to your own fork and thereafter a pull request can be opened against the main
-repo. Forking is done by pressing the "Fork" button in the upper right corner
-of the repository page. See the Github help pages for more details:
-[fork-a-repo#fork-an-example-repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository).
+We are rejecting package requests for single-file scripts and low-quality, infamous
+and outdated, dead projects. We may also reject in packaging non-original, forked
+projects.
 
-## Clone your fork
+Additionally we require that requested packages met these conditions:
 
-Now that you have your own fork you can clone it to your Termux device or computer.
-From a suitable location simply run
-```sh
-git clone https://github.com/<your-username>/x11-packages
+- Package should have widely recognised OSS licenses like GNU GPL, MIT, Apache-2.0
+  and similar.
+- Package should NOT be an outdated, dead project.
+- Package should NOT be a part of language-specific ecosystem. Such packages are
+  installable through `pip`, `gem`, `cpan`, `npm`.
+- Package should NOT be a complex desktop environment such as GNOME or KDE.
+- Package should NOT require hardware graphics acceleration or in any way access
+  to GPU hardware device.
+
+Please be ready that your package request will not be processed immediately.
+
+## Hosting a mirror
+
+Consider hosting own Termux repository mirror to help to distribute bandwidth usage
+between different servers. That will reduce chance of hitting the traffic quota on
+our [Bintray](https://bintray.com) account.
+
+When your mirror is ready, open the issue so we can include it into our mirror
+list.
+
+### Server requirements
+
+Since Bintray does not provide Rsync access to package repositories, you will need
+to mirror it over HTTP. We recommend to use `apt-mirror` for that.
+
+Here are the server requirements:
+
+- 20 GB of disk free space.
+- Stable network with 3+ TB of monthly bandwidth.
+- Cron job for updating mirror at least once in 3 days.
+
+It also preferrable that your server uses a caching CDN.
+
+Here are the URLs for mirroring:
+```
+https://dl.bintray.com/termux/termux-packages-24
+https://dl.bintray.com/grimler/game-packages-24
+https://dl.bintray.com/grimler/science-packages-24
+https://dl.bintray.com/grimler/termux-root-packages-24
+https://dl.bintray.com/xeffyr/unstable-packages
+https://dl.bintray.com/xeffyr/x11-packages
 ```
 
-Note that it is also possible to [edit files directly in github](https://help.github.com/en/github/managing-files-in-a-repository/editing-files-in-your-repository),
-so this step could be skipped.
+If you want to include your mirror into our mirror list, ensure that monthly server's
+uptime is 80% or higher.
 
-## Creating a new branch
+## Updating packages
 
-It is recommended to create a new branch before making changes. This is done by
-first checking out the master branch and making sure it is up to date, and then
-checking out a new branch:
-```sh
-git checkout master
-git pull origin master
-git checkout -b <package-name>-update
+Keeping packages up-to-date ensures that Termux users' will not experience the upstream
+bugs or security issues and will be able to use the latest features.
+
+Periodically check the [Repology](https://repology.org/projects/?inrepo=termux&outdated=1)
+page to see what is outdated and submit a pull request with version update.
+
+### How to update package
+
+Most packages can be updated by just modifying variables `TERMUX_PKG_VERSION` and
+`TERMUX_PKG_SHA256`.
+
+- `TERMUX_PKG_VERSION`: a text field containing an original version of package.
+- `TERMUX_PKG_SHA256`: a text field or an array of text fields containing SHA-256
+  checksum for each source code bundle defined by `TERMUX_PKG_SRCURL`.
+
+More about `build.sh` variables you can read on [developer's wiki](https://github.com/termux/termux-packages/wiki/Creating-new-package#table-of-available-package-control-fields).
+
+#### Rebuilding package with no version change
+
+Changes to patch files and build configuration options require submission of a new
+package release with a different version string. As we can't modify the original
+package version, we append a number called *revision*. This number should be
+incremented on each submitted build whenever project's version remains to be same.
+
+Revision is specified through `TERMUX_PKG_REVISION` build.sh variable. To have
+build.sh script easily readable, we require revision variable to be placed on
+the next line after `TERMUX_PKG_VERSION`.
+
+```
+TERMUX_PKG_VERSION=1.0
+TERMUX_PKG_REVISION=4
 ```
 
-## Updating a package
+#### Downgrading a package or changing versioning scheme
 
-Minor updates (going from for example v1.0.5 to v1.0.6) most often only means that
-the fields `TERMUX_PKG_VERSION`, `TERMUX_PKG_REVISION` and `TERMUX_PKG_SHA256` needs
-to be updated. The changes in the build.sh would then change something like:
-```sh
-[ ... ]
-TERMUX_PKG_VERSION=1.0.5
-TERMUX_PKG_REVISION=2
-TERMUX_PKG_SRCURL=https://example.com/download/${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=abde02986bc1fb112655bb5a3161dddfdc9436057fd8b305a01fe42b7dd247ae
-[ ... ]
+Sometimes we need to downgrade a package or in any other way to change format of
+version string but we also need to tell package manager that this is a new package
+version which should be installed with `apt upgrade`. To force new build to be a
+package update, we set a *package epoch*.
+
+We don't have separate build.sh variable for specifying epoch, so we doing that
+through `TERMUX_PKG_VERSION` variable. It takes following format:
 ```
-to
-```sh
-[ ... ]
-TERMUX_PKG_VERSION=1.0.6
-TERMUX_PKG_SRCURL=https://example.com/download/${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=6116e607250198f224d9ce9304eba6bf0792d592c0b55209e496843192cc6860
-[ ... ]
+${EPOCH}:${ORIG_VERSION}
 ```
 
-Note that the `TERMUX_PKG_REVISION` line has been deleted, when a package is updated
-the REVISION should be reset to 0 and this line hence deleted. The value for `TERMUX_PKG_SHA256`
-can be calculated by downloading the source archive and running `sha256sum` on it:
+Epoch should be bumped on each change of versioning scheme or downgrade.
 
-```sh
-wget https://example.com/download/1.0.6.tar.gz
-sha256sum 1.0.6.tar.gz
+```
+TERMUX_PKG_VERSION=1:0.5
+TERMUX_PKG_REVISION=4
 ```
 
-Major updates (going from for example v1.0.5 to v2.0.0) can mean that patches needs
-to be updated or added. The CI build of the pull request will fail if patches need
-to be updated, but only way to discover that new patches are needed is by testing
-the built package in termux.
+Note that if you are not @termux collaborator, pull request must contain a
+*description* why you are submitting a package downgrade. All pull requests
+which submit package downgrading without any serious reason will be denied.
 
-Revisions of dependent packages should be bumped in case of major updates to ensure
-there will no be issues during runtime.
+#### Dealing with patch errors
 
-## Commiting changes and pushing to your fork
+Major changes introduced to packages often make current patches incompatible
+with newer package version. Unfortunately, there no universal guide about
+fixing patch issues as workaround is always based on changes introduced to
+the new source code version.
 
-Now that the build.sh is updated we can commit it and push it to github so that a pull
-request against the main repo can be opened. To commit with a short message you can run:
-```sh
-git add packages/<package-name>
-git commit -m "<package-name>: update to 1.0.6"
-```
+Here are few things you may to try:
 
-If you want to upload your changes to the remote repository, do:
-```sh
-git push origin
-```
-`origin` here is the repository that you originally cloned, which in this example is
-your fork. The full url to this repository can be shown by running `git remote -v`.
+1. If patch fixing particular known upstream issue, check the project's VCS
+   for commits fixing the issue. There is a chance that patch is no longer
+   needed.
 
-## Opening a pull request
+2. Inspecting the failed patch file and manually applying changes to source
+   code. Do so only if you understand the source code and changes introduced
+   by patch.
 
-You can now visit your repo in a browser and open a pull request against this repo by
-pressing "New pull request". See [creating-a-pull-request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request)
-for more information on how to do this.
+   Regenerate patch file, e.g. with:
+   ```
+   diff -uNr package-1.0 package-1.0.mod > previously-failed-patch-file.patch
+   ```
 
-Once a pull request has been created CI system will attempt to build the changes.
+Always check the CI (Github Actions) status for your pull request. If it fails,
+then either fix or close it. Maintainers can fix it on their own, if issues are
+minor. But they won't rewrite whole your submission.
