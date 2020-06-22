@@ -105,7 +105,7 @@ jobs:
     - name: Get *.deb files
       uses: actions/download-artifact@v1
       with:
-        name: termux-packages
+        name: x11-packages
         path: ./
     - name: Upload to bintray.com
       env:
