@@ -15,7 +15,7 @@ Developer's wiki is available at https://github.com/termux/termux-packages/wiki.
 
 Contribute to Termux by submitting new packages or fixing bugs. Pay attention to
 [issues](https://github.com/termux/x11-packages/issues) labeled as
-["bug report"](https://github.com/termux/x11-packages/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug+report%22)
+["bug"](https://github.com/termux/x11-packages/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug%22)
 and ["help wanted"](https://github.com/termux/x11-packages/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
 
 Note that issue solving may not be easy. If you decided to contribute to @termux,
