@@ -6,6 +6,17 @@
 
 There are located build scripts and patches for Termux X11 packages.
 
+***
+
+@termux is looking for help with fixing issues, adding new packages and maintaining
+existing ones. It would be very helpful if you submit a pull request with new packages
+or bug fixes.
+
+If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md)
+and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
+
+***
+
 Programs using the [X11 Windowing System] cannot be used standalone like normal
 command-line utilities. Termux does not provide a native way for video output
 and therefore you will need to install additional software.
@@ -51,15 +62,6 @@ requirements are Linux-based host with Docker installed.
 	```
 	Replace `${arch}` with target CPU architecture and `${package name}` with
 	package name you want to build.
-
-## Contributing
-
-[I](https://github.com/xeffyr) am working on packages in my spare time and probably
-will not be able to process your issues instantly. It would be very helpful if you
-submit a pull request with new packages or bug fixes.
-
-If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md)
-and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
 
 [X11 Windowing System]: <https://en.wikipedia.org/wiki/X_Window_System>
 [Termux Wiki]: <https://wiki.termux.com/wiki/Graphical_Environment>
