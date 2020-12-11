@@ -17,6 +17,14 @@ and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
 
 ***
 
+## How to enable this repository
+
+Repository is not enabled in Termux by default. First enable it to be able to install
+its packages:
+```
+pkg install x11-repo
+```
+
 ## Using X11 on Termux
 
 Programs using the [X11 Windowing System] cannot be used standalone like normal
@@ -34,13 +42,6 @@ More information about setting up a graphical environment is on the
 [Termux Wiki].
 
 **Only for Termux installations on Android 7.0 or higher.**
-
-## How to enable this repository
-
-To enable this package repository run:
-```
-pkg install x11-repo
-```
 
 ## Building packages
 
