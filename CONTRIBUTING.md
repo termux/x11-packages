@@ -19,27 +19,44 @@ Contribute to Termux by submitting new packages or fixing bugs. Pay attention to
 and ["help wanted"](https://github.com/termux/x11-packages/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
 
 Note that issue solving may not be easy. If you decided to contribute to @termux,
-ensure that you read the [developer's wiki](https://github.com/termux/termux-packages/wiki)
-and you are ready to deal with errors on your own.
+ensure that you read the [developer's wiki](https://github.com/termux/termux-packages/wiki).
+You will also need some basic knowledge about Shell Scripting and build systems
+like Autotools or CMake.
 
-Pull requests containing incomplete work are not being merged.
+Contributors should take full responsibility about submitted changes. Pull requests
+containing incomplete work or disruptive changes will NOT be merged.
 
 ### A note about package requests
 
-We are rejecting package requests for single-file scripts and low-quality, infamous
-and outdated, dead projects. We may also reject in packaging non-original, forked
-projects.
+Termux keeps more than 1000 packages in its repositories. That is quite many, considering
+that Termux maintainers team is small and we prefer to use free hosting for packages
+repository. In order to be able to provide services at reasonable quality, we have
+to put restrictions on acceptable package requests.
 
-Additionally we require that requested packages met these conditions:
+Here are general conditions which should be met to include the requested package in
+our repositories:
 
-- Package should have widely recognised OSS licenses like GNU GPL, MIT, Apache-2.0
-  and similar.
-- Package should NOT be an outdated, dead project.
-- Package should NOT be a part of language-specific ecosystem. Such packages are
-  installable through `pip`, `gem`, `cpan`, `npm`.
-- Package should NOT be a complex desktop environment such as GNOME or KDE.
-- Package should NOT require hardware graphics acceleration or in any way access
-  to GPU hardware device.
+- Packages must be active, well-known projects. Those which are already included into
+  major Linux distributions like Debian have more chances to be included in Termux.
+  Outdated, dead projects are not accepted.
+
+- Packages must be licensed under widely-recognised open source license like Apache-2.0,
+  GNU GPL, MIT and similar. Open source but non-free packages are acceptable and are
+  processed on individual basis. Packages which are closed source are not accepted.
+
+- Packages must NOT be a part of language-specific ecosystem. These packages are
+  installable through `cpan`, `gem`, `npm`, `pip` and similar.
+
+- Packages must NOT duplicate functionality of the already present ones.
+
+Also we will reject any requests for low-quality packages, simple utilities consisting
+of one-file scripts and scripts which automate use of existing packages.
+
+We want to be sure that are adding useful things into our repositories. So when
+requesting a package, please provide a brief description what package does and why
+we should add it. Statements like `"it's hard to compile on device"`, `"I request it
+because I need it"`, `"it's convenient to install it with package manager"` are
+NOT valid reasons to request a package.
 
 Please be ready that your package request will not be processed immediately.
 
@@ -87,6 +104,8 @@ Periodically check the [Repology](https://repology.org/projects/?inrepo=termux&o
 page to see what is outdated and submit a pull request with version update.
 
 ### How to update package
+
+[![asciicast](https://asciinema.org/a/gVwMqf1bGbqrXmuILvxozy3IG.svg)](https://asciinema.org/a/gVwMqf1bGbqrXmuILvxozy3IG?autoplay=1&speed=2.0)
 
 Most packages can be updated by just modifying variables `TERMUX_PKG_VERSION` and
 `TERMUX_PKG_SHA256`.
