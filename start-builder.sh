@@ -67,6 +67,7 @@ fi
 			--detach \
 			--name "$CONTAINER_NAME" \
 			--volume "${REPOROOT}/${BUILD_ENVIRONMENT}:/home/builder/termux-packages" \
+			--volume "${REPOROOT}/debs:/home/builder/termux-packages/debs" \
 			--workdir "/home/builder/termux-packages" \
 			"$IMAGE_NAME"
 
