@@ -47,15 +47,26 @@ if [ ! -d "/srv/apt/aptly-root/public/termux-x11" ]; then
 fi
 
 # Rebuild apt repository.
+echo "[*] Running 'aptly'..."
 aptly repo add termux-x11 "$REPO_ROOT"
 aptly publish update x11 termux-x11
+echo
 
 # Publish on IPFS, but first unpin older version.
+echo "[*] Loading files into IPFS node..."
 IPFS_NEW_CID=$(ipfs add --recursive --nocopy --quieter "/srv/apt/aptly-root/public/termux-x11")
+
 if [ -n "$IPFS_NEW_CID" ]; then
+	echo "[*] Unpinning older hash..."
 	ipfs pin rm /ipns/k51qzi5uqu5dgu3homski160l4t4bmp52vb6dbgxb5bda90rewnwg64wnkwxj4 || true
+	echo
+
+	echo "[*] Registering updated repository root in IPNS..."
 	ipfs name publish --key=termux-x11-repo "$IPFS_NEW_CID"
+	echo
 else
 	echo "Failed to add repository to IPFS."
 	exit 1
 fi
+
+echo "[*] Finished."
