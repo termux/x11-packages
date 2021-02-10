@@ -1,2 +1,40 @@
+# Binary files.
+*.class
+*.a
+*.o
+*.pyc
+*.pyo
+*.so
+*.so.*
+
+# Built packages.
 /debs/*
+/deb-packages/*
+*.deb
 !/debs/.placeholder
+
+# Logs.
+*.log
+*.log.*
+
+# OS-generated files.
+Thumbs.db
+ehthumbs.db
+._*
+.directory
+.DS_Store
+.DS_Store?
+.fuse_hidden*
+.nfs*
+.Spotlight-V100
+.Trash-*
+.Trashes
+
+# Editor-generated files.
+*~
+*.swp
+*.un~
+Session.vim
+.netrwhist
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
