@@ -2,8 +2,6 @@
 
 [![Packages last build status](https://github.com/termux/x11-packages/workflows/Packages/badge.svg)](https://github.com/termux/x11-packages/actions)
 
-[![Powered by JFrog Bintray](./.github/static/powered-by-bintray.png)](https://bintray.com)
-
 There are located build scripts and patches for Termux X11 packages.
 
 ***
