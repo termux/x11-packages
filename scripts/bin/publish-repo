@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ##
-##  Script for updating local apt repository submitting over IPFS.
+##  Script for updating local apt repository and submitting over IPFS.
 ##  This utility may not be suitable for everyone.
 ##
 ##  Copyright 2021 Leonid Pliushch <leonid.pliushch@gmail.com>
