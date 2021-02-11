@@ -7,7 +7,3 @@ TERMUX_PKG_SRCURL=https://svn.webkit.org/repository/webkit/releases/WebKitGTK/we
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DPORT=GTK -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
 TERMUX_PKG_SHA256=637db269b21ede63413409f07c6390fcefbde46bfcfef33b4fcb19b5f6ca3430
-
-termux_step_post_get_source() {
-    cd webkit
-} 
