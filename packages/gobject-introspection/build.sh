@@ -1,4 +1,4 @@
-TERMUX_PKG_HOMEPAGE=https://wiki.gnome.org/action/show/Projects/GObjectIntrospection?action=show&redirect=GObjectIntrospection
+TERMUX_PKG_HOMEPAGE=https://developer.gnome.org/programming-guidelines/stable/introspection.html.en
 TERMUX_PKG_DESCRIPTION="describe the APIs and collect them in
 a uniform, machine readable format"
 TERMUX_PKG_LICENSE="LGPL-2.0"
