@@ -16,7 +16,7 @@ index 31d9abcb31..863514e97c 100644
  int jscmain(int argc, char** argv);
 
 -#if OS(DARWIN) || OS(LINUX)
-+#if OS(DARWIN) || OS(LINUX) [| OS(ANDROID)
++#if OS(DARWIN) || OS(LINUX) || OS(ANDROID)
  static size_t memoryLimit;
 
  static void crashIfExceedingMemoryLimit()
