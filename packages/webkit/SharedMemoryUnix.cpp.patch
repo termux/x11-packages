@@ -6,7 +6,7 @@ index aff7b0d18d..7d22cb5f5c 100644
  #include "ArgumentCoders.h"
  #endif
 
-+tatic int shm_unlink(const char *name) {
++static int shm_unlink(const char *name) {
 +    size_t namelen;
 +    char *fname;
 +
