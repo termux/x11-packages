@@ -5,8 +5,8 @@ index aff7b0d18d..7d22cb5f5c 100644
 @@ -54,6 +54,65 @@
  #include "ArgumentCoders.h"
  #endif
-
-+static int shm_unlink(const char *name) {
+ 
++tatic int shm_unlink(const char *name) {
 +    size_t namelen;
 +    char *fname;
 +
@@ -16,7 +16,6 @@ index aff7b0d18d..7d22cb5f5c 100644
 +    if (name[0] == '\0') {
 +        /* The name "/" is not supported.  */
 +        errno = EINVAL;
-+        return -1;
 +        return -1;
 +    }
 +
@@ -66,3 +65,6 @@ index aff7b0d18d..7d22cb5f5c 100644
 +    return fd;
 +}
 +
+ namespace WebKit {
+ 
+ SharedMemory::Handle::Handle()
