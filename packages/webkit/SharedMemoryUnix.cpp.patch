@@ -66,6 +66,3 @@ index aff7b0d18d..7d22cb5f5c 100644
 +    return fd;
 +}
 +
- namespace WebKit {
-
- SharedMemory::Handle::Handle()
