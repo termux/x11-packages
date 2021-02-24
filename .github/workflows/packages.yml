@@ -75,8 +75,10 @@ jobs:
           ./scripts/lint-packages.sh $(echo "$PACKAGE_NAMES" | grep -P '^[a-zA-Z0-9]' | awk '{ print "./packages/"$0"/build.sh" }')
           ./start-builder.sh ./build-package.sh -a ${{ matrix.target_arch }} -I $PACKAGE_NAMES
         fi
+        mkdir -p artifacts
+        tar cf artifacts/debs-${{ matrix.target_arch }}-${{ github.sha }}.tar debs
     - name: Store *.deb files
       uses: actions/upload-artifact@v2
       with:
         name: x11-packages-${{ github.sha }}
-        path: ./debs
+        path: ./artifacts
