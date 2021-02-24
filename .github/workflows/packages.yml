@@ -78,5 +78,5 @@ jobs:
     - name: Store *.deb files
       uses: actions/upload-artifact@v2
       with:
-        name: x11-packages
+        name: x11-packages-${{ github.sha }}
         path: ./debs
