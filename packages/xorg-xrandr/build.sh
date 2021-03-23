@@ -7,7 +7,3 @@ TERMUX_PKG_SRCURL="https://gitlab.freedesktop.org/xorg/app/xrandr/-/archive/xran
 TERMUX_PKG_SHA256="ca4d5083c86660cb00b465365aab738bcdb310ee9715ad2cf1571f679226229e"
 TERMUX_PKG_DEPENDS="libx11, libxrandr"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros, xorgproto"
-
-termux_step_pre_configure(){
-	./autogen.sh
-}
