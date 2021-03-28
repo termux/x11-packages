@@ -82,3 +82,35 @@ jobs:
       with:
         name: x11-packages-${{ github.sha }}
         path: ./artifacts
+  upload:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Get *.deb files
+      uses: actions/download-artifact@v2
+      with:
+        name: x11-packages-${{ github.sha }}
+        path: ./
+    - name: Setup ssh key and known_hosts
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.KNOWN_HOST_ENTRY }}" >> ~/.ssh/known_hosts
+        ssh-agent -a $SSH_AUTH_SOCK
+        ssh-add - <<< "${{ secrets.SSHKEY }}"
+    - name: Upload to grimler.se
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        # Zip the deb archives to only do one transfer to the repo.
+        # This makes it easier to parse it, we can run one update job
+        # instead of one for each arch on the server.
+        archive="x11-packages-${{ github.sha }}.zip"
+        zip $archive debs-*-${{ github.sha }}.tar
+        sftp -P ${{ secrets.PORT }} ${{ secrets.USER }}@grimler.se <<EOF
+          put $archive /debs/
+        EOF
