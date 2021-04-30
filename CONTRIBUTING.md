@@ -52,6 +52,8 @@ our repositories:
 - Packages must NOT be phishing or pentesting tools. This does not apply for tools with
   double purpose like Nmap.
 
+- Binary form of requested package should be less than 90 MB.
+
 Also we will reject any requests for low-quality packages, simple utilities consisting
 of one-file scripts and scripts which automate use of existing packages.
 
