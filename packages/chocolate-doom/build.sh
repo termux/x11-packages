@@ -9,5 +9,5 @@ TERMUX_PKG_DEPENDS="sdl2, sdl2-mixer, sdl2-net"
 TERMUX_PKG_BLACKLISTED_ARCHES="x86_64"
 
 termux_step_pre_configure(){
-    NOCONFIGURE=1 ./autogen.sh
+    autoreconf -fi
 }
