@@ -73,7 +73,8 @@ jobs:
         # TODO: upload packages to Github Actions artifacts storage.
         if [ -n "$PACKAGE_NAMES" ]; then
           ./scripts/lint-packages.sh $(echo "$PACKAGE_NAMES" | grep -P '^[a-zA-Z0-9]' | awk '{ print "./packages/"$0"/build.sh" }')
-          ./start-builder.sh ./build-package.sh -a ${{ matrix.target_arch }} $PACKAGE_NAMES
+          sudo bash -c "rm -f /etc/resolv.conf; echo 'nameserver 1.1.1.1' > /etc/resolv.conf; chmod 644 /etc/resolv.conf"
+          ./start-builder.sh ./build-package.sh -a ${{ matrix.target_arch }} -I $PACKAGE_NAMES
         fi
         mkdir -p artifacts
         tar cf artifacts/debs-${{ matrix.target_arch }}-${{ github.sha }}.tar debs
