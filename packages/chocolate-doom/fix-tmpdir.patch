@@ -1,0 +1,26 @@
+diff --git a/chocolate-doom-chocolate-doom-3.0.1/src/m_misc.c b/chocolate-doom-chocolate-doom-3.0.1.mod/src/m_misc.c
+index 7e69da8..d18cc0b 100644
+--- a/chocolate-doom-chocolate-doom-3.0.1/src/m_misc.c
++++ b/chocolate-doom-chocolate-doom-3.0.1.mod/src/m_misc.c
+@@ -250,7 +250,7 @@ char *M_TempFile(char *s)
+ #else
+     // In Unix, just use /tmp.
+ 
+-    tempdir = "/tmp";
++    tempdir = "@TERMUX_PREFIX@/tmp";
+ #endif
+ 
+     return M_StringJoin(tempdir, DIR_SEPARATOR_S, s, NULL);
+diff --git a/chocolate-doom-chocolate-doom-3.0.1/src/setup/execute.c b/chocolate-doom-chocolate-doom-3.0.1.mod/src/setup/execute.c
+index 33472e7..1161c17 100644
+--- a/chocolate-doom-chocolate-doom-3.0.1/src/setup/execute.c
++++ b/chocolate-doom-chocolate-doom-3.0.1.mod/src/setup/execute.c
+@@ -69,7 +69,7 @@ static char *TempFile(char *s)
+ #else
+     // In Unix, just use /tmp.
+ 
+-    tempdir = "/tmp";
++    tempdir = "@TERMUX_PREFIX@/tmp";
+ #endif
+ 
+     return M_StringJoin(tempdir, DIR_SEPARATOR_S, s, NULL);
