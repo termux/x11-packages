@@ -1,8 +1,7 @@
-diff --git a/chocolate-doom-chocolate-doom-3.0.1/src/m_misc.c b/chocolate-doom-chocolate-doom-3.0.1.mod/src/m_misc.c
-index 7e69da8..d18cc0b 100644
---- a/chocolate-doom-chocolate-doom-3.0.1/src/m_misc.c
-+++ b/chocolate-doom-chocolate-doom-3.0.1.mod/src/m_misc.c
-@@ -250,7 +250,7 @@ char *M_TempFile(char *s)
+diff -uNr chocolate-doom-chocolate-doom-3.0.1/src/m_misc.c chocolate-doom-chocolate-doom-3.0.1.mod/src/m_misc.c
+--- chocolate-doom-chocolate-doom-3.0.1/src/m_misc.c	2020-06-25 11:16:34.000000000 +0800
++++ chocolate-doom-chocolate-doom-3.0.1.mod/src/m_misc.c	2021-05-09 17:19:02.830000000 +0800
+@@ -250,7 +250,7 @@
  #else
      // In Unix, just use /tmp.
  
@@ -11,11 +10,10 @@ index 7e69da8..d18cc0b 100644
  #endif
  
      return M_StringJoin(tempdir, DIR_SEPARATOR_S, s, NULL);
-diff --git a/chocolate-doom-chocolate-doom-3.0.1/src/setup/execute.c b/chocolate-doom-chocolate-doom-3.0.1.mod/src/setup/execute.c
-index 33472e7..1161c17 100644
---- a/chocolate-doom-chocolate-doom-3.0.1/src/setup/execute.c
-+++ b/chocolate-doom-chocolate-doom-3.0.1.mod/src/setup/execute.c
-@@ -69,7 +69,7 @@ static char *TempFile(char *s)
+diff -uNr chocolate-doom-chocolate-doom-3.0.1/src/setup/execute.c chocolate-doom-chocolate-doom-3.0.1.mod/src/setup/execute.c
+--- chocolate-doom-chocolate-doom-3.0.1/src/setup/execute.c	2020-06-25 11:16:34.000000000 +0800
++++ chocolate-doom-chocolate-doom-3.0.1.mod/src/setup/execute.c	2021-05-09 17:19:37.700000000 +0800
+@@ -69,7 +69,7 @@
  #else
      // In Unix, just use /tmp.
  
