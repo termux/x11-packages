@@ -51,25 +51,10 @@ task:
     fi
 
   build_script: |
-    export TERMUX_DEBDIR="/tmp/debs-${TERMUX_ARCH}"
-    ln -s "$TERMUX_DEBDIR" debs
     bash ./scripts/cirrus-ci_dispatcher.sh
-
-  aarch64_debs_cache:
-    folder: "/tmp/debs-aarch64"
-    fingerprint_script: echo "${CIRRUS_CHANGE_IN_REPO}-aarch64"
-
-  arm_debs_cache:
-    folder: "/tmp/debs-arm"
-    fingerprint_script: echo "${CIRRUS_CHANGE_IN_REPO}-arm"
-
-  i686_debs_cache:
-    folder: "/tmp/debs-i686"
-    fingerprint_script: echo "${CIRRUS_CHANGE_IN_REPO}-i686"
-
-  x86-64_debs_cache:
-    folder: "/tmp/debs-x86_64"
-    fingerprint_script: echo "${CIRRUS_CHANGE_IN_REPO}-x86_64"
+    if ls ./termux-packages/debs/*.deb >/dev/null 2>&1; then
+      mv ./termux-packages/debs/*.deb ./debs/
+    fi
 
   output_artifacts:
     path: "./debs/*.deb"
