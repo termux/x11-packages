@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="The Qt Declarative module provides classes for using GUI
 TERMUX_PKG_LICENSE="LGPL-3.0"
 TERMUX_PKG_MAINTAINER="Simeon Huang <symeon@librehat.com>"
 TERMUX_PKG_VERSION=5.12.10
-TERMUX_PKG_REVISION=5
+TERMUX_PKG_REVISION=6
 TERMUX_PKG_SRCURL="https://download.qt.io/official_releases/qt/5.12/${TERMUX_PKG_VERSION}/submodules/qtdeclarative-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SHA256=ae56708646954f93eae087f20408fdbce9b977af565202ddcb4a3119e90f8a16
 TERMUX_PKG_DEPENDS="qt5-qtbase"
@@ -56,6 +56,10 @@ termux_step_post_make_install () {
             install -Dm700 "../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
         }
     done
+
+    # Install the QmlDevTools for target (needed by some packages such as qttools)
+    install -Dm644 ${TERMUX_PKG_SRCDIR}/lib/libQt5QmlDevTools.a "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.a"
+    install -Dm644 ${TERMUX_PKG_SRCDIR}/lib/libQt5QmlDevTools.prl "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.prl"
 
     #######################################################
     ##
