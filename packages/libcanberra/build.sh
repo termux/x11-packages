@@ -4,5 +4,5 @@ TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_VERSION=0.30
 TERMUX_PKG_SRCURL=http://0pointer.de/lennart/projects/libcanberra/libcanberra-$TERMUX_PKG_VERSION.tar.xz
 TERMUX_PKG_SHA256=c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72
-TERMUX_PKG_DEPENDS="libltdl, libvorbis"
-TERMUX_PKG_BUILD_DEPENDS="gstreamer, gtk3, pulseaudio"
+TERMUX_PKG_DEPENDS="libltdl, libvorbis, gstreamer, gtk3, pulseaudio, zenity"
+
