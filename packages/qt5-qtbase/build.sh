@@ -202,12 +202,12 @@ termux_step_post_make_install() {
     find "${TERMUX_PREFIX}/opt/qt/cross/lib" -iname \*.la -delete
 
     ## Create qmake.conf suitable for compiling host tools (for other modules)
-    sed \
-        -e "s|@TERMUX_PREFIX@|${TERMUX_PREFIX}|g" \
-        "${TERMUX_PKG_BUILDER_DIR}/qmake.host.conf" > "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-host/qmake.conf"
     install -Dm644 \
         "${TERMUX_PKG_BUILDER_DIR}/qplatformdefs.host.h" \
         "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-host/qplatformdefs.h"
+    sed \
+        -e "s|@TERMUX_PREFIX@|${TERMUX_PREFIX}|g" \
+        "${TERMUX_PKG_BUILDER_DIR}/qmake.host.conf" > "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-host/qmake.conf"
 }
 
 termux_step_create_debscripts() {
