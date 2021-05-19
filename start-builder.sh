@@ -28,6 +28,12 @@ LOCK_FILE="/tmp/.termux-x11-builder.lck"
 CONTAINER_NAME="termux-x11-buildenv-v1"
 BUILD_ENVIRONMENT="termux-packages"
 
+if [ -n "${TERMUX_DOCKER_USE_SUDO-}" ]; then
+	SUDO="sudo"
+else
+	SUDO=""
+fi
+
 cd "$REPOROOT"
 
 if [ ! -e "$LOCK_FILE" ]; then
@@ -42,7 +48,7 @@ else
 fi
 
 (flock -n 3 || exit 0
-	sudo docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
+	$SUDO docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
 	echo "[*] Setting up repository submodules..."
 	git submodule deinit --all --force
@@ -60,9 +66,9 @@ fi
 
 (flock -n 3 || true
 	echo "[*] Running container '$CONTAINER_NAME' from image '$IMAGE_NAME'..."
-	if ! sudo docker start "$CONTAINER_NAME" > /dev/null 2>&1; then
+	if ! $SUDO docker start "$CONTAINER_NAME" > /dev/null 2>&1; then
 		echo "Creating new container..."
-		sudo docker run \
+		$SUDO docker run \
 			--tty \
 			--detach \
 			--name "$CONTAINER_NAME" \
@@ -73,16 +79,16 @@ fi
 
 		if [ "$(id -u)" -ne 0 ] && [ "$(id -u)" -ne 1000 ]; then
 			echo "Changed builder uid/gid... (this may take a while)"
-			sudo docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo chown -R $(id -u) "/home/builder"
-			sudo docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo chown -R $(id -u) /data
-			sudo docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo usermod -u $(id -u) builder
-			sudo docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo groupmod -g $(id -g) builder
+			$SUDO docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo chown -R $(id -u) "/home/builder"
+			$SUDO docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo chown -R $(id -u) /data
+			$SUDO docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo usermod -u $(id -u) builder
+			$SUDO docker exec $DOCKER_TTY "$CONTAINER_NAME" sudo groupmod -g $(id -g) builder
 		fi
 	fi
 
 	if [ $# -ge 1 ]; then
-		sudo docker exec --interactive $DOCKER_TTY "$CONTAINER_NAME" "$@"
+		$SUDO docker exec --interactive $DOCKER_TTY "$CONTAINER_NAME" "$@"
 	else
-		sudo docker exec --interactive $DOCKER_TTY "$CONTAINER_NAME" bash
+		$SUDO docker exec --interactive $DOCKER_TTY "$CONTAINER_NAME" bash
 	fi
 ) 3< "$LOCK_FILE"
