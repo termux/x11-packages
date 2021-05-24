@@ -3,11 +3,13 @@ TERMUX_PKG_DESCRIPTION="Qt X11 Extras enables the Qt programmer to write applica
 TERMUX_PKG_LICENSE="LGPL-3.0"
 TERMUX_PKG_MAINTAINER="Simeon Huang <symeon@librehat.com>"
 TERMUX_PKG_VERSION=4.12.4
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL="https://github.com/qt-creator/qt-creator/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
 TERMUX_PKG_SHA256=2469a19ee230eb600467e614c23ed678b1b414adc16efdedcfc0404bf40d8015
-TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtdeclarative, qt5-qttools, qt5-qtx11extras, qt5-qtsvg, llvm, clang"
+TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtdeclarative, qt5-qtquickcontrols, qt5-qttools, qt5-qtx11extras, qt5-qtsvg, llvm, clang"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qtdeclarative-cross-tools, qt5-qttools-cross-tools"
-TERMUX_PKG_RECOMMENDS="gdb, git, cmake"
+TERMUX_PKG_RECOMMENDS="gdb, git, cmake, valgrind"
+TERMUX_PKG_SUGGESTS="cvs, subversion"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
 
