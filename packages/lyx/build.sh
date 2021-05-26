@@ -15,3 +15,9 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --with-hunspell
 "
 TERMUX_PKG_RM_AFTER_INSTALL="share/lyx/examples"
+
+
+termux_step_pre_configure() {
+    # This is to allow the build script find the `moc` on cross-build host
+    export PATH+=":${TERMUX_PREFIX}/opt/qt/cross/bin"
+}
