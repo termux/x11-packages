@@ -70,7 +70,6 @@ jobs:
         PACKAGE_NAMES=$(sed 's/[[:blank:]]*$//' <<< "$PACKAGE_NAMES")
         DELETED_PACKAGE_NAMES=$(sed 's/[[:blank:]]*$//' <<< "$DELETED_PACKAGE_NAMES")
         # Build packages.
-        # TODO: upload packages to Github Actions artifacts storage.
         if [ -n "$PACKAGE_NAMES" ]; then
           ./scripts/lint-packages.sh $(echo "$PACKAGE_NAMES" | grep -P '^[a-zA-Z0-9]' | awk '{ print "./packages/"$0"/build.sh" }')
           ./start-builder.sh ./build-package.sh -a ${{ matrix.target_arch }} $PACKAGE_NAMES
@@ -94,23 +93,29 @@ jobs:
       with:
         name: x11-packages-${{ github.sha }}
         path: ./
-    - name: Setup ssh key and known_hosts
+    - name: Upload to packages.termux.org
       env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        REPOSITORY_NAME: termux-x11
+        REPOSITORY_DISTRIBUTION: x11
       run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.KNOWN_HOST_ENTRY }}" >> ~/.ssh/known_hosts
-        ssh-agent -a $SSH_AUTH_SOCK
-        ssh-add - <<< "${{ secrets.SSHKEY }}"
-    - name: Upload to grimler.se
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      run: |
-        # Zip the deb archives to only do one transfer to the repo.
-        # This makes it easier to parse it, we can run one update job
-        # instead of one for each arch on the server.
-        archive="x11-packages-${{ github.sha }}.zip"
-        zip $archive debs-*-${{ github.sha }}.tar
-        sftp -P ${{ secrets.PORT }} ${{ secrets.USER }}@grimler.se <<EOF
-          put $archive /debs/
-        EOF
+        for archive in *.tar; do
+          tar xf "$archive"
+        done
+        # TODO: handle errors instead of relying on curl exit code.
+        uploaded_files=false
+        for filename in debs/*.deb; do
+          # Upload file to temporary directory.
+          curl --fail -X POST -u "${{ secrets.APTLY_API_AUTH }}" -F file=@${filename} \
+            https://packages.termux.org/aptly-api/files/${REPOSITORY_NAME}-${{ github.sha }}
+          uploaded_files=true
+        done
+        if [ "$uploaded_files" = "true" ]; then
+          # This assigns the uploaded file to given repository.
+          # Temporary directory is being removed at this step.
+          curl --fail -X POST -u "${{ secrets.APTLY_API_AUTH }}" \
+            https://packages.termux.org/aptly-api/repos/${REPOSITORY_NAME}/file/${REPOSITORY_NAME}-${{ github.sha }}
+          # This will cause Aptly to rebuild apt repository.
+          curl --fail -X PUT -u "${{ secrets.APTLY_API_AUTH }}" \
+            -H 'Content-Type: application/json' --data '{"Signing": {"Passphrase": "${{ secrets.GPG_PASSPHRASE }}"}}' \
+            https://packages.termux.org/aptly-api/publish/${REPOSITORY_NAME}/${REPOSITORY_DISTRIBUTION}
+        fi
