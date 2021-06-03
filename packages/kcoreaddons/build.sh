@@ -7,7 +7,7 @@ TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL="http://download.kde.org/stable/frameworks/${TERMUX_PKG_VERSION%.*}/kcoreaddons-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SHA256=e95008b032e299cf47f596739d9236701e2f55e507734f33b8ea497882fd130b
 TERMUX_PKG_DEPENDS="qt5-qtbase, shared-mime-info"
-TERMUX_PKG_BUILD_DEPENDS="cmake, extra-cmake-modules, qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
+TERMUX_PKG_BUILD_DEPENDS="extra-cmake-modules, qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
 
 # Keep share/mime/packages/kde5.xml only which would trigger an update after installation
 TERMUX_PKG_RM_AFTER_INSTALL="
