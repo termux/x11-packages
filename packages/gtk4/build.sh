@@ -18,7 +18,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dprint-cups=disabled
 -Dprint-cloudprint=disabled
 "
-
-#termux_step_pre_configure() {
-#	CPPFLAGS+="-I$TERMUX_PREFIX/include/epoxy"
-#}
