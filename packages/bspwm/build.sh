@@ -4,6 +4,6 @@ TERMUX_PKG_LICENSE="BSD 2-Clause"
 TERMUX_PKG_MAINTAINER="Leap of Azzam (@leapofazzam-backup)"
 TERMUX_PKG_VERSION=0.9.10
 TERMUX_PKG_SRCURL="https://github.com/baskerville/bspwm/archive/refs/tags/$TERMUX_PKG_VERSION.tar.gz"
-TERMUX_PKG_SHA256="1edc8b1a8b3631c10ba9cb9df1181830dacbbdf77adb558e31d5dd2029637386"
+TERMUX_PKG_SHA256="0d0f5e465b9c27a5c2143c86189392fa297fad55253b9ed8f6854473d3928f8f"
 TERMUX_PKG_DEPENDS="libx11, libxcb, libxkbcommon, sxhkd, xcb-util, xcb-util-cursor, xcb-util-keysyms, xcb-util-wm, xcb-util-xrm"
 TERMUX_PKG_BUILD_IN_SRC=true
