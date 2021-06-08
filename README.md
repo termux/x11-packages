@@ -1,5 +1,7 @@
 # Termux X11 Packages
 
+[![Packages last build status](https://github.com/termux/x11-packages/workflows/Packages/badge.svg)](https://github.com/termux/x11-packages/actions)
+
 There are located build scripts and patches for Termux X11 packages.
 
 ***
