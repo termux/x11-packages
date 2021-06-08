@@ -2,6 +2,8 @@
 
 [![Packages last build status](https://github.com/termux/x11-packages/workflows/Packages/badge.svg)](https://github.com/termux/x11-packages/actions)
 
+[![Powered by FossHost](./.github/static/powered-by-fosshost.png)](https://fosshost.org)
+
 There are located build scripts and patches for Termux X11 packages.
 
 ***
