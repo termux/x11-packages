@@ -22,6 +22,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-dri2
 --disable-dri3
 --enable-present
+--disable-tests
 --enable-xinerama
 --enable-xf86vidmode
 --enable-xace
