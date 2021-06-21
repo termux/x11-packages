@@ -1,0 +1,10 @@
+TERMUX_PKG_HOMEPAGE=https://github.com/nana-4/materia-theme
+TERMUX_PKG_DESCRIPTION="Materia is a Material Design theme for GNOME/GTK based desktop environments."
+TERMUX_PKG_LICENSE="GPL-2.0"
+TERMUX_PKG_MAINTAINER="@yisus7u7 <jesuspixel5@gmail.com>"
+TERMUX_PKG_VERSION=v20210322
+TERMUX_PKG_SRCURL=https://github.com/nana-4/materia-theme/archive/refs/tags/$TERMUX_PKG_VERSION.tar.gz
+TERMUX_PKG_SHA256=4460af612cd70242543ac71023f8963eea39be059486e9ebe58b3846be74bcb5
+TERMUX_PKG_DEPENDS="gtk2, gtk3"
+TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_PLATFORM_INDEPENDENT=true
