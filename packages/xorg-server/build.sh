@@ -1,9 +1,14 @@
 TERMUX_PKG_HOMEPAGE=https://xorg.freedesktop.org/wiki/
 TERMUX_PKG_DESCRIPTION="Xorg server"
-TERMUX_PKG_VERSION=1.20.3
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_VERSION=1.20.11
+TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-${TERMUX_PKG_VERSION}.tar.bz2
-TERMUX_PKG_SHA256=1b3ce466c12cacbe2252b3ad5b0ed561972eef9d09e75900d65fb1e21f9201de
+TERMUX_PKG_SHA256=914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c49
+
+#i686 gives the following error...
+#relocation R_386_GOTOFF against preemptible symbol fbdevHWLoadPalette cannot be used when making a shared object
+
+TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 
 TERMUX_PKG_DEPENDS="libandroid-shmem, libdrm, libpciaccess, libpixman, libx11, libxau, libxfont2, libxinerama, libxkbfile, libxshmfence, mesa, openssl, xkeyboard-config, xorg-xkbcomp"
 
@@ -22,6 +27,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-dri2
 --disable-dri3
 --enable-present
+--disable-tests
 --enable-xinerama
 --enable-xf86vidmode
 --enable-xace
@@ -44,7 +50,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-xwayland
 --disable-xwin
 --disable-kdrive
---disable-xephyr
+--enable-xephyr
 --disable-libunwind
 --enable-xshmfence
 --enable-ipv6
