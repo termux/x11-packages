@@ -1,0 +1,9 @@
+TERMUX_PKG_HOMEPAGE=https://github.com/LemonBoy/bar
+TERMUX_PKG_DESCRIPTION="lightweight bar based on XCB"
+TERMUX_PKG_LICENSE="MIT"
+TERMUX_PKG_MAINTAINER="Yisus7u7 <jesuspixel5@gmail.com>"
+TERMUX_PKG_VERSION=1.4
+TERMUX_PKG_SRCURL="https://github.com/LemonBoy/bar/archive/refs/tags/v${TERMUX_PKG_VERSION}.zip"
+TERMUX_PKG_SHA256=3b6952b6f8f60073823bdaf7fe931c33607a4bd7ca472b40990ba1c24c3c74c1
+TERMUX_PKG_DEPENDS="libxcb, libc++, fontconfig, xcb-util-cursor, xcb-util-image, xcb-util-xrm, xcb-util-wm"   
+TERMUX_PKG_BUILD_IN_SRC=true
