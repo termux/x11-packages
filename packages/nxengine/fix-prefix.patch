@@ -7,13 +7,13 @@ index 498caa8..eeb384b 100644
  CFLAGS        = -pipe -O2 $(DEFINES)
  CXXFLAGS      = -pipe -O2 $(DEFINES)
 -INCPATH       = -I/usr/include -I/usr/include/SDL -I/usr/local/include -I/usr/local/include/SDL -I.
-+INCPATH       = -I@TERMUX_PREFIX@/usr/include -I@TERMUX_PREFIX@/usr/include/SDL -I@TERMUX_PREFIX@/usr/local/include -I@TERMUX_PREFIX@/usr/local/include/SDL -I.
++INCPATH       = -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/SDL -I/data/data/com.termux/files/usr/local/include -I/data/data/com.termux/files/usr/local/include/SDL -I.
  LINK          = g++
 -LFLAGS        = -Wl,-O1 -Wl,-rpath,/usr/lib
-+LFLAGS        = -Wl,-O1 -Wl,-rpath,@TERMUX_PREFIX@/usr/lib
++LFLAGS        = -Wl,-O1 -Wl,-rpath,/data/data/com.termux/files/usr/lib
  LIBS_SHARED   = -lSDL -lSDL_ttf
 -LIBS_STATIC   = /usr/local/lib/libSDLmain.a /usr/local/lib/libSDL.a /usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
-+LIBS_STATIC   = @TERMUX_PREFIX@/usr/local/lib/libSDLmain.a @TERMUX_PREFIX@/usr/local/lib/libSDL.a @TERMUX_PREFIX@/usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
++LIBS_STATIC   = /data/data/com.termux/files/usr/local/lib/libSDLmain.a /data/data/com.termux/files/usr/local/lib/libSDL.a /data/data/com.termux/files/usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
  STRIP         = strip
  DEL_FILE      = rm -f
  
