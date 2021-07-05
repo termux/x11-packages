@@ -1,0 +1,19 @@
+diff --git a/Makefile.linux b/Makefile.linux
+index 498caa8..eeb384b 100644
+--- a/Makefile.linux
++++ b/Makefile.linux
+@@ -16,11 +16,11 @@ CXX           = g++
+ DEFINES       = # -D_L10N_CP1251
+ CFLAGS        = -pipe -O2 $(DEFINES)
+ CXXFLAGS      = -pipe -O2 $(DEFINES)
+-INCPATH       = -I/usr/include -I/usr/include/SDL -I/usr/local/include -I/usr/local/include/SDL -I.
++INCPATH       = -I@TERMUX_PREFIX@/usr/include -I@TERMUX_PREFIX@/usr/include/SDL -I@TERMUX_PREFIX@/usr/local/include -I@TERMUX_PREFIX@/usr/local/include/SDL -I.
+ LINK          = g++
+-LFLAGS        = -Wl,-O1 -Wl,-rpath,/usr/lib
++LFLAGS        = -Wl,-O1 -Wl,-rpath,@TERMUX_PREFIX@/usr/lib
+ LIBS_SHARED   = -lSDL -lSDL_ttf
+-LIBS_STATIC   = /usr/local/lib/libSDLmain.a /usr/local/lib/libSDL.a /usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
++LIBS_STATIC   = @TERMUX_PREFIX@/usr/local/lib/libSDLmain.a @TERMUX_PREFIX@/usr/local/lib/libSDL.a @TERMUX_PREFIX@/usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
+ STRIP         = strip
+ DEL_FILE      = rm -f
+ 
