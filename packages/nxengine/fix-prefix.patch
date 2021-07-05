@@ -1,5 +1,5 @@
 diff --git a/Makefile.linux b/Makefile.linux
-index 498caa8..eeb384b 100644
+index 498caa8..13323cc 100644
 --- a/Makefile.linux
 +++ b/Makefile.linux
 @@ -16,11 +16,11 @@ CXX           = g++
@@ -7,13 +7,13 @@ index 498caa8..eeb384b 100644
  CFLAGS        = -pipe -O2 $(DEFINES)
  CXXFLAGS      = -pipe -O2 $(DEFINES)
 -INCPATH       = -I/usr/include -I/usr/include/SDL -I/usr/local/include -I/usr/local/include/SDL -I.
-+INCPATH       = -I$PREFIX/include -I$PREFIX/include/SDL -I$PREFIX/local/include -I$PREFIX/local/include/SDL -I.
++INCPATH       = -I$TERMUX_PREFIX/include -I$TERMUX_PREFIX/include/SDL -I$TERMUX_PREFIX/local/include -I$TERMUX_PREFIX/local/include/SDL -I.
  LINK          = g++
 -LFLAGS        = -Wl,-O1 -Wl,-rpath,/usr/lib
-+LFLAGS        = -Wl,-O1 -Wl,-rpath,$PREFIX/lib
++LFLAGS        = -Wl,-O1 -Wl,-rpath,$TERMUX_PREFIX/lib
  LIBS_SHARED   = -lSDL -lSDL_ttf
 -LIBS_STATIC   = /usr/local/lib/libSDLmain.a /usr/local/lib/libSDL.a /usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
-+LIBS_STATIC   = $PREFIX/local/lib/libSDLmain.a $PREFIX/local/lib/libSDL.a $PREFIX/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
++LIBS_STATIC   = $TERMUX_PREFIX/local/lib/libSDLmain.a $TERMUX_PREFIX/local/lib/libSDL.a $TERMUX_PREFIX/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
  STRIP         = strip
  DEL_FILE      = rm -f
  
