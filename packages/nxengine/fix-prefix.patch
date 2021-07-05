@@ -1,7 +1,8 @@
-diff --git a/Makefile.linux b/Makefile.linux
+diff --git a/NMakefile.linux b/Makefile.linux
 --- a/Makefile.linux
 +++ b/Makefile.linux
-@@ -16,11 +16,11 @@ CXX           = g++
+@@ -16,11 +16,11 @@
+ CXX           = g++
  DEFINES       = # -D_L10N_CP1251
  CFLAGS        = -pipe -O2 $(DEFINES)
  CXXFLAGS      = -pipe -O2 $(DEFINES)
