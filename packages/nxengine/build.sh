@@ -1,6 +1,6 @@
 TERMUX_PKG_HOMEPAGE=https://nxengine.sourceforge.net
 TERMUX_PKG_DESCRIPTION="Open-source rewrite engine of the Cave Story for Dingux and MotoMAGX. Author - Caitlin Shaw (rogueeve), httpd://nxengine.sourceforge.net"
-TERMUX_PKG_LICENSE="GPL v3"
+TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@Yonle"
 TERMUX_PKG_VERSION=1.0.0.4
 TERMUX_PKG_REVISION=4
