@@ -1,5 +1,4 @@
 diff --git a/Makefile.linux b/Makefile.linux
-index 498caa8..13323cc 100644
 --- a/Makefile.linux
 +++ b/Makefile.linux
 @@ -16,11 +16,11 @@ CXX           = g++
