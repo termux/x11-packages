@@ -1,4 +1,4 @@
-diff --git a/NMakefile.linux b/Makefile.linux
+diff --git a/Makefile.linux b/Makefile.linux
 --- a/Makefile.linux
 +++ b/Makefile.linux
 @@ -16,11 +16,11 @@
