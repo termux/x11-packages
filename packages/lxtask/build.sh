@@ -7,6 +7,7 @@ TERMUX_PKG_SRCURL=https://github.com/lxde/lxtask/archive/refs/tags/$TERMUX_PKG_V
 TERMUX_PKG_SHA256=a3ea7f983396d816d8057eea8974e3cc12a870e658f71e15dec41c863e50f5d9
 TERMUX_PKG_DEPENDS="gtk2, glib"
 TERMUX_PKG_BUILD_IN_SRC=true
+
 termux_step_pre_configure() {
-        autoreconf -fi
+	./autogen.sh
 }
