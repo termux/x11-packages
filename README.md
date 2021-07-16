@@ -6,14 +6,12 @@
 
 There are located build scripts and patches for Termux X11 packages.
 
-***
+If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md) and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
 
-**@termux is looking for help with fixing issues, adding new packages and maintaining
-existing ones. It would be very helpful if you submit a pull request with new packages
-or bug fixes.**
-
-If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md)
-and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
+**Donate in cryptocurrency ([TRX](https://tron.network/trx?lng=en) or TRC-10 tokens)**:
+```
+TM5LFhqwBd9VNXCxCwNerEuQbYu4RnsniH
+```
 
 ***
 
