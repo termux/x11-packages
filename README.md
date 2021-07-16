@@ -2,18 +2,18 @@
 
 [![Packages last build status](https://github.com/termux/x11-packages/workflows/Packages/badge.svg)](https://github.com/termux/x11-packages/actions)
 
-[![Powered by FossHost](./.github/static/powered-by-fosshost.png)](https://fosshost.org)
+<img src=".github/static/powered-by-fosshost.png" alt="Powered by FossHost" width="128px"></img>
 
 There are located build scripts and patches for Termux X11 packages.
 
-***
+If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md) and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
 
-**@termux is looking for help with fixing issues, adding new packages and maintaining
-existing ones. It would be very helpful if you submit a pull request with new packages
-or bug fixes.**
+**Donate in cryptocurrency ([TRX](https://tron.network/trx?lng=en) or TRC-10 tokens)**:
+```
+TM5LFhqwBd9VNXCxCwNerEuQbYu4RnsniH
+```
 
-If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md)
-and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
+<img src=".github/static/donation-tronlink-qr.jpg" alt="TM5LFhqwBd9VNXCxCwNerEuQbYu4RnsniH" width="128px"></img>
 
 ***
 
