@@ -13,6 +13,6 @@ termux_step_pre_configure() {
 }
 
 termux_step_make_install () {
-   cd $TERMUX_PKG_SRCDIR/src
-   make install 
+	cd $TERMUX_PKG_SRCDIR/src
+	make install 
 }
