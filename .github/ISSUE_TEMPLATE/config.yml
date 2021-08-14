@@ -2,4 +2,4 @@ blank_issues_enabled: false
 contact_links:
   - name: Want ask questions about the project?
     url: https://github.com/termux/x11-packages/discussions
-    about: Join GitHub Discussions.
+    about: Join GitHub Discussions
