@@ -1,0 +1,4 @@
+[submodule "termux-packages"]
+	path = termux-packages
+	branch = master
+	url = https://github.com/termux/termux-packages
