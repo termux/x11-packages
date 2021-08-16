@@ -1,0 +1,12 @@
+diff -uNr amiwm/Makefile.in amiwm.mod/Makefile.in
+--- amiwm/Makefile.in	2017-08-03 21:30:51.000000000 +0000
++++ amiwm.mod/Makefile.in	2019-10-13 18:18:44.681346365 +0000
+@@ -20,7 +20,7 @@
+ RM = -rm -f
+ LIBAMI = libami/libami.a
+ DT_DIR = /etc/dt
+-STRIPFLAG = -s
++STRIPFLAG =
+ 
+ PROGS = amiwm requestchoice executecmd ppmtoinfo config_util
+ 

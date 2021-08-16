@@ -1,0 +1,21 @@
+diff -uNr libast-0.7/src/str.c libast-0.7.mod/src/str.c
+--- libast-0.7/src/str.c	2004-12-29 08:39:11.000000000 +0200
++++ libast-0.7.mod/src/str.c	2018-11-14 18:48:03.402725160 +0200
+@@ -511,7 +511,7 @@
+     char *tmp;
+ 
+     ASSERT_RVAL(!SPIF_STR_ISNULL(self), (SPIF_CAST(stridx) -1));
+-    tmp = index(SPIF_CONST_CAST_C(char *) SPIF_STR_STR(self), c);
++    tmp = strchr(SPIF_CONST_CAST_C(char *) SPIF_STR_STR(self), c);
+     if (tmp) {
+         return SPIF_CAST(stridx) (SPIF_CAST(long) tmp - SPIF_CAST(long) (SPIF_STR_STR(self)));
+     } else {
+@@ -619,7 +619,7 @@
+     char *tmp;
+ 
+     ASSERT_RVAL(!SPIF_STR_ISNULL(self), (SPIF_CAST(stridx) -1));
+-    tmp = rindex(SPIF_CONST_CAST_C(char *) SPIF_STR_STR(self), c);
++    tmp = strrchr(SPIF_CONST_CAST_C(char *) SPIF_STR_STR(self), c);
+     if (tmp) {
+         return SPIF_CAST(stridx) (SPIF_CAST(long) tmp - SPIF_CAST(long) (SPIF_STR_STR(self)));
+     } else {

@@ -1,0 +1,43 @@
+diff -uNr mkvtoolnix-release-59.0.0/ac/cmark.m4 mkvtoolnix-release-59.0.0.mod/ac/cmark.m4
+--- mkvtoolnix-release-59.0.0/ac/cmark.m4	2021-07-10 13:31:42.000000000 +0300
++++ mkvtoolnix-release-59.0.0.mod/ac/cmark.m4	2021-07-25 19:30:46.461555199 +0300
+@@ -3,11 +3,11 @@
+ dnl
+ 
+ if test x"$BUILD_GUI" = xyes; then
+-  PKG_CHECK_EXISTS([libcmark],[cmark_found=yes],[cmark_found=no])
++  PKG_CHECK_EXISTS([libcmark-gfm],[cmark_found=yes],[cmark_found=no])
+   if test x"$cmark_found" = xyes; then
+-    PKG_CHECK_MODULES([libcmark],[libcmark],[cmark_found=yes])
+-    CMARK_CFLAGS="`$PKG_CONFIG --cflags libcmark`"
+-    CMARK_LIBS="`$PKG_CONFIG --libs libcmark`"
++    PKG_CHECK_MODULES([libcmark],[libcmark-gfm],[cmark_found=yes])
++    CMARK_CFLAGS="`$PKG_CONFIG --cflags libcmark-gfm`"
++    CMARK_LIBS="`$PKG_CONFIG --libs libcmark-gfm`"
+   fi
+ 
+   if test x"$cmark_found" != xyes; then
+diff -uNr mkvtoolnix-release-59.0.0/src/common/markdown.cpp mkvtoolnix-release-59.0.0.mod/src/common/markdown.cpp
+--- mkvtoolnix-release-59.0.0/src/common/markdown.cpp	2021-07-10 13:31:42.000000000 +0300
++++ mkvtoolnix-release-59.0.0.mod/src/common/markdown.cpp	2021-07-25 19:38:40.998032246 +0300
+@@ -13,7 +13,7 @@
+ 
+ #if defined(HAVE_CMARK)
+ 
+-# include <cmark.h>
++# include <cmark-gfm.h>
+ 
+ # include "common/markdown.h"
+ 
+diff -uNr mkvtoolnix-release-59.0.0/src/mkvtoolnix-gui/util/system_information.cpp mkvtoolnix-release-59.0.0.mod/src/mkvtoolnix-gui/util/system_information.cpp
+--- mkvtoolnix-release-59.0.0/src/mkvtoolnix-gui/util/system_information.cpp	2021-07-10 13:31:42.000000000 +0300
++++ mkvtoolnix-release-59.0.0.mod/src/mkvtoolnix-gui/util/system_information.cpp	2021-07-25 19:39:06.574395389 +0300
+@@ -10,7 +10,7 @@
+ #include <QSysInfo>
+ 
+ #include <boost/version.hpp>
+-#include <cmark.h>
++#include <cmark-gfm.h>
+ #if defined(HAVE_DVDREAD)
+ # include <dvdread/dvd_reader.h>
+ #endif
