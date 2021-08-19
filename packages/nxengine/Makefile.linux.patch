@@ -1,0 +1,19 @@
+diff -uNr NXEngine/Makefile.linux NXEngine.mod/Makefile.linux
+--- NXEngine/Makefile.linux	2021-08-19 23:01:03.919001521 +0700
++++ NXEngine.mod/Makefile.linux	2021-08-19 23:33:28.336000037 +0700
+@@ -16,11 +16,11 @@
+ DEFINES       = # -D_L10N_CP1251
+ CFLAGS        = -pipe -O2 $(DEFINES)
+ CXXFLAGS      = -pipe -O2 $(DEFINES)
+-INCPATH       = -I/usr/include -I/usr/include/SDL -I/usr/local/include -I/usr/local/include/SDL -I.
++INCPATH       = -I${TERMUX_PREFIX}/include -I${TERMUX_PREFIX}/include/SDL -I${TERMUX_PREFIX}/include -I${TERMUX_PREFIX}/include/SDL -I.
+ LINK          = g++
+-LFLAGS        = -Wl,-O1 -Wl,-rpath,/usr/lib
++LFLAGS        = -Wl,-O1 -Wl,-rpath,${TERMUX_PREFIX}/lib
+ LIBS_SHARED   = -lSDL -lSDL_ttf
+-LIBS_STATIC   = /usr/local/lib/libSDLmain.a /usr/local/lib/libSDL.a /usr/local/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
++LIBS_STATIC   = ${TERMUX_PREFIX}/lib/libSDLmain.a ${TERMUX_PREFIX}/lib/libSDL.a ${TERMUX_PREFIX}/lib/libSDL_ttf.a -ldl -lpthread -lfreetype
+ STRIP         = strip
+ DEL_FILE      = rm -f
+ 
+
