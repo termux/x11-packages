@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Java development kit and runtime"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=17.0
-TERMUX_PKG_REVISION=8
+TERMUX_PKG_REVISION=9
 TERMUX_PKG_SRCURL=https://github.com/termux/openjdk-mobile-termux/archive/2a42d94548738280653d48e55ee8891fdd87b656.tar.gz
 TERMUX_PKG_SHA256=3c86157f56ffa837c66f46a778736627be2c149f3fc55588005c88cc488518bd
 TERMUX_PKG_DEPENDS="freetype, libandroid-shmem, libandroid-spawn, libiconv, zlib, xorgproto, libx11, libxcursor, libxext, cups, fontconfig, libpng, libxrender, libxtst, libxrandr, libxt, libxi"
@@ -77,7 +77,7 @@ termux_step_configure() {
 		--with-zlib=system \
 		--x-includes="$TERMUX_PREFIX/include/X11" \
 		--x-libraries="$TERMUX_PREFIX/lib" \
-        --with-x="$TERMUX_PREFIX/include/X11"
+        	--with-x="$TERMUX_PREFIX/include/X11"
 }
 
 termux_step_make() {
