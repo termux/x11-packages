@@ -11,18 +11,16 @@ TERMUX_PKG_REPLACES="emacs-dev"
 TERMUX_PKG_SERVICE_SCRIPT=("emacsd" 'exec emacs --fg-daemon 2>&1')
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-autodepend
---with-gif=no
---with-gnutls
---with-jpeg=no
+--without-cairo
+--without-imagemagick
+--without-libotf
+--without-xaw3d
+--without-gpm
+--without-dbus
 --without-gconf
 --without-gsettings
---without-lcms2
 --with-x
---with-png=no
---with-tiff=no
---with-xml2
---with-xpm=no
---without-dbus
+--with-x-toolkit=lucid
 --without-selinux
 --with-modules
 --with-pdumper=yes
