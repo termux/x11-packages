@@ -1,4 +1,4 @@
-TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
+TERMUX_PKG_MAINTAINER="@termux"
 
 TERMUX_PKG_HOMEPAGE=https://github.com/twaik/xorg-input-mtev
 TERMUX_PKG_DESCRIPTION="X.org mtev input driver"

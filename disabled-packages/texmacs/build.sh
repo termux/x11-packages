@@ -5,7 +5,7 @@
 TERMUX_PKG_HOMEPAGE=http://www.texmacs.org/
 TERMUX_PKG_DESCRIPTION="Free scientific text editor, inspired by TeX and GNU Emacs."
 TERMUX_PKG_LICENSE="GPL-2.0"
-TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
+TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=1.99.8
 TERMUX_PKG_SRCURL=http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${TERMUX_PKG_VERSION}-src.tar.gz
 TERMUX_PKG_SHA256=7febdbccc6d1ac16d9375a136814259499fb38a49078de2857ab4f47d29a20c0

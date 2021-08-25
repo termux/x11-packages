@@ -1,6 +1,6 @@
 ## This package is not working properly.
 
-TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
+TERMUX_PKG_MAINTAINER="@termux"
 
 TERMUX_PKG_HOMEPAGE=http://eterm.org/
 TERMUX_PKG_DESCRIPTION="A vt102 terminal emulator intended as a replacement for xterm."
