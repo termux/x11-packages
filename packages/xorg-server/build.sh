@@ -47,7 +47,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-dmx
 --disable-xvfb
 --disable-xnest
---disable-xwayland
+--enable-xwayland
 --disable-xwin
 --disable-kdrive
 --enable-xephyr
