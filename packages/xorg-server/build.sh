@@ -10,7 +10,7 @@ TERMUX_PKG_SHA256=914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c
 
 TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 
-TERMUX_PKG_DEPENDS="libandroid-shmem, libdrm, libpciaccess, libpixman, libx11, libxau, libxfont2, libxinerama, libxkbfile, libxshmfence, mesa, openssl, xkeyboard-config, xorg-xkbcomp"
+TERMUX_PKG_DEPENDS="libandroid-shmem, libdrm, libpciaccess, libpixman, libx11, libxau, libxfont2, libxinerama, libxkbfile, libxshmfence, mesa, openssl, xkeyboard-config, xorg-xkbcomp, libwayland, libwayland-protocols"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-composite
