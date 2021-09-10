@@ -15,3 +15,7 @@ termux_step_configure () {
         PREFIX="${TERMUX_PREFIX}"
 }
 
+termux_step_make_install () {
+	cd ${TERMUX_PKG_SRCDIR}
+	cp ./debpac ${TERMUX_PREFIX}/bin
+}
