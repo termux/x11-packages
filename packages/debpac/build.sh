@@ -17,5 +17,5 @@ termux_step_configure () {
 
 termux_step_make_install () {
 	cd ${TERMUX_PKG_SRCDIR}
-	install ./debpac ${TERMUX_PREFIX}/bin
+	install -Dm700 ${TERMUX_PREFIX}/bin ./debpac
 }
