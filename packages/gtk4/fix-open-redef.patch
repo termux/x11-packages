@@ -1,0 +1,21 @@
+diff -uNr gtk-4.3.0/demos/print-editor/print-editor.c gtk-4.3.0.mod/demos/print-editor/print-editor.c
+--- gtk-4.3.0/demos/print-editor/print-editor.c	2021-05-04 07:31:18.000000000 +0700
++++ gtk-4.3.0.mod/demos/print-editor/print-editor.c	2021-09-13 15:56:47.445487327 +0700
+@@ -868,7 +868,7 @@
+ }
+ 
+ static void
+-open (GApplication  *application,
++print_editor_open (GApplication  *application,
+       GFile        **files,
+       int            n_files,
+       const char    *hint)
+@@ -912,7 +912,7 @@
+ 
+   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
+   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+-  g_signal_connect (app, "open", G_CALLBACK (open), NULL);
++  g_signal_connect (app, "open", G_CALLBACK (print_editor_open), NULL);
+ 
+   g_application_run (G_APPLICATION (app), argc, argv);
+ 
