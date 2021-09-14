@@ -9,7 +9,7 @@ TERMUX_PKG_DEPENDS="mesa"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dglx=yes
--Degl=no
+-Degl=yes
 -Dx11=true
 -Dtests=false
 "
