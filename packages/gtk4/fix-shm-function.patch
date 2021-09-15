@@ -1,0 +1,20 @@
+diff -uNr gtk-4.3.0/meson.build gtk-4.3.0.mod/meson.build
+--- gtk-4.3.0/meson.build	2021-05-04 07:31:18.000000000 +0700
++++ gtk-4.3.0.mod/meson.build	2021-09-15 07:23:22.431700489 +0700
+@@ -267,7 +267,6 @@
+     '-Wformat-nonliteral',
+     '-Wformat-security',
+     '-Wignored-qualifiers',
+-    '-Wimplicit-function-declaration',
+     '-Wlogical-op',
+     '-Wmisleading-indentation',
+     '-Wmissing-format-attribute',
+@@ -286,8 +285,6 @@
+     '-Werror=address',
+     '-Werror=array-bounds',
+     '-Werror=empty-body',
+-    '-Werror=implicit',
+-    '-Werror=implicit-fallthrough',
+     '-Werror=init-self',
+     '-Werror=int-to-pointer-cast',
+     '-Werror=main',
