@@ -20,4 +20,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dprint-cups=disabled
 -Dprint-cloudprint=disabled
 "
-LDFLAGS=-landroid-shmem
+LDFLAGS+=-landroid-shmem
