@@ -38,7 +38,7 @@ if grep -q 'M termux-packages' <(git status -s); then
 	echo "You are about to commit these changes:"
 	echo
 	echo "--------------------"
-	git diff --patch "./termux-packages"
+	git --no-pager diff --patch "./termux-packages"
 	echo "--------------------"
 	echo
 	echo "update submodule 'termux-packages'"
