@@ -1,0 +1,9 @@
+TERMUX_PKG_HOMEPAGE=https://github.com/ujjwal96/xwinwrap
+TERMUX_PKG_DESCRIPTION="Xwinwrap allows you to stick most of the apps to your desktop background."
+TERMUX_PKG_LICENSE="MIT"
+TERMUX_PKG_MAINTAINER="Yisus7u7 <jesuspixel5@gmail.com"
+TERMUX_PKG_VERSION=0.9
+_COMMIT=ec32e9b72539de7e1553a4f70345166107b431f7
+TERMUX_PKG_SRCURL=https://github.com/ujjwal96/xwinwrap/archive/${_COMMIT}.zip
+TERMUX_PKG_SHA256=96445de556f2971feadca0609f81af914be770562d93f83576034367b8783ede
+TERMUX_PKG_DEPENDS="libx11, libxrender, giflib"

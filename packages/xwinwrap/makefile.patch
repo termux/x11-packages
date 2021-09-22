@@ -1,0 +1,24 @@
+diff --git a/Makefile b/Makefile
+index ac6981a..33d38d4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,16 +1,16 @@
+ CC = gcc
+ CFLAGS= -g -Wall
+-INCLUDE = -L /usr/lib/x86_64-linux-gnu
++INCLUDE = -L @TERMUX_PREFIX@/lib
+ LIBS = -lX11 -lXext -lXrender
+ 
+ all:
+ 	${CC} xwinwrap.c ${CFLAGS} ${INCLUDE} ${LIBS} -o xwinwrap
+ 
+ install:
+-	install xwinwrap '/usr/local/bin'
++	install xwinwrap '@TERMUX_PREFIX@/bin'
+ 
+ uninstall:
+-	rm -f '/usr/local/bin/xwinwrap'
++	rm -f '@TERMUX_PREFIX@/bin/xwinwrap'
+ 
+ clean:
+ 	rm -f xwinwrap
