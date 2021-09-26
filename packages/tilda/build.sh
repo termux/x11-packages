@@ -10,5 +10,5 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="--silent"
 
 
 termux_step_pre_configure() {
-        NOCONFIFURE=1 ./autogen.sh
+        ./autogen.sh
 }
