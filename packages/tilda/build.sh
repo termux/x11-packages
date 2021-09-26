@@ -8,5 +8,5 @@ TERMUX_PKG_SHA256="f664c17daca2a2900f49de9eb65746ced03c867b02144149ef21260cbcd61
 TERMUX_PKG_DEPENDS="glib, gtk3, libvte, libconfuse, libx11"
 
 termux_step_pre_configure() {
-	./autogen.sh --prefix=$TERMUX_PREFIX
+        NOCONFIFURE=1 ./autogen.sh
 }
