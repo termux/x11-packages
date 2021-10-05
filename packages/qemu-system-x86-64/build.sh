@@ -75,7 +75,7 @@ termux_step_configure() {
 		--disable-stack-protector \
 		--smbd="$TERMUX_PREFIX/bin/smbd" \
 		--enable-coroutine-pool \
-		--audio-drv-list=sdl \
+		--audio-drv-list=pa,sdl \
 		--enable-trace-backends=nop \
 		--disable-guest-agent \
 		--enable-gnutls \
@@ -117,7 +117,6 @@ termux_step_configure() {
 		--enable-usb-redir \
 		--disable-vhost-user \
 		--disable-vhost-user-blk-server \
-		--audio-drv-list=pa,spice,wav \
 		--target-list="$QEMU_TARGETS"
 }
 
