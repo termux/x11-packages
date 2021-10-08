@@ -154,7 +154,7 @@ jobs:
         # Function for deleting temporary directory with uploaded files from
         # the server.
         aptly_delete_dir() {
-          echo "[*] Deleting uploads temporary directory."
+          echo "[$(date +%H:%M:%S)] Deleting uploads temporary directory..."
 
           curl_response=$(
             curl \
@@ -168,7 +168,7 @@ jobs:
           http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
 
           if [ "$http_status_code" != "200" ]; then
-            echo "[!] Server returned $http_status_code code while deleting temporary directory."
+            echo "[$(date +%H:%M:%S)] Warning: server returned $http_status_code code while deleting temporary directory."
           fi
         }
 
@@ -183,18 +183,23 @@ jobs:
               --request POST \
               --form file=@${filename} \
               --write-out "|%{http_code}" \
-              https://packages.termux.org/aptly-api/files/${REPOSITORY_NAME}-${{ github.sha }}
+              https://packages.termux.org/aptly-api/files/${REPOSITORY_NAME}-${{ github.sha }} || true
           )
 
           http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
 
           if [ "$http_status_code" = "200" ]; then
-            echo "[*] Uploaded: $(echo "$curl_response" | cut -d'|' -f1 | jq -r '.[]' | cut -d'/' -f2)"
+            echo "[$(date +%H:%M:%S)] Uploaded: $(echo "$curl_response" | cut -d'|' -f1 | jq -r '.[]' | cut -d'/' -f2)"
+          elif [ "$http_status_code" = "000" ]; then
+            echo "[$(date +%H:%M:%S)]: Failed to upload '$filename'. Server/proxy dropped connection during upload."
+            echo "[$(date +%H:%M:%S)]: Aborting any further uploads."
+            aptly_delete_dir
+            exit 1
           else
             # Manually cleaning up the temporary directory to reclaim disk space.
             # Don't rely on scheduled server-side scripts.
-            echo "[!] Failed to upload '$filename'. Server returned $http_status_code code."
-            echo "[!] Aborting any further uploads."
+            echo "[$(date +%H:%M:%S)] Error: failed to upload '$filename'. Server returned $http_status_code code."
+            echo "[$(date +%H:%M:%S)] Aborting any further uploads."
             aptly_delete_dir
             exit 1
           fi
@@ -205,51 +210,79 @@ jobs:
 
         # Publishing repository changes.
         if [ "$uploaded_files" = "true" ]; then
-          echo "[*] Adding packages to repository '$REPOSITORY_NAME'..."
+          echo "[$(date +%H:%M:%S)] Adding packages to repository '$REPOSITORY_NAME'..."
 
-          curl_response=$(
-            curl \
-              --silent \
-              --user "${{ secrets.APTLY_API_AUTH }}" \
-              --request POST \
-              --write-out "|%{http_code}" \
-              https://packages.termux.org/aptly-api/repos/${REPOSITORY_NAME}/file/${REPOSITORY_NAME}-${{ github.sha }} || true
-          )
+          # Retry up to 5 times.
+          http_status_code=""
+          for _ in {1..5}; do
+            curl_response=$(
+              set +e
+              curl \
+                --silent \
+                --user "${{ secrets.APTLY_API_AUTH }}" \
+                --request POST \
+                --write-out "|%{http_code}" \
+                https://packages.termux.org/aptly-api/repos/${REPOSITORY_NAME}/file/${REPOSITORY_NAME}-${{ github.sha }} || true
+            )
+            http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
 
-          http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
+            if [ "$http_status_code" = "000" ]; then
+              echo "[$(date +%H:%M:%S)] Warning: server/proxy has dropped connection, retrying (adding packages)..."
+              continue
+            else
+              break
+            fi
+          done
 
           if [ "$http_status_code" = "200" ]; then
             warnings=$(echo "$curl_response" | cut -d'|' -f1 | jq '.Report.Warnings' | jq -r '.[]')
             if [ -n "$warnings" ]; then
-              echo "[!] WARNINGS (NON-CRITICAL):"
+              echo "[$(date +%H:%M:%S)] APTLY WARNINGS (NON-CRITICAL):"
               echo
               echo "$warnings"
               echo
             fi
+          else
+            echo "[$(date +%H:%M:%S)] Error: got http_status_code == '$http_status_code', packages may not appear in repository."
           fi
+
           # Usually temporary directory is deleted automatically, but in certain cases it is left.
           aptly_delete_dir
 
           # Final part to make changes appear in web root.
-          echo "[*] Publishing repository changes..."
-          set +e
-          curl \
-            --silent \
-            --user "${{ secrets.APTLY_API_AUTH }}" \
-            --header 'Content-Type: application/json' \
-            --request PUT \
-            --data '{"Signing": {"Passphrase": "${{ secrets.GPG_PASSPHRASE }}"}}' \
-            https://packages.termux.org/aptly-api/publish/${REPOSITORY_NAME}/${REPOSITORY_DISTRIBUTION}
-          exit_code=$?
-          echo
+          echo "[$(date +%H:%M:%S)] Publishing repository changes..."
+          # Retry up to 5 times.
+          http_status_code=""
+          for _ in {1..5}; do
+            curl_response=$(
+              set +e
+              curl \
+                --silent \
+                --user "${{ secrets.APTLY_API_AUTH }}" \
+                --header 'Content-Type: application/json' \
+                --request PUT \
+                --data '{"Signing": {"Passphrase": "${{ secrets.GPG_PASSPHRASE }}"}}' \
+                --write-out '|%{http_code}' \
+                https://packages.termux.org/aptly-api/publish/${REPOSITORY_NAME}/${REPOSITORY_DISTRIBUTION} || true
+            )
+            http_status_code=$(echo "$curl_response" | cut -d'|' -f2)
 
-          if [ "$exit_code" = 0 ]; then
-            echo "[*] Repository updated successfully."
-          elif [ "$exit_code" = 52 ]; then
-            echo "[!] Repository update takes more time than expected, server returned empty response."
-            echo "[!] This is expected if large amount of data has been submitted."
+            if [ "$http_status_code" = "000" ]; then
+              echo "[$(date +%H:%M:%S)] Warning: server/proxy has dropped connection, retrying (publishing changes)..."
+              continue
+            else
+              break
+            fi
+          done
+
+          if [ "$http_status_code" = "200" ]; then
+            echo "[$(date +%H:%M:%S)] Repository has been updated successfully."
+          elif [ "$http_status_code" = "000" ]; then
+            echo "[$(date +%H:%M:%S)] Error: server/proxy has dropped connection."
+            # Ignore - nothing can be done with that unless we change proxy.
+            #exit 1
           else
-            echo "[!] curl exited with error code $exit_status."
-            exit "$exit_code"
+            echo "[$(date +%H:%M:%S)] Error: got http_status_code == '$http_status_code'"
+            exit 1
           fi
         fi
