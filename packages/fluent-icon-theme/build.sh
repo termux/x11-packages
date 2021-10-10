@@ -11,5 +11,5 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 
 termux_step_make_install(){
-	./install.sh -b -d ${TERMUX_PREFIX}/share/icons
+	./install.sh -b -d=${TERMUX_PREFIX}/share/icons
 }
