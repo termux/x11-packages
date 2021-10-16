@@ -5,7 +5,7 @@
  #define WriteHostDWordToLittleEndian(hostPtr, nativeVar32) \
      *((Bit32u*)(hostPtr)) = (nativeVar32)
 -#ifdef ANDROID
-+#if defined ANDROID || (defined __ANDROID__ && defined __arm__)
++#if defined ANDROID | (defined __ANDROID__ && defined __arm__)
  // Resolve problems with unaligned access
  #define WriteHostQWordToLittleEndian(hostPtr, nativeVar64) { \
      ((Bit8u *)(hostPtr))[0] = (Bit8u) (nativeVar64); \
@@ -14,7 +14,7 @@
  #define ReadHostDWordFromLittleEndian(hostPtr, nativeVar32) \
      (nativeVar32) = *((Bit32u*)(hostPtr))
 -#ifdef ANDROID
-+#if defined ANDROID || (defined __ANDROID__ && defined __arm__)
++#if defined ANDROID | (defined __ANDROID__ && defined __arm__)
  // Resolve problems with unaligned access
  #define ReadHostQWordFromLittleEndian(hostPtr, nativeVar64) { \
      (nativeVar64) = ((Bit64u) ((Bit8u *)(hostPtr))[0]) | \
