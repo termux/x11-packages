@@ -25,4 +25,6 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-e1000
 --enable-clgd54xx
 --enable-voodoo
+CFLAGS+="-DANDROID"
+CXXFLAGS+="-DANDROID"
 "
