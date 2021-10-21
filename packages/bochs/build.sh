@@ -24,6 +24,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-e1000
 --enable-clgd54xx
 --enable-voodoo
+--disable-readline
 "
 
 termux_step_pre_configure() {
