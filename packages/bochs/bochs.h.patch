@@ -1,0 +1,49 @@
+--- bochs.h.orig	2021-10-22 00:29:49.489997862 +0300
++++ bochs.h	2021-10-22 00:34:26.959997663 +0300
+@@ -526,13 +526,13 @@
+ 
+ #ifdef BX_LITTLE_ENDIAN
+ 
+-#define WriteHostWordToLittleEndian(hostPtr, nativeVar16) \
++WriteHostWordToLittleEndian(hostPtr, nativeVar16) \
+     *((Bit16u*)(hostPtr)) = (nativeVar16)
+-#define WriteHostDWordToLittleEndian(hostPtr, nativeVar32) \
++WriteHostDWordToLittleEndian(hostPtr, nativeVar32) \
+     *((Bit32u*)(hostPtr)) = (nativeVar32)
+ #ifdef ANDROID
+ // Resolve problems with unaligned access
+-#define WriteHostQWordToLittleEndian(hostPtr, nativeVar64) { \
++WriteHostQWordToLittleEndian(hostPtr, nativeVar64) { \
+     ((Bit8u *)(hostPtr))[0] = (Bit8u) (nativeVar64); \
+     ((Bit8u *)(hostPtr))[1] = (Bit8u) ((nativeVar64)>>8); \
+     ((Bit8u *)(hostPtr))[2] = (Bit8u) ((nativeVar64)>>16); \
+@@ -543,16 +543,16 @@
+     ((Bit8u *)(hostPtr))[7] = (Bit8u) ((nativeVar64)>>56); \
+ }
+ #else
+-#define WriteHostQWordToLittleEndian(hostPtr, nativeVar64) \
++WriteHostQWordToLittleEndian(hostPtr, nativeVar64) \
+     *((Bit64u*)(hostPtr)) = (nativeVar64)
+ #endif
+-#define ReadHostWordFromLittleEndian(hostPtr, nativeVar16) \
++ReadHostWordFromLittleEndian(hostPtr, nativeVar16) \
+     (nativeVar16) = *((Bit16u*)(hostPtr))
+-#define ReadHostDWordFromLittleEndian(hostPtr, nativeVar32) \
++ReadHostDWordFromLittleEndian(hostPtr, nativeVar32) \
+     (nativeVar32) = *((Bit32u*)(hostPtr))
+ #ifdef ANDROID
+ // Resolve problems with unaligned access
+-#define ReadHostQWordFromLittleEndian(hostPtr, nativeVar64) { \
++ReadHostQWordFromLittleEndian(hostPtr, nativeVar64) { \
+     (nativeVar64) = ((Bit64u) ((Bit8u *)(hostPtr))[0]) | \
+     (((Bit64u) ((Bit8u *)(hostPtr))[1])<<8) | \
+     (((Bit64u) ((Bit8u *)(hostPtr))[2])<<16) | \
+@@ -563,7 +563,7 @@
+     (((Bit64u) ((Bit8u *)(hostPtr))[7])<<56); \
+ }
+ #else
+-#define ReadHostQWordFromLittleEndian(hostPtr, nativeVar64) \
++ReadHostQWordFromLittleEndian(hostPtr, nativeVar64) \
+     (nativeVar64) = *((Bit64u*)(hostPtr))
+ #endif
+ 
