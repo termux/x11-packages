@@ -1,5 +1,5 @@
---- bochs.h.orig
-+++ bochs.h
+--- a/bochs.h
++++ b/bochs.h
 @@ -526,13 +526,13 @@
  
  #ifdef BX_LITTLE_ENDIAN
