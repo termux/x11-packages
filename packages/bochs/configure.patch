@@ -1,124 +1,70 @@
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -177,7 +177,7 @@
- bochs@EXE@: @IODEV_LIB_VAR@ @DISPLAY_LIB_VAR@ @HDIMAGE_LIB_VAR@ @USB_LIB_VAR@ @NETWORK_LIB_VAR@ @SOUND_LIB_VAR@ \
- 		@DEBUGGER_VAR@ cpu/libcpu.a @AVX_LIB_VAR@ cpu/cpudb/libcpudb.a memory/libmemory.a \
- 		gui/libgui.a @INSTRUMENT_VAR@ $(BX_OBJS) \
--		$(SIMX86_OBJS) @FPU_VAR@ @GDBSTUB_VAR@ @PLUGIN_VAR@
-+		$(SIMX86_OBJS) @FPU_VAR@ @GDBSTUB_VAR@ $(filter-out -l%,@PLUGIN_VAR@)
- 	@LINK@ @EXPORT_DYNAMIC@ $(BX_OBJS) $(SIMX86_OBJS) \
- 		@IODEV_LIB_VAR@ @DISPLAY_LIB_VAR@ @HDIMAGE_LIB_VAR@ @USB_LIB_VAR@ @NETWORK_LIB_VAR@ @SOUND_LIB_VAR@ \
- 		@DEBUGGER_VAR@ cpu/libcpu.a @AVX_LIB_VAR@ cpu/cpudb/libcpudb.a \
---- a/configure.in
-+++ b/configure.in
-@@ -145,8 +145,8 @@
-   RANLIB="echo"
- fi
- 
--AC_PATH_PROG(PKGCONFIG, pkg-config, not_found)
--if test "$PKGCONFIG" = not_found; then
-+PKG_PROG_PKG_CONFIG
-+if test "x$PKG_CONFIG" = x; then
-   AC_PATH_XTRA
- fi
- 
-@@ -997,10 +997,10 @@
-     AC_MSG_CHECKING(if readline works without -lcurses)
-     OLD_LIBS=$LIBS
-     LIBS="$LIBS -lreadline"
--    AC_TRY_RUN([
-+    AC_TRY_LINK([
-       #include <stdio.h>
-       #include <readline/readline.h>
+diff -uNr bochs-2.6.9/configure bochs-2.6.9.mod/configure
+--- bochs-2.6.9/configure       2017-04-09 14:46:13.000000000 +0800
++++ bochs-2.6.9.mod/configure   2019-08-26 20:49:05.555477600 +0800
+@@ -22636,66 +22636,9 @@
+
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if readline works without -lcurses" >&5
+ $as_echo_n "checking if readline works without -lcurses... " >&6; }
+-    OLD_LIBS=$LIBS
+-    LIBS="$LIBS -lreadline"
+-    if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-      #include <stdio.h>
+-      #include <readline/readline.h>
 -      int main() { rl_initialize(); exit(0); }
-+      ],[ rl_initialize();
-       ],
-       [ AC_MSG_RESULT(yes)
-         rl_without_curses_ok=yes ],
-@@ -1008,10 +1008,10 @@
-     )
-     AC_MSG_CHECKING(if readline works with -lcurses)
-     LIBS="$LIBS -lcurses"
--    AC_TRY_RUN([
-+    AC_TRY_LINK([
-       #include <stdio.h>
-       #include <readline/readline.h>
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+         rl_without_curses_ok=yes
+-else
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+-
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if readline works with -lcurses" >&5
+-$as_echo_n "checking if readline works with -lcurses... " >&6; }
+-    LIBS="$LIBS -lcurses"
+-    if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-      #include <stdio.h>
+-      #include <readline/readline.h>
 -      int main() { rl_initialize(); exit(0); }
-+      ],[ rl_initialize();
-       ],
-       [AC_MSG_RESULT(yes)
-        rl_with_curses_ok=yes ],
-@@ -2381,9 +2381,9 @@
-     XRANDR_LIB='-lXrandr'
-     ])
- 
--  if test "$PKGCONFIG" != not_found; then
--    X_CFLAGS="`pkg-config --cflags x11`"
--    X_LIBS="`pkg-config --libs x11` $XPM_LIB $XRANDR_LIB"
-+  if test "x$PKG_CONFIG" != x; then
-+    X_CFLAGS="`$PKG_CONFIG --cflags x11`"
-+    X_LIBS="`$PKG_CONFIG --libs x11` $XPM_LIB $XRANDR_LIB"
-   else
-     X_LIBS="$X_LIBS -lX11 $XPM_LIB $XRANDR_LIB"
-   fi
-@@ -2593,13 +2593,13 @@
-   WX_CFLAGS="`$WX_CONFIG --cflags`"
-   WX_CXXFLAGS="`$WX_CONFIG --cxxflags`"
-   if test "$wx_needs_gdk_version" = 2; then
--    GDK_CFLAGS="`pkg-config --cflags gdk-2.0`"
-+    GDK_CFLAGS="`$PKG_CONFIG --cflags gdk-2.0`"
-     WX_CFLAGS="$WX_CFLAGS $GDK_CFLAGS"
-     WX_CXXFLAGS="$WX_CXXFLAGS $GDK_CFLAGS"
-     AC_DEFINE(WX_GDK_VERSION, 2)
-   fi
-   if test "$wx_needs_gdk_version" = 3; then
--    GDK_CFLAGS="`pkg-config --cflags gdk-3.0`"
-+    GDK_CFLAGS="`$PKG_CONFIG --cflags gdk-3.0`"
-     WX_CFLAGS="$WX_CFLAGS $GDK_CFLAGS"
-     WX_CXXFLAGS="$WX_CXXFLAGS $GDK_CFLAGS"
-     AC_DEFINE(WX_GDK_VERSION, 3)
-@@ -2656,20 +2656,20 @@
- bx_have_gtk_version=0
- if test "$needs_gtk2" = 1; then
-   # pkg-config is required to set TOOLKIT_CXXFLAGS and LIBS
--  if test "$PKGCONFIG" != not_found; then
-+  if test "x$PKG_CONFIG" != x; then
-     # if wxGTK is based on GTK 3.0, use it for gui debugger to avoid conflicts
-     if test "$with_wx" = yes -a "$wx_needs_gdk_version" = 3; then
--      pkg-config --exists gtk+-3.0
-+      $PKG_CONFIG --exists gtk+-3.0
-       if test x$? = x0; then
--        TOOLKIT_CXXFLAGS="`pkg-config --cflags gtk+-3.0`"
--        LIBS="$LIBS `pkg-config --libs gtk+-3.0`"
-+        TOOLKIT_CXXFLAGS="`$PKG_CONFIG --cflags gtk+-3.0`"
-+        LIBS="$LIBS `$PKG_CONFIG --libs gtk+-3.0`"
-         bx_have_gtk_version=3
-       fi
-     else
--      pkg-config --exists gtk+-2.0
-+      $PKG_CONFIG --exists gtk+-2.0
-       if test x$? = x0; then
--        TOOLKIT_CXXFLAGS="`pkg-config --cflags gtk+-2.0`"
--        LIBS="$LIBS `pkg-config --libs gtk+-2.0`"
-+        TOOLKIT_CXXFLAGS="`$PKG_CONFIG --cflags gtk+-2.0`"
-+        LIBS="$LIBS `$PKG_CONFIG --libs gtk+-2.0`"
-         bx_have_gtk_version=2
-       fi
-     fi
-@@ -2930,11 +2930,11 @@
- AC_SUBST(EXPORT_DYNAMIC)
- 
- if test "$use_curses" = yes; then
--  if test "$PKGCONFIG" != not_found; then
--    AC_CHECK_LIB(curses, mvaddch, GUI_LINK_OPTS_TERM="`pkg-config --libs curses`")
--    AC_CHECK_LIB(ncurses, mvaddch, GUI_LINK_OPTS_TERM="`pkg-config --libs ncurses`")
--    AC_CHECK_LIB(termlib, mvaddch, GUI_LINK_OPTS_TERM="`pkg-config --libs termlib`")
--    AC_CHECK_LIB(pdcurses, mvaddch, GUI_LINK_OPTS_TERM="`pkg-config --libs pdcurses`")
-+  if test "x$PKG_CONFIG" != x; then
-+    AC_CHECK_LIB(curses, mvaddch, GUI_LINK_OPTS_TERM="`$PKG_CONFIG --libs curses`")
-+    AC_CHECK_LIB(ncurses, mvaddch, GUI_LINK_OPTS_TERM="`$PKG_CONFIG --libs ncurses`")
-+    AC_CHECK_LIB(termlib, mvaddch, GUI_LINK_OPTS_TERM="`$PKG_CONFIG --libs termlib`")
-+    AC_CHECK_LIB(pdcurses, mvaddch, GUI_LINK_OPTS_TERM="`$PKG_CONFIG --libs pdcurses`")
-   else
-     AC_CHECK_LIB(curses, mvaddch, GUI_LINK_OPTS_TERM='-lcurses')
-     AC_CHECK_LIB(ncurses, mvaddch, GUI_LINK_OPTS_TERM='-lncurses')
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-       rl_with_curses_ok=yes
+-else
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+-
+-    LIBS=$OLD_LIBS
+
+     if test "$rl_without_curses_ok" = yes; then
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
