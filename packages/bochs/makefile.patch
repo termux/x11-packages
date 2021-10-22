@@ -1,0 +1,617 @@
+--- a/host/linux/pcidev/Makefile.in
++++ b/host/linux/pcidev/Makefile.in
+@@ -17,7 +17,7 @@
+ 
+ PCIDEV_MODULE_MAKE_ALL = @PCIDEV_MODULE_MAKE_ALL@
+ 
+-CFLAGS = -Wstrict-prototypes -Wno-trigraphs -g -fno-strict-aliasing -fno-common -D__KERNEL__ -DMODULE -I$(KERNELDIR)/include -O -Wall
++CFLAGS = @CFLAGS@ -Wstrict-prototypes -Wno-trigraphs -g -fno-strict-aliasing -fno-common -D__KERNEL__ -DMODULE -I$(KERNELDIR)/include -O -Wall
+ 
+ 
+ .PHONY : all
+--- a/gui/Makefile.in
++++ b/gui/Makefile.in
+@@ -40,6 +40,7 @@
+ 
+ CXX = @CXX@
+ CXXFLAGS = $(BX_INCDIRS) @CXXFLAGS@  @GUI_CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ LOCAL_CXXFLAGS = @TOOLKIT_CXXFLAGS@
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -116,54 +117,54 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ libbx_%_gui.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ libbx_x_gui.la: x.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_X)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_X)
+ 
+ libbx_sdl_gui.la: sdl.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_SDL)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_SDL)
+ 
+ libbx_sdl2_gui.la: sdl2.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_SDL2)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_SDL2)
+ 
+ libbx_rfb_gui.la: rfb.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_RFB)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_RFB)
+ 
+ libbx_vncsrv_gui.la: vncsrv.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_VNCSRV)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_VNCSRV)
+ 
+ libbx_amigaos_gui.la: amigaos.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_AMIGAOS)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_AMIGAOS)
+ 
+ libbx_win32_gui.la: win32.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_WIN32)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_WIN32)
+ 
+ libbx_macos_gui.la: macos.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_MACOS)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_MACOS)
+ 
+ libbx_carbon_gui.la: carbon.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_CARBON)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_CARBON)
+ 
+ libbx_nogui_gui.la: nogui.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_NOGUI)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_NOGUI)
+ 
+ libbx_term_gui.la: term.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_TERM)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH) $(GUI_LINK_OPTS_TERM)
+ 
+ libbx_textconfig.la: textconfig.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ # special link rules for plugins that require more than one object file
+ libbx_wx_gui.la: $(GUI_OBJS_WX:.o=.lo) $(GUI_OBJS_WX_SUPPORT:.o=.lo)
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $(GUI_OBJS_WX:.o=.lo) $(GUI_OBJS_WX_SUPPORT:.o=.lo) -o $@ -rpath $(PLUGIN_PATH)  $(GUI_LINK_OPTS_WX)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $(GUI_OBJS_WX:.o=.lo) $(GUI_OBJS_WX_SUPPORT:.o=.lo) -o $@ -rpath $(PLUGIN_PATH)  $(GUI_LINK_OPTS_WX)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%_gui.dll: %.o
+--- a/iodev/Makefile.in
++++ b/iodev/Makefile.in
+@@ -39,7 +39,8 @@
+ @SET_MAKE@
+ 
+ CXX = @CXX@
+-CXXFLAGS = $(BX_INCDIRS) @CXXFLAGS@ @GUI_CXXFLAGS@
++CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = $(BX_INCDIRS) @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -111,30 +112,30 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ pcidev.o : pcidev.@CPP_SUFFIX@
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) $(PCIDEV_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $(PCIDEV_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ pcidev.lo : pcidev.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $(PCIDEV_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $(PCIDEV_CXXFLAGS) $< -o $@
+ 
+ libbx_%.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ # special link rules for plugins that require more than one object file
+ libbx_keyboard.la: keyboard.lo scancodes.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module keyboard.lo scancodes.lo -o libbx_keyboard.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module keyboard.lo scancodes.lo -o libbx_keyboard.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_pit.la: pit82c54.lo pit.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module pit82c54.lo pit.lo -o libbx_pit.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module pit82c54.lo pit.lo -o libbx_pit.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_serial.la: serial.lo serial_raw.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module serial.lo serial_raw.lo -o libbx_serial.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module serial.lo serial_raw.lo -o libbx_serial.la -rpath $(PLUGIN_PATH)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%.dll: %.o
+--- a/bios/Makefile.in
++++ b/bios/Makefile.in
+@@ -28,6 +28,7 @@
+ 
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -51,7 +52,7 @@
+ 
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) -c $(BX_INCDIRS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) -c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ bios: biossums BIOS-bochs-latest BIOS-bochs-legacy BIOS-qemu-latest
+--- a/bx_debug/Makefile.in
++++ b/bx_debug/Makefile.in
+@@ -31,6 +31,7 @@
+ CFLAGS = @CFLAGS@ @GUI_CFLAGS@
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -64,11 +65,11 @@
+ all: libdebug.a
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c $(BX_INCDIRS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ .c.o:
+-	$(CC) @DASH@c $(BX_INCDIRS) $(CFLAGS) @CFP@$< @OFP@$@
++	$(CC) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS) @CFP@$< @OFP@$@
+ 
+ 
+ 
+--- a/cpu/cpudb/Makefile.in
++++ b/cpu/cpudb/Makefile.in
+@@ -28,6 +28,7 @@
+ 
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -69,7 +70,7 @@
+ all: libcpudb.a
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c $(BX_INCDIRS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ libcpudb.a: $(CPUDB_OBJS)
+--- a/cpu/Makefile.in
++++ b/cpu/Makefile.in
+@@ -28,6 +28,7 @@
+ 
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -143,7 +144,7 @@
+ all: libcpu.a
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c $(BX_INCDIRS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ libcpu.a: $(OBJS) @OBJS64@
+--- a/instrument/example0/Makefile.in
++++ b/instrument/example0/Makefile.in
+@@ -28,6 +28,7 @@
+ CFLAGS = @CFLAGS@
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -47,11 +48,11 @@
+ BX_INCDIRS = -I../.. -I$(srcdir)/../.. -I. -I$(srcdir)/.
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) -c $(CXXFLAGS) $(BX_INCDIRS) @CXXFP@$< @OFP@$@
++	$(CXX) -c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ .c.o:
+-	$(CC) -c $(CFLAGS) $(BX_INCDIRS) @CFP@$< @OFP@$@
++	$(CC) -c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS) @CFP@$< @OFP@$@
+ 
+ 
+ 
+--- a/instrument/example1/Makefile.in
++++ b/instrument/example1/Makefile.in
+@@ -29,6 +29,7 @@
+ CFLAGS = @CFLAGS@
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -48,11 +49,11 @@
+ BX_INCDIRS = -I../.. -I$(srcdir)/../.. -I. -I$(srcdir)/.
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) -c $(CXXFLAGS) $(BX_INCDIRS) @CXXFP@$< @OFP@$@
++	$(CXX) -c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ .c.o:
+-	$(CC) -c $(CFLAGS) $(BX_INCDIRS) @CFP@$< @OFP@$@
++	$(CC) -c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS) @CFP@$< @OFP@$@
+ 
+ 
+ 
+--- a/instrument/example2/Makefile.in
++++ b/instrument/example2/Makefile.in
+@@ -29,6 +29,7 @@
+ CFLAGS = @CFLAGS@
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -48,11 +49,11 @@
+ BX_INCDIRS = -I../.. -I$(srcdir)/../.. -I. -I$(srcdir)/.
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) -c $(CXXFLAGS) $(BX_INCDIRS) @CXXFP@$< @OFP@$@
++	$(CXX) -c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ .c.o:
+-	$(CC) -c $(CFLAGS) $(BX_INCDIRS) @CFP@$< @OFP@$@
++	$(CC) -c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS) @CFP@$< @OFP@$@
+ 
+ 
+ 
+--- a/instrument/stubs/Makefile.in
++++ b/instrument/stubs/Makefile.in
+@@ -29,6 +29,7 @@
+ CFLAGS = @CFLAGS@
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -48,11 +49,11 @@
+ BX_INCDIRS = -I../.. -I$(srcdir)/../.. -I. -I$(srcdir)/.
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) -c $(CXXFLAGS) $(BX_INCDIRS) @CXXFP@$< @OFP@$@
++	$(CXX) -c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ .c.o:
+-	$(CC) -c $(CFLAGS) $(BX_INCDIRS) @CFP@$< @OFP@$@
++	$(CC) -c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS) @CFP@$< @OFP@$@
+ 
+ 
+ 
+--- a/iodev/hdimage/Makefile.in
++++ b/iodev/hdimage/Makefile.in
+@@ -39,7 +39,8 @@
+ @SET_MAKE@
+ 
+ CXX = @CXX@
+-CXXFLAGS = $(BX_INCDIRS) @CXXFLAGS@ @GUI_CXXFLAGS@
++CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = $(BX_INCDIRS) @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -84,14 +85,14 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ libbx_%_img.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%_img.dll: %.o
+--- a/iodev/network/Makefile.in
++++ b/iodev/network/Makefile.in
+@@ -39,7 +39,8 @@
+ @SET_MAKE@
+ 
+ CXX = @CXX@
+-CXXFLAGS = $(BX_INCDIRS) @CXXFLAGS@ @GUI_CXXFLAGS@
++CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = $(BX_INCDIRS) @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -109,21 +110,21 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ libbx_%.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ # special link rules for plugins that require more than one object file
+ libbx_eth_slirp.la: eth_slirp.lo $(SLIRP_OBJS:.o=.lo)
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module eth_slirp.lo $(SLIRP_OBJS:.o=.lo) -o libbx_eth_slirp.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module eth_slirp.lo $(SLIRP_OBJS:.o=.lo) -o libbx_eth_slirp.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_eth_vnet.la: eth_vnet.lo netutil.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module eth_vnet.lo netutil.lo -o libbx_eth_vnet.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module eth_vnet.lo netutil.lo -o libbx_eth_vnet.la -rpath $(PLUGIN_PATH)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%.dll: %.o
+--- a/iodev/sound/Makefile.in
++++ b/iodev/sound/Makefile.in
+@@ -39,7 +39,8 @@
+ @SET_MAKE@
+ 
+ CXX = @CXX@
+-CXXFLAGS = $(BX_INCDIRS) @CXXFLAGS@ @GUI_CXXFLAGS@
++CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = $(BX_INCDIRS) @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -88,24 +89,24 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ libbx_%.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ # special link rules for plugins that require more than one object file
+ libbx_sb16.la: sb16.lo opl.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module sb16.lo opl.lo -o libbx_sb16.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module sb16.lo opl.lo -o libbx_sb16.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_soundalsa.la: soundalsa.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module soundalsa.lo -o libbx_soundalsa.la -rpath $(PLUGIN_PATH) $(ALSA_SOUND_LINK_OPTS)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module soundalsa.lo -o libbx_soundalsa.la -rpath $(PLUGIN_PATH) $(ALSA_SOUND_LINK_OPTS)
+ 
+ libbx_soundsdl.la: soundsdl.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module soundsdl.lo -o libbx_soundsdl.la -rpath $(PLUGIN_PATH) $(SDL_SOUND_LINK_OPTS)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module soundsdl.lo -o libbx_soundsdl.la -rpath $(PLUGIN_PATH) $(SDL_SOUND_LINK_OPTS)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%.dll: %.o
+--- a/iodev/usb/Makefile.in
++++ b/iodev/usb/Makefile.in
+@@ -39,7 +39,8 @@
+ @SET_MAKE@
+ 
+ CXX = @CXX@
+-CXXFLAGS = $(BX_INCDIRS) @CXXFLAGS@ @GUI_CXXFLAGS@
++CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = $(BX_INCDIRS) @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -88,24 +89,24 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ libbx_%.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ # special link rules for plugins that require more than one object file
+ libbx_usb_msd.la: usb_msd.lo scsi_device.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module usb_msd.lo scsi_device.lo -o libbx_usb_msd.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module usb_msd.lo scsi_device.lo -o libbx_usb_msd.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_usb_uhci.la: usb_uhci.lo uhci_core.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module usb_uhci.lo uhci_core.lo -o libbx_usb_uhci.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module usb_uhci.lo uhci_core.lo -o libbx_usb_uhci.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_usb_ehci.la: usb_ehci.lo uhci_core.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module usb_ehci.lo uhci_core.lo -o libbx_usb_ehci.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module usb_ehci.lo uhci_core.lo -o libbx_usb_ehci.la -rpath $(PLUGIN_PATH)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%.dll: %.o
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -86,6 +86,7 @@
+ CXX = @CXX@
+ CFLAGS = @CFLAGS@ @GUI_CFLAGS@ $(MCH_CFLAGS) $(FLA_FLAGS) @DEFINE_PLUGIN_PATH@ -DBX_SHARE_PATH='"$(sharedir)"'
+ CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@ $(MCH_CFLAGS) $(FLA_FLAGS) @DEFINE_PLUGIN_PATH@ -DBX_SHARE_PATH='"$(sharedir)"'
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -164,9 +165,9 @@
+ 
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c $(BX_INCDIRS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ .c.o:
+-	$(CC) @DASH@c $(BX_INCDIRS) $(CFLAGS) $(FPU_FLAGS) $< @OFP@$@
++	$(CC) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS) $(FPU_FLAGS) $< @OFP@$@
+ 
+ 
+ all: @PRIMARY_TARGET@ @PLUGIN_TARGET@ bximage@EXE@ @OPTIONAL_TARGET@ @BUILD_DOCBOOK_VAR@
+@@ -256,39 +257,39 @@
+ # compile with console CXXFLAGS, not gui CXXFLAGS
+ misc/bximage.o: $(srcdir)/misc/bximage.cc $(srcdir)/misc/bswap.h \
+   $(srcdir)/misc/bxcompat.h $(srcdir)/iodev/hdimage/hdimage.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) $(CXXFLAGS_CONSOLE) $(srcdir)/misc/bximage.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/misc/bximage.cc @OFP@$@
+ 
+ misc/hdimage.o: $(srcdir)/iodev/hdimage/hdimage.cc \
+   $(srcdir)/iodev/hdimage/hdimage.h $(srcdir)/misc/bxcompat.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/hdimage.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/hdimage.cc @OFP@$@
+ 
+ misc/vmware3.o: $(srcdir)/iodev/hdimage/vmware3.cc $(srcdir)/iodev/hdimage/vmware3.h \
+   $(srcdir)/iodev/hdimage/hdimage.h $(srcdir)/misc/bxcompat.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vmware3.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vmware3.cc @OFP@$@
+ 
+ misc/vmware4.o: $(srcdir)/iodev/hdimage/vmware4.cc $(srcdir)/iodev/hdimage/vmware4.h \
+   $(srcdir)/iodev/hdimage/hdimage.h $(srcdir)/misc/bxcompat.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vmware4.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vmware4.cc @OFP@$@
+ 
+ misc/vpc.o: $(srcdir)/iodev/hdimage/vpc.cc $(srcdir)/iodev/hdimage/vpc.h \
+   $(srcdir)/iodev/hdimage/hdimage.h $(srcdir)/misc/bxcompat.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vpc.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vpc.cc @OFP@$@
+ 
+ misc/vbox.o: $(srcdir)/iodev/hdimage/vbox.cc $(srcdir)/iodev/hdimage/vbox.h \
+   $(srcdir)/iodev/hdimage/hdimage.h $(srcdir)/misc/bxcompat.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vbox.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) @BXIMAGE_FLAG@ $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/hdimage/vbox.cc @OFP@$@
+ 
+ misc/bxhub.o: $(srcdir)/misc/bxhub.cc $(srcdir)/iodev/network/netmod.h \
+   $(srcdir)/iodev/network/netutil.h $(srcdir)/misc/bxcompat.h
+-	$(CC) @DASH@c $(BX_INCDIRS) $(CXXFLAGS_CONSOLE) $(srcdir)/misc/bxhub.cc @OFP@$@
++	$(CC) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/misc/bxhub.cc @OFP@$@
+ 
+ misc/netutil.o: $(srcdir)/iodev/network/netutil.cc $(srcdir)/iodev/network/netutil.h \
+   $(srcdir)/iodev/network/netmod.h $(srcdir)/misc/bxcompat.h
+-	$(CXX) @DASH@c $(BX_INCDIRS) @BXHUB_FLAG@ $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/network/netutil.cc @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) @BXHUB_FLAG@ $(CPPFLAGS) $(CXXFLAGS_CONSOLE) $(srcdir)/iodev/network/netutil.cc @OFP@$@
+ 
+ # compile with console CFLAGS, not gui CXXFLAGS
+ misc/niclist.o: $(srcdir)/misc/niclist.c
+-	$(CC) @DASH@c $(BX_INCDIRS) $(CFLAGS_CONSOLE) $(srcdir)/misc/niclist.c @OFP@$@
++	$(CC) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CFLAGS_CONSOLE) $(srcdir)/misc/niclist.c @OFP@$@
+ 
+ $(BX_OBJS): $(BX_INCLUDES)
+ 
+--- a/memory/Makefile.in
++++ b/memory/Makefile.in
+@@ -28,6 +28,7 @@
+ 
+ CXX = @CXX@
+ CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -46,7 +47,7 @@
+ all: libmemory.a
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c $(BX_INCDIRS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(BX_INCDIRS) $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ libmemory.a: $(BX_OBJS)
+--- a/misc/Makefile.in
++++ b/misc/Makefile.in
+@@ -28,6 +28,7 @@
+ CXX = @CXX@
+ CFLAGS = @CFLAGS@ @GUI_CFLAGS@
+ CXXFLAGS = @CXXFLAGS@ @GUI_CXXFLAGS@
++CPPFLAGS = @CPPFLAGS@
+ 
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+@@ -36,7 +37,7 @@
+ 
+ 
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c $(CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c $(CPPFLAGS) $(CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ 
+ all: make_cmos_image
+--- a/iodev/display/Makefile.in
++++ b/iodev/display/Makefile.in
+@@ -83,24 +83,24 @@
+ 
+ # standard compile rule for C++ files
+ .@CPP_SUFFIX@.o:
+-	$(CXX) @DASH@c  $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
++	$(CXX) @DASH@c  $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) @CXXFP@$< @OFP@$@
+ 
+ ##### building plugins with libtool
+ %.lo: %.@CPP_SUFFIX@
+-	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
++	$(LIBTOOL) --mode=compile --tag CXX $(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(LOCAL_CXXFLAGS) $< -o $@
+ 
+ libbx_%.la: %.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module $< -o $@ -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module $< -o $@ -rpath $(PLUGIN_PATH)
+ 
+ # special link rules for plugins that require more than one object file
+ libbx_vga.la: vga.lo vgacore.lo ddc.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module vga.lo vgacore.lo ddc.lo -o libbx_vga.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module vga.lo vgacore.lo ddc.lo -o libbx_vga.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_svga_cirrus.la: svga_cirrus.lo vgacore.lo ddc.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module svga_cirrus.lo vgacore.lo ddc.lo -o libbx_svga_cirrus.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module svga_cirrus.lo vgacore.lo ddc.lo -o libbx_svga_cirrus.la -rpath $(PLUGIN_PATH)
+ 
+ libbx_voodoo.la: voodoo.lo banshee.lo vgacore.lo ddc.lo
+-	$(LIBTOOL) --mode=link --tag CXX $(CXX) -module voodoo.lo banshee.lo vgacore.lo ddc.lo -o libbx_voodoo.la -rpath $(PLUGIN_PATH)
++	$(LIBTOOL) --mode=link --tag CXX $(CXX) $(LDFLAGS) -module voodoo.lo banshee.lo vgacore.lo ddc.lo -o libbx_voodoo.la -rpath $(PLUGIN_PATH)
+ 
+ #### building DLLs for win32 (Cygwin and MinGW/MSYS)
+ bx_%.dll: %.o
