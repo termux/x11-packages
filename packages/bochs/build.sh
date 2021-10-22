@@ -24,10 +24,16 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-e1000
 --enable-clgd54xx
 --enable-voodoo
---disable-readline
 "
 
 termux_step_pre_configure() {
 	CFLAGS+=" -DANDROID"
 	CXXFLAGS+=" -DANDROID"
+        if [["$TERMUX_ARCH" == "arm"]] || [["$TERMUX_ARCH" == "i686"]]; then
+                CFLAGS+=" -DANDROID_32BIT"
+	        CXXFLAGS+=" -DANDROID_32BIT"
+        elif [["$TERMUX_ARCH" == "aarch64"]] || [["$TERMUX_ARCH" == "x86_64"]]; then
+                CFLAGS+=" -DANDROID_64BIT"
+	        CXXFLAGS+=" -DANDROID_64BIT"
+        fi
 }
