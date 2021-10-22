@@ -4,7 +4,7 @@ TERMUX_PKG_LICENSE="LGPL-2.0"
 TERMUX_PKG_VERSION=2.7
 TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/bochs/bochs-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=a010ab1bfdc72ac5a08d2e2412cd471c0febd66af1d9349bc0d796879de5b17a
-TERMUX_PKG_DEPENDS="atk, fontconfig, freetype, gdk-pixbuf, glib, gtk2, libc++, libcairo, libgraphite, libx11, libxpm, libxrandr, ncurses, pango"
+TERMUX_PKG_DEPENDS="atk, fontconfig, freetype, gdk-pixbuf, glib, gtk2, libc++, libcairo, libgraphite, libx11, libxpm, libxrandr, ncurses, pango, readline"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --without-wx
