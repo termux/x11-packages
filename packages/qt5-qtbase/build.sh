@@ -33,11 +33,11 @@ termux_step_pre_configure () {
         -e "s|@TERMUX_PREFIX@|${TERMUX_PREFIX}|g" \
         -e "s|@TERMUX_CC@|${TERMUX_HOST_PLATFORM}-clang|" \
         -e "s|@TERMUX_CXX@|${TERMUX_HOST_PLATFORM}-clang++|" \
-        -e "s|@TERMUX_AR@|${TERMUX_HOST_PLATFORM}-ar|" \
-        -e "s|@TERMUX_NM@|${TERMUX_HOST_PLATFORM}-nm|" \
-        -e "s|@TERMUX_OBJCOPY@|${TERMUX_HOST_PLATFORM}-objcopy|" \
+        -e "s|@TERMUX_AR@|llvm-ar|" \
+        -e "s|@TERMUX_NM@|llvm-nm|" \
+        -e "s|@TERMUX_OBJCOPY@|llvm-objcopy|" \
         -e "s|@TERMUX_PKGCONFIG@|${TERMUX_HOST_PLATFORM}-pkg-config|" \
-        -e "s|@TERMUX_STRIP@|${TERMUX_HOST_PLATFORM}-strip|" \
+        -e "s|@TERMUX_STRIP@|llvm-strip|" \
         -e "s|@TERMUX_CFLAGS@|${CPPFLAGS} ${CFLAGS}|" \
         -e "s|@TERMUX_CXXFLAGS@|${CPPFLAGS} ${CXXFLAGS}|" \
         -e "s|@TERMUX_LDFLAGS@|${LDFLAGS}|" \
