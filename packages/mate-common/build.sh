@@ -1,0 +1,9 @@
+TERMUX_PKG_HOMEPAGE=https://mate-common.mate-desktop.dev/
+TERMUX_PKG_DESCRIPTION="Common scripts and macros to develop with MATE"
+TERMUX_PKG_LICENSE="GPL-3.0"
+TERMUX_PKG_MAINTAINER="Yisus7u7 <jesuspixel5@gmail.com>"
+TERMUX_PKG_VERSION=1.26.0
+TERMUX_PKG_SRCURL=https://github.com/mate-desktop/mate-common/releases/download/v1.26.0/mate-common-${TERMUX_PKG_VERSION}.tar.xz
+TERMUX_PKG_SHA256=f2afd28ef2e1dfd6b9e4094c1ff482830fb4139d116fd48cb92e0451cf64236f
+TERMUX_PKG_DEPENDS="gawk"
+TERMUX_PKG_BUILD_IN_SRC=true
