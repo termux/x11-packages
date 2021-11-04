@@ -13,4 +13,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/glib-2.0/schemas/gschemas.compiled"
 termux_step_pre_configure(){
   ./autogen.sh
 }
-
