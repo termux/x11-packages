@@ -11,5 +11,5 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_RM_AFTER_INSTALL="share/glib-2.0/schemas/gschemas.compiled"
 
 termux_step_pre_configure(){
-  ./autogen.sh
+  PATH=$PATH:$TERMUX_PREFIX/bin ./autogen.sh
 }
