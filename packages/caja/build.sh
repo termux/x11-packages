@@ -11,6 +11,7 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_RM_AFTER_INSTALL="share/glib-2.0/schemas/gschemas.compiled"
 
 termux_step_pre_configure(){
-  apt-get install -y mate-common
+  mkdir ./mate-tmp && cp ${TERMUX_PREFIX}/bin/mate* ./mate-tmp
+  export PATH=./mate-tmp:$PATH
   ./autogen.sh
 }
