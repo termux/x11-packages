@@ -12,6 +12,6 @@ termux_step_pre_configure() {
 	echo 'INPUT(-lc)' > $TERMUX_PREFIX/lib/librt.so
 }
 
-termux_step_post_configure() {
+termux_step_post_make_install() {
 	rm $TERMUX_PREFIX/lib/librt.so
 }
