@@ -1,0 +1,14 @@
+diff -uNr lite-xl.orig/subprojects/reproc/meson.build lite-xl/subprojects/reproc/meson.build
+index a00c397..adae18a 100644
+--- lite-xl.orig/subprojects/reproc/meson.build
++++ lite-xl/subprojects/reproc/meson.build
+@@ -8,9 +8,6 @@ if host_machine.system() == 'windows'
+     platform = 'windows'
+ else
+     platform = 'posix'
+-    if host_machine.system() != 'darwin'
+-        reproc_deps += meson.get_compiler('c').find_library('rt')
+-    endif
+ endif
+ 
+ if get_option('multithreaded')
