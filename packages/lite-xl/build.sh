@@ -9,7 +9,7 @@ TERMUX_PKG_DEPENDS="sdl2, freetype, liblua52"
 
 termux_step_pre_configure() {
 	# fix meson not detecting librt
-	ln -s $TERMUX_PREFIX/lib/libc.so.6 $TERMUX_PREFIX/lib/librt.so
+	echo 'INPUT(-lc)' > $TERMUX_PREFIX/lib/librt.so
 }
 
 termux_step_post_configure() {
