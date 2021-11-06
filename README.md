@@ -8,10 +8,6 @@ There are located build scripts and patches for Termux X11 packages.
 
 If you wish to contribute, please take a look at X11 packages [contributing guide](./CONTRIBUTING.md) and developer's [wiki pages](https://github.com/termux/termux-packages/wiki).
 
-## Support
-
-[![Donate with Ethereum](https://en.cryptobadges.io/badge/big/0x3CC8F61862e5c3Ad62A7eea0c3048853FA31af23?showBalance=true)](https://en.cryptobadges.io/donate/0x3CC8F61862e5c3Ad62A7eea0c3048853FA31af23)
-
 ***
 
 ## How to enable this repository
