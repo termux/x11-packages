@@ -8,7 +8,10 @@ TERMUX_PKG_SHA256=6c8a4ea284f102f772e3aff583236e89d5b1171664526dd501000b681ae5c4
 TERMUX_PKG_DEPENDS="sdl2, freetype, liblua52"
 
 termux_step_pre_configure() {
-	# fix meson not detecting librt
+	# reproc needs librt but we don't have it
+	# and we can't directly patch subprojects
+	# because it needs to be patch after
+	# meson downloads it
 	echo 'INPUT(-lc)' > $TERMUX_PREFIX/lib/librt.so
 }
 
