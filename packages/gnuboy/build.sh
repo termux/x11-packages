@@ -1,5 +1,5 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/AlexOberhofer/SDL2-GNUBoy.git
-TERMUX_PKG_DESCRIPTION="Emulator A Gameboy and Gameboy Color Emulator"
+TERMUX_PKG_DESCRIPTION="Emulator Gameboy and Gameboy Color Emulator"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@Toxic"
 TERMUX_PKG_VERSION=1.2.1
@@ -10,7 +10,7 @@ TERMUX_PKG_DEPENDS="sdl2"
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_make() {
-        make -j $TERMUX_MAKE_PROCESSES -f Makefile.linux
+        make linux -j $TERMUX_MAKE_PROCESSES -f Makefile.linux
 }
 
 termux_step_make_install() {
