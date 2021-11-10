@@ -17,6 +17,7 @@ termux_step_configure () {
 
 termux_step_make_install () {
 	cd ${TERMUX_PKG_SRCDIR}
+        mkdir -p ${TERMUX_PREFIX}/share/applications
 	install -Dm700 -t ${TERMUX_PREFIX}/bin ./termux-pkg-manager
-	install -Dm700 ${TERMUX_PREFIX}/share/applications ./org.termux-pkg-manager-qt.desktop
+	install -Dm700 -t ${TERMUX_PREFIX}/share/applications ./org.termux-pkg-manager-qt.desktop
 }
