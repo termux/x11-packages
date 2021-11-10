@@ -10,9 +10,6 @@ TERMUX_PKG_DEPENDS="sdl2"
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_make() {
-        make linux
-}
-
-termux_step_make_install() {
-        $TERMUX_PREFIX/bin ./sdl2gnuboy
-}
+        cd "SDL2-GNUBoy"
+make linux
+mv "./sdl2gnuboy" "$PREFIX/bin"
