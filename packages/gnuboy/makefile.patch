@@ -3,11 +3,3 @@
 @@ -1,25 +0,0 @@
 .PHONY: linux
 .PHONY: clean
-
-.PHONY: linux
-linux:
-        make -f makefile.linux
-        rm -f sys/*/*.o src/*.o lib/*/*.o
-
-clean:
-        rm -f *gnuboy sdl2gnuboy.exe mac-sdl2gnuboy gmon.out *.o sys/*.o lib/*/*.o sys/*/*.o src/*.o
