@@ -10,4 +10,4 @@ linux:
         rm -f sys/*/*.o src/*.o lib/*/*.o
 
 clean:
-        rm -f *gnuboy sdl2gnuboy.exe mac-sdl2gnuboy gmon.out *.o sys/*.o lib/*/*.o sys/*/*.o sr>
+        rm -f *gnuboy sdl2gnuboy.exe mac-sdl2gnuboy gmon.out *.o sys/*.o lib/*/*.o sys/*/*.o src/*.o
