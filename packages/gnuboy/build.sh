@@ -1,5 +1,5 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/AlexOberhofer/SDL2-GNUBoy
-TERMUX_PKG_DESCRIPTION="Emulator Gameboy and Gameboy Color Emulator" "sdl2gnuboy --> rom.gbc"
+TERMUX_PKG_DESCRIPTION="Emulator Gameboy and Gameboy Color Emulator"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@Toxic"
 TERMUX_PKG_VERSION=1.2.1
