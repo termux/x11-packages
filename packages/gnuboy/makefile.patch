@@ -1,7 +1,7 @@
 --- makefile    2021-11-12 15:45:27.753465089 -0600
 +++ makefile.linux      2021-11-12 15:45:27.753465089 -0600
 @@ -1,25 +1,59 @@
--.PHONY: all
+-.PHONY: linux
 -.PHONY: clean
 +prefix = /usr/local
 +exec_prefix = ${prefix}
