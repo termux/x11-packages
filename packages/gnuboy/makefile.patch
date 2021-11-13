@@ -3,9 +3,9 @@
 @@ -1,25 +1,59 @@
 -.PHONY: linux
 -.PHONY: clean
-+prefix = /usr/local
-+exec_prefix = ${prefix}
-+bindir = ${exec_prefix}/bin
++prefix = @TERMUX_PREFIX@/bin
++exec_prefix = @TERMUX_PREFIX@
++bindir = @TERMUX_PREFIX@/bin
 
 -.PHONY: linux
 -linux:
