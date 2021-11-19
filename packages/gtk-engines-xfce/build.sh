@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=http://deb.debian.org/debian/pool/main/g/gtk2-engines-xfce/gtk
 TERMUX_PKG_SHA256=875c9c3bda96faf050a2224649cc42129ffb662c4de33add8c0fd1fb860b47ed
 TERMUX_PKG_DEPENDS="gtk2, gtk3, atk, libcairo, gdk-pixbuf, glib, pango"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-gtk2  --enable-gtk3"
+TERMUX_PKG_BUILD_IN_SRC=true
