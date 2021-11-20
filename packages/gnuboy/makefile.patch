@@ -13,6 +13,7 @@ index 427d696..653a5d3 100644
 -linux:
 -	make -f makefile.linux
 -	rm -f sys/*/*.o src/*.o
+-	mv sdl2gnuboy gnuboy && mv gnuboy /data/data/com.termux/files/usr/bin
 +LD = $(CC)
 +AS = $(CC)
 +INSTALL = /usr/bin/install -c
