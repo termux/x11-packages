@@ -3,7 +3,7 @@ index 427d696..653a5d3 100644
 --- a/makefile
 +++ b/makefile
 @@ -1,20 +1,58 @@
--.PHONY: all
+-.PHONY: linux
 -.PHONY: clean
 +prefix = ${PREFIX}
 +exec_prefix = ${PREFIX}
