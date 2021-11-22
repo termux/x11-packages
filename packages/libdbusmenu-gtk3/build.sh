@@ -5,6 +5,6 @@ TERMUX_PKG_MAINTAINER="Yisus7u7 <jesuspixel5@gmail.com>"
 TERMUX_PKG_VERSION=18.10
 TERMUX_PKG_SRCURL=http://deb.debian.org/debian/pool/main/libd/libdbusmenu/libdbusmenu_${TERMUX_PKG_VERSION}.20180917~bzr492+repack1.orig.tar.xz
 TERMUX_PKG_SHA256=41298b926573419f21864205317461750b833c596af6ab0bd206e13336f8cee3
-TERMUX_PKG_DEPENDS="gtk3, glib, atk, libcairo, gdk-pixbuf, harfbuzz, pango"
+TERMUX_PKG_DEPENDS="gtk3, glib, atk, libcairo, gdk-pixbuf, harfbuzz, pango, xsltproc, json-glib"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-introspection=no --disable-vala"
