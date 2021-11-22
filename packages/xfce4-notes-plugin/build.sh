@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256=13f909c948b639f96de64cf793eb74cb1779589201d3933eff214ee8f35ab0
 TERMUX_PKG_DEPENDS="atk, gtk3, glib, libcairo, gdk-pixbuf, harfbuzz, pango, libsm, libxfce4ui, libxfce4util, xfce4-panel, xfconf"
 TERMUX_PKG_BUILD_DEPENDS="valac"
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-maintainer-mode"
