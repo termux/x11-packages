@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256=41298b926573419f21864205317461750b833c596af6ab0bd206e13336f8ce
 TERMUX_PKG_DEPENDS="gtk3, glib, atk, libcairo, gdk-pixbuf, harfbuzz, pango"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-introspection=no --disable-vala"
