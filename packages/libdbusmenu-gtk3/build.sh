@@ -11,5 +11,5 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-introspection=no --disable-vala"
 
 termux_step_pre_configure(){
-	autoreconf -fi
+	PATH=$PATH:$TERMUX_PREFIX/bin autoreconf -fi
 }
