@@ -8,4 +8,5 @@ TERMUX_PKG_SHA256=cb85fefbf742b306f2a8dca695252bae22842ab586abd31b52688312e3f631
 TERMUX_PKG_DEPENDS="gtk3, atk, libcairo, pango, harfbuzz, gdk-pixbuf, libxfce4util, libxfce4ui"
 TERMUX_PKG_RECOMMENDS="xfce4-panel"
 TERMUX_PKG_SUGGESTS="aspell"
+TERMUX_PKG_BUILD_DEPENDS="xfce4-panel"
 TERMUX_PKG_BUILD_IN_SRC=true
