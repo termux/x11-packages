@@ -1,3 +1,5 @@
+# Error in the termux_step_create_debian_package.sh:49
+# script
 TERMUX_PKG_HOMEPAGE=https://goodies.xfce.org/
 TERMUX_PKG_DESCRIPTION="this meta-package will install various utilities and programs for the XFCE desktop environment (incomplete!)"
 TERMUX_PKG_LICENSE="Public Domain"
