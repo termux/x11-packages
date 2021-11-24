@@ -10,6 +10,7 @@ TERMUX_PKG_DEPENDS="atk, dbus-glib, glib, gtk3, pango, libcairo, libx11, xsltpro
 TERMUX_PKG_BUILD_DEPENDS="valac"
 TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_configure_cmake(){
+	cd ${TERMUX_PKG_SRCDIR}
 	mkdir build && cd build
 	cmake .. -DCMAKE_INSTALL_PREFIX=${TERMUX_PREFIX}
 }
