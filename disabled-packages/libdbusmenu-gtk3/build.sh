@@ -13,6 +13,5 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-introspection=no --disable-vala"
 # in a build on device this is fixed by 
 # installing gtk-doc
 termux_step_pre_configure(){
-	export PATH=$PATH:$TERMUX_PREFIX/bin 
 	autoreconf -fi
 }
