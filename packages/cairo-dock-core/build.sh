@@ -13,3 +13,11 @@ termux_step_configure_cmake(){
 	mkdir build && cd build
 	cmake .. -DCMAKE_INSTALL_PREFIX=${TERMUX_PREFIX}
 }
+
+termux_step_make(){
+	make -j$(nproc)
+}
+
+termux_step_make_install(){
+	make install
+}
