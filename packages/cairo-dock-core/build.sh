@@ -12,5 +12,5 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_configure_(){
 	cd ${TERMUX_PKG_SRCDIR}
 	mkdir build && cd build
-	${TERMUX_PREFIX}/bin/cmake .. -DCMAKE_INSTALL_PREFIX=${TERMUX_PREFIX}
+	/usr/bin/cmake .. -DCMAKE_INSTALL_PREFIX=${TERMUX_PREFIX}
 }
