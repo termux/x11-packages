@@ -13,5 +13,5 @@ termux_step_make() {
 }
 
 termux_step_make_install() {
-	python setup.py install --root=${TERMUX_PREFIX} --skip-build --optimize=1
+	python setup.py install --prefix=${TERMUX_PREFIX} --skip-build --optimize=1
 }
