@@ -1,6 +1,6 @@
 TERMUX_PKG_HOMEPAGE=https://quodlibet.readthedocs.io
 TERMUX_PKG_DESCRIPTION="An audio library tagger, manager and player"
-TERMUX_PKG_LICENSE="GPL2"
+TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@Yonle <yonle@protonmail.com>"
 TERMUX_PKG_VERSION=4.4.0
 TERMUX_PKG_SRCURL="https://github.com/quodlibet/quodlibet/archive/refs/tags/release-${TERMUX_PKG_VERSION}.tar.gz"
