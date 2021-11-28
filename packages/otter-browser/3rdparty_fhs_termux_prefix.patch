@@ -44,7 +44,7 @@ diff --color -uNr src/3rdparty/sonnet/src/plugins/hunspell/hunspellclient.cpp sr
      directories << QLatin1String("/System/Library/Spelling/");
  #else
 -    directories << QLatin1String("/usr/share/hunspell/") << QLatin1String("/usr/local/share/hunspell/") << QLatin1String("/usr/share/myspell/") << QLatin1String("/usr/share/myspell/dicts/") << QLatin1String("/usr/local/share/mozilla-dicts/");
-+    directories << QLatin1String("@TERMUX_PREFIX@/share/hunspell/") << QLatin1String("@TERMUX_PREFIX@/share/hunspell/") << QLatin1String("@TERMUX_PREFIX@/share/myspell/") << QLatin1String("@TERMUX_PREFIX@/share/myspell/dicts/") << QLatin1String("@TERMUX_PREFIX@/share/mozilla-dicts/");
++    directories << QLatin1String("@TERMUX_PREFIX@/share/hunspell/") << QLatin1String("@TERMUX_PREFIX@/share/myspell/") << QLatin1String("@TERMUX_PREFIX@/share/myspell/dicts/") << QLatin1String("@TERMUX_PREFIX@/share/mozilla-dicts/");
  #endif
  
      const QString otterDirectory(qgetenv("OTTER_DICTIONARIES"));
