@@ -11,6 +11,8 @@ TERMUX_PKG_DEPENDS="libandroid-glob, libflac, libogg, libsndfile, libvorbis, lib
 TERMUX_PKG_CONFLICTS="libsdl2"
 TERMUX_PKG_REPLACES="libsdl2"
 
+TERMUX_DEBUG_BUILD=true
+
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --x-includes=${TERMUX_PREFIX}/include
 --x-libraries=${TERMUX_PREFIX}/lib
