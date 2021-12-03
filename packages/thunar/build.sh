@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="desktop-file-utils, exo, hicolor-icon-theme, libexif, libnot
 TERMUX_PKG_BUILD_DEPENDS="xfce4-panel"
 TERMUX_PKG_RECOMMENDS="thunar-archive-plugin, tumbler"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-maintainer-mode --enable-gtk-doc-html=no --enable-introspection=no"
+TERMUX_PKG_BUILD_IN_SRC=true
