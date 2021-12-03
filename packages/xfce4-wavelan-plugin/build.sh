@@ -1,3 +1,11 @@
+# error after last change in ndk-sysroot
+
+# /home/builder/.termux-build/_cache/android-r23b-api-24-v3/bin/../sysroot/usr/include/unistd.h:268:5:
+# note: previous declaration is here
+# int close(int __fd);
+#     ^
+# 1 error generated.
+
 TERMUX_PKG_HOMEPAGE=https://docs.xfce.org/panel-plugins/xfce4-wavelan-plugin/start
 TERMUX_PKG_DESCRIPTION="wavelan status plugin for the Xfce4 panel"
 TERMUX_PKG_LICENSE="GPL-2.0"
