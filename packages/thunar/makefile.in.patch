@@ -1,0 +1,15 @@
+--- thunar/Makefile.in	2021-11-22 15:40:41.000000000 -0500
++++ mod/thunar/Makefile.in	2021-12-03 14:53:14.792797338 -0500
+@@ -2778,10 +2778,10 @@
+ @MAINTAINER_MODE_TRUE@	$(AM_V_GEN) gdbus-codegen --c-namespace Thunar --generate-c-code=thunar-dbus-service-infos $(srcdir)/thunar-dbus-service-infos.xml
+ 
+ @MAINTAINER_MODE_TRUE@thunar-thumbnailer-proxy.h thunar-thumbnailer-proxy.c: $(srcdir)/thunar-thumbnailer-dbus.xml Makefile
+-@MAINTAINER_MODE_TRUE@	$(AM_V_GEN) gdbus-codegen --c-namespace Thunar --generate-c-code thunar-thumbnailer-proxy $(srcdir)/thunar-thumbnailer-dbus.xml
++@MAINTAINER_MODE_TRUE@	$(AM_V_GEN) gdbus-codegen --c-namespace Thunar --generate-c-code=thunar-thumbnailer-proxy $(srcdir)/thunar-thumbnailer-dbus.xml
+ 
+ @MAINTAINER_MODE_TRUE@thunar-thumbnail-cache-proxy.h thunar-thumbnail-cache-proxy.c: $(srcdir)/thunar-thumbnail-cache-dbus.xml Makefile
+-@MAINTAINER_MODE_TRUE@	$(AM_V_GEN) gdbus-codegen --c-namespace Thunar --generate-c-code thunar-thumbnail-cache-proxy $(srcdir)/thunar-thumbnail-cache-dbus.xml
++@MAINTAINER_MODE_TRUE@	$(AM_V_GEN) gdbus-codegen --c-namespace Thunar --generate-c-code=thunar-thumbnail-cache-proxy $(srcdir)/thunar-thumbnail-cache-dbus.xml
+ 
+ @MAINTAINER_MODE_TRUE@thunar-marshal.h: stamp-thunar-marshal.h
+ @MAINTAINER_MODE_TRUE@	@true
