@@ -1,0 +1,49 @@
+--- lib/kpty.cpp	2018-11-25 04:06:16.000000000 +0700
++++ lib.mod/kpty.cpp	2021-12-04 10:42:33.068112068 +0700
+@@ -32,6 +32,10 @@
+ #define HAVE_LIBUTIL_H
+ #endif
+ 
++#if defined(__ANDROID__)
++#define HAVE_PTY_H
++#endif
++
+ #if defined(__OpenBSD__)
+ #define HAVE_LOGIN
+ #define HAVE_UTIL_H
+@@ -573,10 +577,12 @@
+ #   endif
+ #  else
+     utmpname(_PATH_UTMP);
++#ifndef __ANDROID__
+     setutent();
+     pututline(&l_struct);
+     endutent();
+     updwtmp(_PATH_WTMP, &l_struct);
++#endif
+ #  endif
+ # endif
+ #endif
+@@ -626,7 +632,12 @@
+ #  else
+     utmpname(_PATH_UTMP);
+     setutent();
++
++#ifndef __ANDROID__
+     if ((ut = getutline(&l_struct))) {
++#else
++    if ((ut = getutent())) {
++#endif
+ #  endif
+ #  ifdef HAVE_UTMPX
+         memset(ut->ut_user, 0, sizeof(*ut->ut_user));
+@@ -647,7 +658,9 @@
+     endutxent();
+ #  else
+     ut->ut_time = time(0);
++#ifndef __ANDROID__
+     pututline(ut);
++#endif
+ }
+ endutent();
+ #  endif

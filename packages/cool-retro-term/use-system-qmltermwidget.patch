@@ -1,0 +1,10 @@
+--- cool-retro-term-1.1.1/cool-retro-term.pro	2019-01-20 03:08:57.000000000 +0700
++++ cool-retro-term-1.1.1.mod/cool-retro-term.pro	2021-12-04 10:47:27.348112086 +0700
+@@ -2,7 +2,6 @@
+ 
+ CONFIG += ordered
+ 
+-SUBDIRS += qmltermwidget
+ SUBDIRS += app
+ 
+ desktop.files += cool-retro-term.desktop

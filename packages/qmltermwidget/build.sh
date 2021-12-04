@@ -1,0 +1,9 @@
+TERMUX_PKG_HOMEPAGE=https://github.com/Swordfish90/qmltermwidget
+TERMUX_PKG_DESCRIPTION="A terminal emulator widget for Qt Quick"
+TERMUX_PKG_LICENSE="GPL-2.0"
+TERMUX_PKG_MAINTAINER="@leapofazzam123"
+TERMUX_PKG_VERSION=0.2.0
+TERMUX_PKG_SRCURL="https://github.com/Swordfish90/qmltermwidget/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz"
+TERMUX_PKG_SHA256=23e19eedb59d6fe3e37ecc06872f54befd94384946926e009c42c4b39914cfe2
+TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtdeclarative"
+TERMUX_PKG_BUILD_DEPENDS="qt5-qttools-cross-tools, qt5-qtdeclarative-cross-tools"

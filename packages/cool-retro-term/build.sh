@@ -1,0 +1,9 @@
+TERMUX_PKG_HOMEPAGE=https://github.com/Swordfish90/cool-retro-term
+TERMUX_PKG_DESCRIPTION="A good looking terminal emulator which mimics the old cathode display"
+TERMUX_PKG_LICENSE="GPL-2.0, GPL-3.0"
+TERMUX_PKG_MAINTAINER="@leapofazzam123"
+TERMUX_PKG_VERSION=1.1.1
+TERMUX_PKG_SRCURL="https://github.com/lxqt/qterminal/releases/download/${TERMUX_PKG_VERSION}/qterminal-${TERMUX_PKG_VERSION}.tar.xz"
+TERMUX_PKG_SHA256=a9859876205940566519e763f6fb33c3109e044dd0461615d20e55668d3adb65
+TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtx11extras, qt5-qtquickcontrols, qt5-qtgraphicaleffects, qmltermwidget"
+TERMUX_PKG_BUILD_DEPENDS="qt5-qttools-cross-tools, qt5-qtdeclarative-cross-tools"
