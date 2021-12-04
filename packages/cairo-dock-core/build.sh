@@ -3,6 +3,7 @@ TERMUX_PKG_DESCRIPTION="Cairo-Dock is a simple and avanzed dock for linux deskto
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="Yisus7u7 <jesuspixel5@gmail.com>"
 TERMUX_PKG_VERSION=3.4.1
+TERMUX_PKG_REVISION=1
 _COMMIT=6c569e67a2a366e7634224a0133ede51755629cb
 TERMUX_PKG_SRCURL=https://github.com/Cairo-Dock/cairo-dock-core/archive/${_COMMIT}.zip
 TERMUX_PKG_SHA256=e59e99147ce9c901b46d4b56b88bd53aeda34292b86fd9fbf2c55d158153f2ec
@@ -19,3 +20,19 @@ fi
 
 TERMUX_CMAKE_BUILD="Unix Makefiles"
 
+termux_step_post_make_install(){
+	if [ $TERMUX_ARCH == "arm" ]; then
+		chmod +x ${TERMUX_PREFIX}/lib32/libgldi.so
+		chmod +x ${TERMUX_PREFIX}/lib32/cairo-dock/*
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$TERMUX_PREFIX/lib32" >> $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
+	elif [ $TERMUX_ARCH == "i686" ]; then
+		chmod +x ${TERMUX_PREFIX}/lib32/libgldi.so
+                chmod +x ${TERMUX_PREFIX}/lib32/cairo-dock/*
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$TERMUX_PREFIX/lib32" > $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
+	else
+		chmod +x ${TERMUX_PREFIX}/lib64/libgldi.so
+                chmod +x ${TERMUX_PREFIX}/lib64/cairo-dock/*
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/data/data/com.termux/files/usr/lib64" > $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
+	fi
+
+}
