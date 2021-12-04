@@ -24,7 +24,7 @@ termux_step_post_make_install(){
 	if [ $TERMUX_ARCH == "arm" ]; then
 		chmod +x ${TERMUX_PREFIX}/lib32/libgldi.so
 		chmod +x ${TERMUX_PREFIX}/lib32/cairo-dock/*
-		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$TERMUX_PREFIX/lib32" >> $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$TERMUX_PREFIX/lib32" > $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
 	elif [ $TERMUX_ARCH == "i686" ]; then
 		chmod +x ${TERMUX_PREFIX}/lib32/libgldi.so
                 chmod +x ${TERMUX_PREFIX}/lib32/cairo-dock/*
@@ -32,7 +32,7 @@ termux_step_post_make_install(){
 	else
 		chmod +x ${TERMUX_PREFIX}/lib64/libgldi.so
                 chmod +x ${TERMUX_PREFIX}/lib64/cairo-dock/*
-		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/data/data/com.termux/files/usr/lib64" > $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$TERMUX_PREFIX/lib64" > $TERMUX_PREFIX/etc/profile.d/cairo-dock.sh
 	fi
 
 }
