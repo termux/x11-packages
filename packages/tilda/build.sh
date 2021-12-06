@@ -8,6 +8,7 @@ TERMUX_PKG_SRCURL=https://github.com/lanoxx/tilda/archive/a8f70a8b9300992dc13185
 TERMUX_PKG_SHA256=83c3bdccd9f41183cf656c11f925cf383f7cf0cbafbd56f51d8a1e2983bb7739
 TERMUX_PKG_DEPENDS="glib, gtk3, libvte, libconfuse, libx11, gettext"
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_REVISION=1
 
 termux_step_pre_configure() {
 	NOCONFIGURE=1 ./autogen.sh
