@@ -1,5 +1,5 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/lanoxx/tilda
-TERMUX_PKG_DESCRIPTION="A Gtk based drop down terminal for Linux and Unix"
+TERMUX_PKG_DESCRIPTION="A Gtk based drop down terminal for Linux and Unix."
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@ELWAER-M"
 TERMUX_PKG_VERSION="1.6-alpha"
