@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://github.com/Swordfish90/qmltermwidget/archive/refs/tag
 TERMUX_PKG_SHA256=23e19eedb59d6fe3e37ecc06872f54befd94384946926e009c42c4b39914cfe2
 TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtdeclarative"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qttools-cross-tools, qt5-qtdeclarative-cross-tools"
+TERMUX_PKG_BUILD_IN_SRC=true
