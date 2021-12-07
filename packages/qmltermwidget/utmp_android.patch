@@ -1,6 +1,6 @@
-diff -uNr qmltermwidget-0.2.0/lib/kpty.cpp qmltermwidget-0.2.0.mod/lib/kpty.cpp
---- qmltermwidget-0.2.0/lib/kpty.cpp	2018-11-25 04:06:16.000000000 +0700
-+++ qmltermwidget-0.2.0.mod/lib/kpty.cpp	2021-12-04 10:42:33.068112068 +0700
+diff -uNr lib/kpty.cpp lib.mod/kpty.cpp
+--- lib/kpty.cpp	2018-11-25 04:06:16.000000000 +0700
++++ lib.mod/kpty.cpp	2021-12-04 10:42:33.068112068 +0700
 @@ -32,6 +32,10 @@
  #define HAVE_LIBUTIL_H
  #endif
