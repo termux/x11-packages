@@ -1,4 +1,4 @@
-TERMUX_PKG_HOMEPAGE=https://github.com/termux/x11-packages
+TERMUX_PKG_HOMEPAGE=https://xfce.org/
 TERMUX_PKG_DESCRIPTION="A metapackage that installs all parts of the XFCE desktop environment"
 TERMUX_PKG_LICENSE="Public Domain"
 TERMUX_PKG_MAINTAINER="@termux"
