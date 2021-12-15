@@ -11,7 +11,12 @@ TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_configure () {
     "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
-        -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross" \
-        PREFIX="${TERMUX_PREFIX}"
+        -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross"
+}
+
+termux_step_make_install () {
+        cd ${TERMUX_PKG_SRCDIR}/bin
+        install -Dm700 -t ${TERMUX_PREFIX}/lib ./*.so*
+	install -Dm700 -t ${TERMUX_PREFIX}/bin ./wkhtmltoimage ./wkhtmltopdf
 }
 
