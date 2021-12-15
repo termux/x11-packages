@@ -1,0 +1,28 @@
+--- Makefile	2021-12-15 09:05:20.173320127 -0600
++++ Makefile1	2021-12-15 09:39:40.853318653 -0600
+@@ -9,25 +9,7 @@
+ build:
+ 	mkdir build || true
+ 	$(CC) $(CFLAGS) src/$(NAME).c -o build/$(NAME) $(LIBS)
+-	cp .config/$(NAME).desktop build/
+-	cp README.md build/
+-	gzip -cn man/$(NAME).1 > build/$(NAME).1.gz
+-
+-# Make the installation
+-install:
+-	# Create directories if they don't exist
+-	mkdir $(TARGET)/usr/bin || true
+-	mkdir $(TARGET)/usr/share/applications || true
+-	mkdir $(TARGET)/usr/share/doc || true
+-	mkdir $(TARGET)/usr/share/man/man1 || true
+-	# Install binary
+ 	install -Dm 755 build/$(NAME) -t $(TARGET)/usr/bin
+-	# Install desktop entry
+-	install -Dm 644 build/$(NAME).desktop -t $(TARGET)/usr/share/applications
+-	# Install README.md
+-	install -Dm 644 README.md -t $(TARGET)/usr/share/doc
+-	# Install man page
+-	install -Dm 644 build/$(NAME).1.gz -t $(TARGET)/usr/share/man/man1
+ 
+ # Clean
+ clean:
