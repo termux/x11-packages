@@ -1,8 +1,8 @@
-TERMUX_PKG_HOMEPAGE=https://xfce.org/
+TERMUX_PKG_HOMEPAGE=TERMUX_PKG_HOMEPAGE=https://github.com/termux/x11-packages
 TERMUX_PKG_DESCRIPTION="A metapackage that installs all parts of the XFCE desktop environment"
 TERMUX_PKG_LICENSE="Public Domain"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=4.16
+TERMUX_PKG_VERSION=2.1
 TERMUX_PKG_REVISION=16
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
 TERMUX_PKG_DEPENDS="thunar, xfce4-panel, xfce4-session, xfce4-settings, xfconf, xfwm4, xfce4-notifyd"
