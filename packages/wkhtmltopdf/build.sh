@@ -8,6 +8,7 @@ TERMUX_PKG_SHA256=adcced78492e7366d940c66a1327a85d3ae8c45190f486f545fdaa84cac662
 TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtsvg, qt5-qtwebkit, qt5-qtxmlpatterns, xorg-server, python"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 
 termux_step_configure () {
     "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
