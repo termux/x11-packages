@@ -3,11 +3,10 @@ TERMUX_PKG_DESCRIPTION="A library for portable low-level access to a video frame
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_LICENSE_FILE="COPYING.txt"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=2.0.10
-TERMUX_PKG_REVISION=25
+TERMUX_PKG_VERSION=2.0.18
 TERMUX_PKG_SRCURL=https://www.libsdl.org/release/SDL2-${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=b4656c13a1f0d0023ae2f4a9cf08ec92fffb464e0f24238337784159b8b91d57
-TERMUX_PKG_DEPENDS="libandroid-glob, libflac, libogg, libsndfile, libvorbis, libx11, libxau, libxcb, libxcursor, libxdmcp, libxext, libxfixes, libxi, libxinerama, libxrandr, libxrender, libxss, libxxf86vm, pulseaudio"
+TERMUX_PKG_SHA256=94d40cd73dbfa10bb6eadfbc28f355992bb2d6ef6761ad9d4074eff95ee5711c
+TERMUX_PKG_DEPENDS="libandroid-glob, libflac, libogg, libsndfile, libvorbis, libx11, libxau, libxcb, libxcursor, libxdmcp, libxext, libxfixes, libxi, libxinerama, libxrandr, libxrender, libxss, libxxf86vm, pulseaudio, mesa"
 TERMUX_PKG_CONFLICTS="libsdl2"
 TERMUX_PKG_REPLACES="libsdl2"
 
@@ -30,10 +29,10 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-video-x11-scrnsaver
 --enable-video-x11-xshape
 --enable-video-x11-vm
+--enable-video-opengl
 --disable-video-vivante
 --disable-video-cocoa
 --disable-render-metal
---disable-video-opengl
 --disable-video-opengles
 --disable-video-opengles2
 --disable-video-vulkan
