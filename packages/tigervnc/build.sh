@@ -3,11 +3,9 @@ TERMUX_PKG_DESCRIPTION="Suite of VNC servers. Based on the VNC 4 branch of Tight
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 # No update anymore. v1.11.x requires support of PAM.
-TERMUX_PKG_VERSION=1.10.1
-TERMUX_PKG_REVISION=17
+TERMUX_PKG_VERSION=1.12.0
 TERMUX_PKG_SRCURL=https://github.com/TigerVNC/tigervnc/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=19fcc80d7d35dd58115262e53cac87d8903180261d94c2a6b0c19224f50b58c4
-
+TERMUX_PKG_SHA256=9ff3f3948f2a4e8cc06ee598ee4b1096beb62094c13e0b1462bff78587bed789
 TERMUX_PKG_DEPENDS="freetype, libandroid-shmem, libbz2, libc++, libdrm, libexpat, libgnutls, libjpeg-turbo, libpixman, libpng, libuuid, libx11, libxau, libxcb, libxdamage, libxdmcp, libxext, libxxf86vm, libxfixes, libxfont2, libxshmfence, mesa, openssl, perl, xkeyboard-config, xorg-xauth, xorg-xkbcomp"
 TERMUX_PKG_BUILD_DEPENDS="xorgproto, xorg-font-util, xorg-util-macros, xtrans"
 TERMUX_PKG_SUGGESTS="aterm, xorg-twm"
