@@ -7,7 +7,7 @@ TERMUX_PKG_SRCURL=https://download.geany.org/geany-${TERMUX_PKG_VERSION/.0}.tar.
 TERMUX_PKG_SHA256=abff176e4d48bea35ee53037c49c82f90b6d4c23e69aed6e4a5ca8ccd3aad546
 TERMUX_PKG_DEPENDS="atk, fontconfig, freetype, fribidi, gdk-pixbuf, glib, gtk3, harfbuzz, libandroid-glob, libandroid-shmem, libbz2, libc++, libcairo, libffi, libgraphite, liblzma, libpixman, libpng, libuuid, libvte, libx11, libxau, libxcb, libxdmcp, libxext, libxml2, libxrender, pango, pcre, zlib"
 TERMUX_PKG_RECOMMENDS="clang, make"
-TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-gtk3 --enable-vte"
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS=" --enable-vte"
 
 TERMUX_PKG_RM_AFTER_INSTALL="
 share/icons/hicolor/icon-theme.cache
