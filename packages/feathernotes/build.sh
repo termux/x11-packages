@@ -1,7 +1,7 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/tsujan/FeatherNotes
 TERMUX_PKG_DESCRIPTION="Lightweight Qt Notes-Manager for Linux"
 TERMUX_PKG_LICENSE="GPL-3.0"
-TERMUX_PKG_MAINTAINER="Yisus7u7"
+TERMUX_PKG_MAINTAINER="Yisus7u7 <yisus7u7v@gmail.com>"
 TERMUX_PKG_VERSION=0.9.0
 TERMUX_PKG_REVISION=1
 _COMMIT=087f522d62deed421b40d8fe96d66ecef0f38bf3
