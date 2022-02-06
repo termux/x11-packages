@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 6052705..6612367 100644
+--- a/Makefile
++++ b/Makefile
+@@ -5,7 +5,7 @@ PREFIX?=/usr/local
+ LIB_SUFFIX?=lib
+ MANPREFIX?=$(PREFIX)/share/man
+ TWOBWM_PATH?=${PREFIX}/bin/2bwm
+-X11_INCLUDE?=/usr/local/include
++X11_INCLUDE?=@TERMUX_PREFIX@/include
+ 
+ #CC=clang
+ DIST=2bwm-$(VERSION)
