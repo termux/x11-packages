@@ -13,6 +13,6 @@ termux_step_make(){
 	make
 }
 
-termux_step_make_install () {
+termux_step_make_install(){
 	install -Dm700 -t ${TERMUX_PREFIX}/bin ./2bwm
 }
