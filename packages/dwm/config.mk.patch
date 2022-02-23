@@ -1,46 +1,41 @@
-diff -uNr dwm-6.2/config.mk dwm-6.2.mod/config.mk
---- dwm-6.2/config.mk	2019-02-02 14:55:28.000000000 +0200
-+++ dwm-6.2.mod/config.mk	2019-07-10 16:11:57.523790390 +0300
-@@ -4,11 +4,11 @@
- # Customize below to fit your system
- 
- # paths
--PREFIX = /usr/local
+--- ../dwm-6.3/config.mk	1969-12-31 19:00:00.000000000 -0500
++++ dwm-mod/config.mk	2022-02-22 19:39:16.105068945 -0500
+@@ -0,0 +1,38 @@
++# dwm version
++VERSION = 6.3
++
++# Customize below to fit your system
++
++# paths
 +PREFIX = @TERMUX_PREFIX@
- MANPREFIX = ${PREFIX}/share/man
- 
--X11INC = /usr/X11R6/include
--X11LIB = /usr/X11R6/lib
++MANPREFIX = ${PREFIX}/share/man
++
 +X11INC = @TERMUX_PREFIX@/include
 +X11LIB = @TERMUX_PREFIX@/lib
- 
- # Xinerama, comment if you don't want it
- XINERAMALIBS  = -lXinerama
-@@ -16,7 +16,7 @@
- 
- # freetype
- FREETYPELIBS = -lfontconfig -lXft
--FREETYPEINC = /usr/include/freetype2
++
++# Xinerama, comment if you don't want it
++XINERAMALIBS  = -lXinerama
++XINERAMAFLAGS = -DXINERAMA
++
++# freetype
++FREETYPELIBS = -lfontconfig -lXft
 +FREETYPEINC = @TERMUX_PREFIX@/include/freetype2
- # OpenBSD (uncomment)
- #FREETYPEINC = ${X11INC}/freetype2
- 
-@@ -25,14 +25,14 @@
- LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}
- 
- # flags
--CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=2 -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
-+CPPFLAGS += -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=2 -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
- #CFLAGS   = -g -std=c99 -pedantic -Wall -O0 ${INCS} ${CPPFLAGS}
--CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os ${INCS} ${CPPFLAGS}
--LDFLAGS  = ${LIBS}
-+CFLAGS   += -std=c99 -pedantic -Wall -Wno-deprecated-declarations ${INCS} ${CPPFLAGS}
-+LDFLAGS  += ${LIBS}
- 
- # Solaris
- #CFLAGS = -fast ${INCS} -DVERSION=\"${VERSION}\"
- #LDFLAGS = ${LIBS}
- 
- # compiler and linker
--CC = cc
-+CC ?= cc
++# OpenBSD (uncomment)
++#FREETYPEINC = ${X11INC}/freetype2
++
++# includes and libs
++INCS = -I${X11INC} -I${FREETYPEINC}
++LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}
++
++# flags
++CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
++#CFLAGS   = -g -std=c99 -pedantic -Wall -O0 ${INCS} ${CPPFLAGS}
++CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os ${INCS} ${CPPFLAGS}
++LDFLAGS  = ${LIBS}
++
++# Solaris
++#CFLAGS = -fast ${INCS} -DVERSION=\"${VERSION}\"
++#LDFLAGS = ${LIBS}
++
++# compiler and linker
++CC = cc
