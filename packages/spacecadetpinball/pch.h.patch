@@ -1,0 +1,12 @@
+--- SpaceCadetPinball-Release_2.0.1/SpaceCadetPinball/pch.h	2021-12-29 13:46:09.000000000 +0700
++++ SpaceCadetPinball-Release_2.0.1.mod/SpaceCadetPinball/pch.h	2022-03-01 11:31:40.938961594 +0700
+@@ -100,8 +100,7 @@
+ 	#ifdef _WIN32
+ 	nullptr
+ 	#else
+-	"/usr/local/share/SpaceCadetPinball/",
+-	"/usr/share/SpaceCadetPinball/"
++	"@TERMUX_PREFIX@/share/SpaceCadetPinball/"
+ 	#endif
+ };
+ 
