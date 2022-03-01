@@ -1,0 +1,13 @@
+--- SpaceCadetPinball-Release_2.0.1/CMakeLists.txt	2021-12-29 13:46:09.000000000 +0700
++++ SpaceCadetPinball-Release_2.0.1.mod/CMakeLists.txt	2022-03-01 11:12:43.910961526 +0700
+@@ -221,8 +221,8 @@
+ if(UNIX AND NOT APPLE)
+ 	include(GNUInstallDirs)
+ 	install(TARGETS "${PROJECT_NAME}" RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+-	install(FILES "/Platform/Linux/${PROJECT_NAME}.desktop" DESTINATION "share/applications")
+-	install(FILES "/Platform/Linux/${PROJECT_NAME}.metainfo.xml" DESTINATION "share/metainfo")
++	install(FILES "Platform/Linux/${PROJECT_NAME}.desktop" DESTINATION "share/applications")
++	install(FILES "Platform/Linux/${PROJECT_NAME}.metainfo.xml" DESTINATION "share/metainfo")
+ 	foreach(S 16 32 48 128 192)
+ 		install(FILES "${PROJECT_NAME}/Icon_${S}x${S}.png" DESTINATION
+ 			"share/icons/hicolor/${S}x${S}/apps" RENAME "${PROJECT_NAME}.png")
