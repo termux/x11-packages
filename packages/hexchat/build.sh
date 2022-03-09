@@ -9,16 +9,12 @@ TERMUX_PKG_SHA256=4f2c2137020913513ea559f788c41039ca6230764d8158862d5d1ee8785592
 TERMUX_PKG_DEPENDS="gdk-pixbuf, glib, gtk2, liblua53, libnotify, libx11, openssl, pango, python"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
--Dgtk-frontend=true 
--Dtext-frontend=true 
--Dtls=enabled 
--Dplugin=true 
--Ddbus=enabled 
--Dlibcanberra=enabled 
--Ddbus-service-use-appid=false 
--Dwith-lua=lua53 
--Dwith-perl=false 
--Dwith-python=python3 
+-Dwith-libproxy=false
+-Dwith-libcanberra=false
+-Dwith-dbus=false
+-Dwith-lua=lua53
+-Dwith-text=true
+-Dwith-perl=false
 -Dwith-sysinfo=false
 "
 
