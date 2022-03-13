@@ -151,7 +151,8 @@ jobs:
         GITHUB_SHA=${{ github.sha }}
         APTLY_API_AUTH=${{ secrets.APTLY_API_AUTH }}
 
-        source scripts/aptly_api.sh
+        git submodule update --init
+        source termux-packages/scripts/aptly_api.sh
 
         for archive in x11-packages-*/*.tar; do
           tar xf "$archive"
@@ -193,11 +194,7 @@ jobs:
         GITHUB_SHA=${{ github.sha }}
         APTLY_API_AUTH=${{ secrets.APTLY_API_AUTH }}
 
-        source scripts/aptly_api.sh
-
-        for archive in termux-packages-*/*.tar; do
-          tar xf "$archive"
-        done
+        source termux-packages/scripts/aptly_api.sh
 
         # Upload file to temporary directory.
         uploaded_files=false
