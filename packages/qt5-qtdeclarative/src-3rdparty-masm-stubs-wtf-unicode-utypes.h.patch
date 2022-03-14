@@ -1,9 +1,0 @@
-diff --git a/src/3rdparty/masm/stubs/wtf/unicode/utypes.h.orig b/src/3rdparty/masm/stubs/wtf/unicode/utypes.h
-index e1b4ff90..297fc5a0 100644
---- a/src/3rdparty/masm/stubs/wtf/unicode/utypes.h.orig
-+++ b/src/3rdparty/masm/stubs/wtf/unicode/utypes.h
-@@ -1 +1,4 @@
-+#ifndef UTYPES_H
-+#define UTYPES_H
- #include <unicode/Unicode.h>
-+#endif
