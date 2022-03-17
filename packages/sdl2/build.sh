@@ -3,10 +3,12 @@ TERMUX_PKG_DESCRIPTION="A library for portable low-level access to a video frame
 TERMUX_PKG_LICENSE="ZLIB"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=2.0.20
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://www.libsdl.org/release/SDL2-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=c56aba1d7b5b0e7e999e4a7698c70b63a3394ff9704b5f6e1c57e0c16f04dd06
 TERMUX_PKG_DEPENDS="libandroid-glob, libflac, libogg, libsndfile, libvorbis, libx11, libxau, libxcb, libxcursor, libxdmcp, libxext, libxfixes, libxi, libxinerama, libxrandr, libxrender, libxss, libxxf86vm, pulseaudio"
+TERMUX_PKG_BUILD_DEPENDS="mesa"
+TERMUX_PKG_RECOMMENDS="mesa"
 TERMUX_PKG_CONFLICTS="libsdl2"
 TERMUX_PKG_REPLACES="libsdl2"
 
@@ -31,7 +33,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-video-vivante
 --disable-video-cocoa
 --disable-render-metal
---disable-video-opengl
+--enable-video-opengl
 --disable-video-opengles
 --disable-video-opengles2
 --disable-video-vulkan
@@ -54,6 +56,12 @@ termux_step_pre_configure() {
 		-e 's/\([^A-Za-z0-9_]__ANDROID\)__$/\1_NO_TERMUX__/g'
 }
 
-termux_step_post_make_install() {
-	ln -sf libSDL2-2.0.so $TERMUX_PREFIX/lib/libSDL2.so
+termux_step_post_massage() {
+	cd ${TERMUX_PKG_MASSAGEDIR}/${TERMUX_PREFIX}/lib || exit 1
+	if [ ! -e "./libSDL2.so" ]; then
+		ln -sf libSDL2-2.0.so libSDL2.so
+	fi
+	if [ ! -e "./libSDL2-2.0.so.0" ]; then
+		ln -sf libSDL2-2.0.so libSDL2-2.0.so.0
+	fi
 }
