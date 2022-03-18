@@ -52,7 +52,7 @@ termux_step_post_make_install () {
     #######################################################
 
     ## Qt Declarative utilities.
-    for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
+    for i in qmlcachegen qmlformat qmlimportscanner qmllint qmlmin; do
         cd "${TERMUX_PKG_SRCDIR}/tools/${i}" && {
             "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
                 -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross"
@@ -111,7 +111,7 @@ termux_step_post_make_install () {
     }
 
     ## Qt Declarative utilities.
-    for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
+    for i in qmlcachegen qmlformat qmlimportscanner qmllint qmlmin; do
         cd "${TERMUX_PKG_SRCDIR}/tools/${i}" && {
             make clean
 
