@@ -19,6 +19,12 @@ opt/qt/cross/lib/libQt5Bootstrap.*
 TERMUX_PKG_REPLACES="qt5-declarative"
 
 termux_step_pre_configure () {
+    pushd "${TERMUX_PKG_SRCDIR}/src/qmltyperegistrar"
+    "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
+        -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-host"
+    make -j "${TERMUX_MAKE_PROCESSES}"
+    popd
+
     #######################################################
     ##
     ##  Hijack the bootstrap library for cross building
@@ -46,8 +52,20 @@ termux_step_post_make_install () {
     #######################################################
 
     ## Qt Declarative utilities.
-    for i in qmltyperegistrar qmlcachegen qmlimportscanner qmllint qmlmin; do
+    for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
         cd "${TERMUX_PKG_SRCDIR}/tools/${i}" && {
+            "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
+                -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross"
+
+            make -j "${TERMUX_MAKE_PROCESSES}"
+            install -Dm700 "../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
+        }
+    done
+
+    for i in qmltyperegistrar; do
+        cd "${TERMUX_PKG_SRCDIR}/src/${i}" && {
+            make clean
+
             "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
                 -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross"
 
@@ -93,8 +111,20 @@ termux_step_post_make_install () {
     }
 
     ## Qt Declarative utilities.
-    for i in qmltyperegistrar qmlcachegen qmlimportscanner qmllint qmlmin; do
+    for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
         cd "${TERMUX_PKG_SRCDIR}/tools/${i}" && {
+            make clean
+
+            "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
+                -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-host"
+
+            make -j "${TERMUX_MAKE_PROCESSES}"
+            install -Dm700 "../../bin/${i}" "${TERMUX_PREFIX}/opt/qt/cross/bin/${i}"
+        }
+    done
+
+    for i in qmltyperegistrar; do
+        cd "${TERMUX_PKG_SRCDIR}/src/${i}" && {
             make clean
 
             "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
