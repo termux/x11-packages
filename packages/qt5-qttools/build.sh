@@ -90,7 +90,7 @@ termux_step_post_make_install() {
     #######################################################
 
     # Install the linguist utilities to the correct path
-    for i in lconvert lrelease lupdate; do
+    for i in lconvert lprodump lrelease{,-pro} lupdate{,-pro}; do
         install -Dm700 "${TERMUX_PKG_SRCDIR}/bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
     done
 
@@ -195,7 +195,7 @@ termux_step_post_make_install() {
             "${TERMUX_PREFIX}/opt/qt/cross/bin/qtattributionsscanner"
     }
 
-    for i in lconvert lrelease lupdate; do
+    for i in lconvert lprodump lrelease{,-pro} lupdate{,-pro}; do
         cd "${TERMUX_PKG_SRCDIR}/src/linguist/${i}" && {
             make clean
             "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
