@@ -3,6 +3,7 @@ TERMUX_PKG_DESCRIPTION="GNOME desktop schemas contains a collection of GSettings
 TERMUX_PKG_LICENSE="LGPL-2.0"
 TERMUX_PKG_MAINTAINER="Yisus7u7 <dev.yisus@hotmail.com>"
 TERMUX_PKG_VERSION=41.0
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL="https://github.com/GNOME/gsettings-desktop-schemas/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz"
 TERMUX_PKG_SHA256=bb7ec2687bcfbe5219e6df7f1c9860027ce02c37cd897c3b0969ba9752c288d6
 TERMUX_PKG_DEPENDS="dconf"
