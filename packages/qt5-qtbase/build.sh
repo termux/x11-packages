@@ -90,7 +90,7 @@ termux_step_configure () {
         -system-freetype \
         -ssl \
         -openssl-linked \
-        -no-system-proxies \
+        -system-proxies \
         -no-cups \
         -system-harfbuzz \
         -no-opengl \
@@ -111,8 +111,7 @@ termux_step_configure () {
         -system-libpng \
         -system-libjpeg \
         -system-sqlite \
-        -sql-sqlite \
-        -no-feature-systemsemaphore
+        -sql-sqlite
 
 }
 
