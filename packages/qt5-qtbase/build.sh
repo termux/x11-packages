@@ -80,6 +80,7 @@ termux_step_configure () {
         -L "${TERMUX_PREFIX}/lib" \
         -nomake examples \
         -no-pch \
+        -feature-itemmodel \
         -no-accessibility \
         -glib \
         -gtk \
