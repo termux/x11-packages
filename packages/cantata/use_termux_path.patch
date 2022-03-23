@@ -102,8 +102,8 @@ index 53ebc41..1a91512 100755
  Type=forking
 -ExecStart=/usr/share/cantata/scripts/cantata-dynamic server /etc/cantata-dynamic.conf
 -ExecStop=/usr/share/cantata/scripts/cantata-dynamic stopserver /etc/cantata-dynamic.conf
-+ExecStart=/data/data/com.termux/files/usr/share/cantata/scripts/cantata-dynamic server /data/data/com.termux/files/usr/etc/cantata-dynamic.conf
-+ExecStop=/data/data/com.termux/files/usr/share/cantata/scripts/cantata-dynamic stopserver /data/data/com.termux/files/usr/etc/cantata-dynamic.conf
++ExecStart=@TERMUX_PREFIX@/share/cantata/scripts/cantata-dynamic server @TERMUX_PREFIX@/etc/cantata-dynamic.conf
++ExecStop=@TERMUX_PREFIX@/share/cantata/scripts/cantata-dynamic stopserver @TERMUX_PREFIX@/etc/cantata-dynamic.conf
  RuntimeDirectory=cantata-dynamic
  PIDFile=/run/cantata-dynamic/pid
  
