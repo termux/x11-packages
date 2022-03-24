@@ -1,6 +1,6 @@
 TERMUX_PKG_HOMEPAGE="https://github.com/venam/2bwm"
 TERMUX_PKG_DESCRIPTION="A fast floating WM written over the XCB library and derived from mcwm."
-TERMUX_PKG_LICENSE="Unlicense"
+TERMUX_PKG_LICENSE="ISC"
 TERMUX_PKG_MAINTAINER="Yisus7u7 <yisus7u7v@gmail.com>"
 TERMUX_PKG_VERSION=0.3
 TERMUX_PKG_SRCURL="https://github.com/venam/2bwm/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
