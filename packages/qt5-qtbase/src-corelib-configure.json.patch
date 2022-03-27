@@ -1,0 +1,16 @@
+--- a/src/corelib/configure.json
++++ b/src/corelib/configure.json
+@@ -462,11 +462,8 @@
+             "test": {
+                 "include": [ "sys/types.h", "sys/mman.h", "semaphore.h", "fcntl.h" ],
+                 "main": [
+-                    "sem_close(sem_open(\"test\", O_CREAT | O_EXCL, 0666, 0));",
+-                    "shm_open(\"test\", O_RDWR | O_CREAT | O_EXCL, 0666);",
+-                    "shm_unlink(\"test\");"
+-                ],
+-                "qmake": "linux: LIBS += -lpthread -lrt"
++                    "sem_close(sem_open(\"test\", O_CREAT | O_EXCL, 0666, 0));"
++                ]
+             }
+         },
+         "linkat": {
