@@ -1,6 +1,6 @@
-diff -uNr polybar/src/ipc.cpp polybar.mod/src/ipc.cpp
---- polybar/src/ipc.cpp	2019-04-03 08:32:20.000000000 +0300
-+++ polybar.mod/src/ipc.cpp	2019-07-10 22:14:11.763825428 +0300
+diff -uNr ./polybar/src/ipc.cpp ./polybar.mod/src/ipc.cpp
+--- ./polybar/src/ipc.cpp	2019-04-03 08:32:20.000000000 +0300
++++ ./polybar.mod/src/ipc.cpp	2019-07-10 22:14:11.763825428 +0300
 @@ -12,7 +12,7 @@
  using namespace std;
  
@@ -10,9 +10,9 @@ diff -uNr polybar/src/ipc.cpp polybar.mod/src/ipc.cpp
  #endif
  
  void log(const string& msg) {
-diff -uNr polybar/src/utils/bspwm.cpp polybar.mod/src/utils/bspwm.cpp
---- polybar/src/utils/bspwm.cpp	2019-04-03 08:32:20.000000000 +0300
-+++ polybar.mod/src/utils/bspwm.cpp	2019-07-10 22:14:35.983493128 +0300
+diff -uNr ./polybar/src/utils/bspwm.cpp polybar.mod/src/utils/bspwm.cpp
+--- ./polybar/src/utils/bspwm.cpp	2019-04-03 08:32:20.000000000 +0300
++++ ./polybar.mod/src/utils/bspwm.cpp	2019-07-10 22:14:35.983493128 +0300
 @@ -85,7 +85,7 @@
        return BSPWM_SOCKET_PATH;
      }
