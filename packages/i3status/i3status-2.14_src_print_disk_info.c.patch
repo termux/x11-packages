@@ -1,6 +1,6 @@
-diff -uNr i3status-2.13/src/print_disk_info.c i3status-2.13.mod/src/print_disk_info.c
---- i3status-2.13/src/print_disk_info.c	2019-01-23 10:03:56.000000000 +0200
-+++ i3status-2.13.mod/src/print_disk_info.c	2019-07-19 01:56:23.384608234 +0300
+diff -uNr i3status-2.14/src/print_disk_info.c i3status-2.14.mod/src/print_disk_info.c
+--- i3status-2.14/src/print_disk_info.c	
++++ i3status-2.14.mod/src/print_disk_info.c
 @@ -147,10 +147,10 @@
              sanitized[strlen(sanitized) - 1] = '\0';
          FILE *mntentfile = setmntent("/etc/mtab", "r");
