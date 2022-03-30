@@ -1,6 +1,6 @@
-diff -uNr i3status-2.13/i3status.c i3status-2.13.mod/i3status.c
---- i3status-2.13/i3status.c	2019-02-21 16:35:12.000000000 +0200
-+++ i3status-2.13.mod/i3status.c	2019-07-19 02:34:38.188689039 +0300
+diff -uNr i3status-2.14/i3status.c i3status-2.14.mod/i3status.c
+--- i3status-2.14/i3status.c	
++++ i3status-2.14.mod/i3status.c	
 @@ -346,16 +346,6 @@
          CFG_CUSTOM_SEP_BLOCK_WIDTH_OPT,
          CFG_END()};
