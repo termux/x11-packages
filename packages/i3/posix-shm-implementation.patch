@@ -1,6 +1,6 @@
-diff -uNr i3-4.16/i3-dump-log/main.c i3-4.16.mod/i3-dump-log/main.c
---- i3-4.16/i3-dump-log/main.c	2018-11-04 15:47:34.000000000 +0200
-+++ i3-4.16.mod/i3-dump-log/main.c	2019-03-20 17:12:26.815477041 +0200
+diff -uNr i3-4.20.1/i3-dump-log/main.c i3-4.20.1.mod/i3-dump-log/main.c
+--- i3-4.20.1/i3-dump-log/main.c
++++ i3-4.20.1.mod/i3-dump-log/main.c
 @@ -91,6 +91,44 @@
      va_end(args);
  }
