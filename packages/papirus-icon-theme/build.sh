@@ -9,3 +9,8 @@ TERMUX_PKG_DEPENDS="hicolor-icon-theme"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_NO_SHEBANG_FIX=true
+TERMUX_PKG_RM_AFTER_INSTALL="
+share/icons/ePapirus
+share/icons/ePapirus-Dark
+share/icons/Papirus-Light
+"

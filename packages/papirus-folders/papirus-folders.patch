@@ -1,0 +1,90 @@
+diff --git a/papirus-folders b/papirus-folders
+index 26937ed..6f9514e 100755
+--- a/papirus-folders
++++ b/papirus-folders
+@@ -82,10 +82,10 @@ _is_root_user() {
+ }
+ 
+ _is_user_dir() {
+-	[ -n "$USER_HOME" ] || return 1
++	[ -n "$HOME" ] || return 1
+ 
+ 	# if $THEME_DIR is placed in home dir
+-	if [ -z "${THEME_DIR##"$USER_HOME"/*}" ]; then
++	if [ -z "${THEME_DIR##"$HOME"/*}" ]; then
+ 		return 0
+ 	fi
+ 
+@@ -145,13 +145,13 @@ get_theme_dir() {
+ 	local data_dir icons_dir
+ 	local -a data_dirs=()
+ 	local -a icons_dirs=(
+-		"$USER_HOME/.icons"
+-		"${XDG_DATA_HOME:-$USER_HOME/.local/share}/icons"
++		"$HOME/.icons"
++		"${XDG_DATA_HOME:-$HOME/.local/share}/icons"
+ 	)
+ 
+ 	# Get data directories from XDG_DATA_DIRS variable and
+ 	# convert colon-separated list into bash array
+-	IFS=: read -ra data_dirs <<< "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
++	IFS=: read -ra data_dirs <<< "${XDG_DATA_DIRS:-@TERMUX_PREFIX@/local/share:@TERMUX_PREFIX@/share}"
+ 
+ 	for data_dir in "${data_dirs[@]}"; do
+ 		[ -d "$data_dir/icons" ] || continue
+@@ -185,8 +185,6 @@ get_real_user() {
+ 
+ get_user_home() {
+ 	local user="$1"
+-
+-	getent passwd "$user" | awk -F: '{print $(NF-1)}'
+ }
+ 
+ config() {
+@@ -195,9 +193,9 @@ config() {
+ 	local config_file
+ 
+ 	if _is_user_dir; then
+-		config_dir="${XDG_CONFIG_HOME:-$USER_HOME/.config}/$PROGNAME"
++		config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/$PROGNAME"
+ 	else
+-		config_dir="/var/lib/$PROGNAME"
++		config_dir="@TERMUX_PREFIX@/var/lib/$PROGNAME"
+ 	fi
+ 
+ 	config_file="$config_dir/keep"
+@@ -340,13 +338,13 @@ do_restore_color() {
+ delete_icon_caches() {
+ 	local icon_cache real_user='' real_home=''
+ 
+-	real_user="$(get_real_user)"
+-	real_home="$(get_user_home "$real_user")"
++	real_user="$(whoami)"
++	real_home=$HOME
+ 
+ 	declare -a icon_caches=(
+ 		# KDE 5 icon caches
+ 		"$real_home/.cache/icon-cache.kcache"
+-		"/var/tmp/kdecache-$real_user/icon-cache.kcache"
++		"@TERMUX_PREFIX@/var/tmp/kdecache-$real_user/icon-cache.kcache"
+ 	)
+ 
+ 	verbose "Deleting icon caches ..."
+@@ -385,7 +383,7 @@ verify_privileges() {
+ 	verbose "This operation requires root privileges."
+ 
+ 	if command -v sudo > /dev/null; then
+-		exec sudo USER_HOME="$USER_HOME" XDG_DATA_DIRS="$XDG_DATA_DIRS" \
++		exec sudo USER_HOME="$HOME" XDG_DATA_DIRS="$XDG_DATA_DIRS" \
+ 			"$THIS_SCRIPT" "${ARGS[@]}"
+ 	else
+ 		fatal "You need to be root to run this command."
+@@ -484,7 +482,7 @@ main() {
+ 
+ 	# set USER_HOME variable instead HOME to prevent changing user's icons
+ 	# when running with sudo
+-	[ -n "$USER_HOME" ] || USER_HOME="$(get_user_home "$(id -nu)")"
++	[ -n "$HOME" ] || USER_HOME="$(get_user_home "$(id -nu)")"
+ 
+ 	if [ -f "$THEME_NAME/index.theme" ]; then
+ 		# THEME_NAME is a path to an icon theme
