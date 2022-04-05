@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!$TERMUX_PREFIX/bin/bash
 ##
 ##  A script for building qmake on device.
 ##  Use in Termux only !
@@ -9,7 +9,7 @@
 
 set -e
 
-TERMUX_PREFIX=/data/data/com.termux/files/usr
+TERMUX_PREFIX=$TERMUX_PREFIX
 
 if [ $(uname -o) != Android ]; then
     echo "This script should be run in Termux !"
