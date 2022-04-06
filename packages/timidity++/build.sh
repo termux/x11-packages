@@ -1,0 +1,10 @@
+TERMUX_PKG_HOMEPAGE=http://timidity.sourceforge.net/
+TERMUX_PKG_DESCRIPTION="A software synthesizer based on TiMidity 0.2i"
+TERMUX_PKG_LICENSE="GPL-2.0"
+TERMUX_PKG_MAINTAINER="@Yonle <yonle@duck.com>"
+TERMUX_PKG_VERSION=2.13.0
+TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/project/timidity/TiMidity%2B%2B/TiMidity%2B%2B-${TERMUX_PKG_VERSION}/TiMidity%2B%2B-${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=93e83cd6f370ea614ce7da8ffb972a85411dc51e648736fdef73c2a68dde99f4
+TERMUX_PKG_DEPENDS="openssl"
+TERMUX_PKG_REPLACES="timidity"
+TERMUX_PKG_PROVIDES="timidity"
