@@ -10,7 +10,7 @@ TERMUX_PKG_DEPENDS="apt, dpkg, gtk3, atk, libvte, hicolor-icon-theme"
 TERMUX_PKG_RECOMMENDS="netsurf"
 TERMUX_PKG_BUILD_IN_SRC=true
 
-termux_step_pre_configure() {
+termux_step_pre_configure(){
 	NOCONFIGURE=1 ./autogen.sh
 }
 
