@@ -1,0 +1,87 @@
+--- i3-4.20.1/i3-dmenu-desktop	2021-11-03 16:23:08.228037000 +0800
++++ i3-4.20.1.mod/i3-dmenu-desktop	2022-04-10 16:12:17.991155062 +0800
+@@ -112,7 +112,7 @@
+     ! -d $xdg_data_home;
+ 
+ my $xdg_data_dirs = $ENV{XDG_DATA_DIRS};
+-$xdg_data_dirs = '/usr/local/share/:/usr/share/' if
++$xdg_data_dirs = '@TERMUX_PREFIX@/usr/local/share/:@TERMUX_PREFIX@/usr/share/' if
+     !defined($xdg_data_dirs) ||
+     $xdg_data_dirs eq '';
+
+
+--- i3-4.20.1/i3bar/src/main.c	2021-11-03 16:23:08.231370400 +0800
++++ i3-4.20.1.mod/i3bar/src/main.c	2022-04-10 16:16:39.111154962 +0800
+@@ -153,7 +153,7 @@
+     }
+ 
+     if (socket_path == NULL) {
+-        char *i3_default_sock_path = "/tmp/i3-ipc.sock";
++        char *i3_default_sock_path = "@TERMUX_PREFIX@/tmp/i3-ipc.sock";
+         ELOG("No socket path specified, default to %s\n", i3_default_sock_path);
+         socket_path = sstrdup(i3_default_sock_path);
+     }
+
+--- i3-4.20.1/libi3/get_exe_path.c	2021-11-03 16:23:08.234703500 +0800
++++ i3-4.20.1.mod/libi3/get_exe_path.c	2022-04-11 19:15:19.764735141 +0800
+@@ -71,13 +71,8 @@
+     /* Fall back to searching $PATH (or _CS_PATH in absence of $PATH). */
+     char *path = getenv("PATH");
+     if (path == NULL) {
+-        /* _CS_PATH is typically something like "/bin:/usr/bin" */
+-        while (confstr(_CS_PATH, tmp, tmp_size) > tmp_size) {
+-            tmp_size = tmp_size * 2;
+-            tmp = srealloc(tmp, tmp_size);
+-        }
+-        sasprintf(&path, ":%s", tmp);
+-    } else {
++            path = sstrdup("@TERMUX_PREFIX@/bin:@TERMUX_PREFIX@/bin/applets");
++     else {
+         path = sstrdup(path);
+     }
+     const char *component;
+@@ -101,5 +96,5 @@
+     free(tmp);
+ 
+     /* Last resort: maybe it’s in /usr/bin? */
+-    return sstrdup("/usr/bin/i3-nagbar");
++    return sstrdup("@TERMUX_PREFIX@/usr/bin/i3-nagbar");
+ }
+
+
+--- i3-4.20.1/libi3/get_process_filename.c	2021-11-03 16:23:08.234703500 +0800
++++ i3-4.20.1.mod/libi3/get_process_filename.c	2022-04-11 19:19:10.514735053 +0800
+@@ -41,7 +41,7 @@
+              * /tmp/i3-<user>.XXXXXX */
+             struct passwd *pw = getpwuid(getuid());
+             const char *username = pw ? pw->pw_name : "unknown";
+-            sasprintf(&dir, "/tmp/i3-%s.XXXXXX", username);
++            sasprintf(&dir, "@TERMUX_PREFIX@/tmp/i3-%s.XXXXXX", username);
+             /* mkdtemp modifies dir */
+             if (mkdtemp(dir) == NULL) {
+                 perror("mkdtemp()");
+
+diff -uNr i3-4.20.1/libi3/ipc_connect.c i3-4.20.1.mod/libi3/ipc_connect.c
+--- i3-4.20.1/libi3/ipc_connect.c	
++++ i3-4.20.1.mod/libi3/ipc_connect.c
+@@ -38,7 +38,7 @@
+     }
+ 
+     if (path == NULL) {
+-        path = sstrdup("/tmp/i3-ipc.sock");
++        path = sstrdup("@TERMUX_PREFIX@/tmp/i3-ipc.sock");
+     }
+ 
+     int sockfd = socket(AF_LOCAL, SOCK_STREAM, 0);
+
+--- i3-4.20.1/src/sighandler.c	2021-11-03 16:23:08.238036900 +0800
++++ i3-4.20.1.mod/src/sighandler.c	2022-04-11 19:24:46.974734925 +0800
+@@ -49,7 +49,7 @@
+ static int sighandler_backtrace(void) {
+     char *tmpdir = getenv("TMPDIR");
+     if (tmpdir == NULL)
+-        tmpdir = "/tmp";
++        tmpdir = "@TERMUX_PREFIX@/tmp";
+ 
+     pid_t pid_parent = getpid();
+ 
