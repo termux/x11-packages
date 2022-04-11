@@ -6,8 +6,8 @@
  
 -		mXdgDataDirs.push_back("/usr/local/share");
 -		mXdgDataDirs.push_back("/usr/share");
-+		mXdgDataDirs.push_back("/data/data/com.termux/files/usr/local/share");
-+		mXdgDataDirs.push_back("/data/data/com.termux/files/usr/share");
++		mXdgDataDirs.push_back("@TERMUX_PREFIX@/local/share");
++		mXdgDataDirs.push_back("@TERMUX_PREFIX@/share");
  		mXdgDataDirs.push_back(std::string(getenv("HOME")) + "/.local/share");
  
  		for (std::string& dir : mXdgDataDirs)
