@@ -1,0 +1,20 @@
+--- xfce4-docklike-plugin-0.4.0/src/Hotkeys.cpp	2021-07-26 22:57:35.000000000 -0500
++++ xfce4-docklike-plugin-mod/src/Hotkeys.cpp	2022-04-10 22:24:16.395301913 -0500
+@@ -113,8 +113,6 @@
+ 
+ 	void* threadedXIKeyListenner(void* data)
+ 	{
+-		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+-		pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+ 
+ 		Display* display = XOpenDisplay(NULL);
+ 
+@@ -159,7 +157,7 @@
+ 				pthread_create(&mThread, NULL, threadedXIKeyListenner, NULL);
+ 			else if (mThread)
+ 			{
+-				pthread_cancel(mThread); //also close the XDisplay in the thread
++				//also close the XDisplay in the thread
+ 				void* ret = NULL;
+ 				pthread_join(mThread, &ret);
+ 				mThread = 0;

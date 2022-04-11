@@ -1,0 +1,13 @@
+--- xfce4-docklike-plugin-0.4.0/src/AppInfos.cpp	2021-09-21 01:14:27.000000000 -0500
++++ xfce4-docklike-plugin-mod/src/AppInfos.cpp	2022-04-10 22:30:38.035339932 -0500
+@@ -70,8 +70,8 @@
+ 		if (var != NULL && var[0] != '\0')
+ 			Help::String::split(var, mXdgDataDirs, ':');
+ 
+-		mXdgDataDirs.push_back("/usr/local/share");
+-		mXdgDataDirs.push_back("/usr/share");
++		mXdgDataDirs.push_back("/data/data/com.termux/files/usr/local/share");
++		mXdgDataDirs.push_back("/data/data/com.termux/files/usr/share");
+ 		mXdgDataDirs.push_back(std::string(getenv("HOME")) + "/.local/share");
+ 
+ 		for (std::string& dir : mXdgDataDirs)
