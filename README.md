@@ -1,3 +1,7 @@
+# ARCHIVED
+
+Packages from x11-repo are now maintained along with the main repo in github.com/termux/termux-packages in a git monorepo
+
 # Termux X11 Packages
 
 [![Packages last build status](https://github.com/termux/x11-packages/workflows/Packages/badge.svg)](https://github.com/termux/x11-packages/actions)
