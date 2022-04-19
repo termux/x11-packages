@@ -45,6 +45,7 @@ termux_step_configure () {
         -plugindir "${TERMUX_PREFIX}/libexec/qt" \
         -nomake examples \
         -no-pch \
+        -feature-itemmodel \
         -no-accessibility \
         -no-glib \
         -icu \
@@ -53,7 +54,7 @@ termux_step_configure () {
         -system-freetype \
         -ssl \
         -openssl-linked \
-        -no-system-proxies \
+        -system-proxies \
         -no-cups \
         -system-harfbuzz \
         -no-opengl \

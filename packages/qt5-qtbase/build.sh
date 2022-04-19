@@ -81,6 +81,7 @@ termux_step_configure () {
         -L "${TERMUX_PREFIX}/lib" \
         -nomake examples \
         -no-pch \
+        -feature-itemmodel \
         -no-accessibility \
         -glib \
         -gtk \
@@ -91,7 +92,7 @@ termux_step_configure () {
         -system-freetype \
         -ssl \
         -openssl-linked \
-        -no-system-proxies \
+        -system-proxies \
         -no-cups \
         -system-harfbuzz \
         -no-opengl \
